@@ -9,10 +9,12 @@
 /* Table Styling */
 .table {
     margin-top: 20px;
-    width: 100%;
-    min-width: 1100px; /* Prevents the table from shrinking below this width */
+    width: 100%; /* Full width of the container */
+    height: 100%; /* Full height of the container */
     border-collapse: collapse; /* Ensures borders are collapsed for a clean look */
+    overflow: hidden; / /* Ensures borders are collapsed for a clean look */
 }
+
 
 .table th, .table td {
     vertical-align: middle;

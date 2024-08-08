@@ -36,12 +36,86 @@
             </div>
             <ul class="sub-menu">
                 <li><a class="link_name" href="#">Category</a></li>
-                <li><a href="#">HTML & CSS</a></li>
+                <li><a href="map.php">Map</a></li>
                 <li><a href="#">JavaScript</a></li>
                 <li><a href="#">PHP & MySQL</a></li>
             </ul>
         </li>
-        <!-- Add more menu items here -->
+        <li>
+            <div class="iocn-link">
+                <a href="#">
+                    <i class='bx bx-book-alt'></i>
+                    <span class="link_name">Posts</span>
+                </a>
+                <i class='bx bxs-chevron-down arrow'></i>
+            </div>
+            <ul class="sub-menu">
+                <li><a class="link_name" href="#">Posts</a></li>
+                <li><a href="#">Web Design</a></li>
+                <li><a href="#">Login Form</a></li>
+                <li><a href="#">Card Design</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">
+                <i class='bx bx-pie-chart-alt-2'></i>
+                <span class="link_name">Analytics</span>
+            </a>
+            <ul class="sub-menu blank">
+                <li><a class="link_name" href="#">Analytics</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">
+                <i class='bx bx-line-chart'></i>
+                <span class="link_name">Chart</span>
+            </a>
+            <ul class="sub-menu blank">
+                <li><a class="link_name" href="#">Chart</a></li>
+            </ul>
+        </li>
+        <li>
+            <div class="iocn-link">
+                <a href="#">
+                    <i class='bx bx-plug'></i>
+                    <span class="link_name">Plugins</span>
+                </a>
+                <i class='bx bxs-chevron-down arrow'></i>
+            </div>
+            <ul class="sub-menu">
+                <li><a class="link_name" href="#">Plugins</a></li>
+                <li><a href="#">UI Face</a></li>
+                <li><a href="#">Pigments</a></li>
+                <li><a href="#">Box Icons</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">
+                <i class='bx bx-compass'></i>
+                <span class="link_name">Explore</span>
+            </a>
+            <ul class="sub-menu blank">
+                <li><a class="link_name" href="#">Explore</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">
+                <i class='bx bx-history'></i>
+                <span class="link_name">History</span>
+            </a>
+            <ul class="sub-menu blank">
+                <li><a class="link_name" href="#">History</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">
+                <i class='bx bx-cog'></i>
+                <span class="link_name">Settings</span>
+            </a>
+            <ul class="sub-menu blank">
+                <li><a class="link_name" href="#">Settings</a></li>
+            </ul>
+        </li>
         <li>
             <div class="profile-details">
                 <div class="profile-content">
@@ -57,13 +131,31 @@
     </ul>
 </div>
 
+
+
+
 <section class="home-section">
     <div class="home-content">
         <i class='bx bx-menu'></i>
         <span class="text">Drop Down Sidebar</span>
     </div>
 
+<style>
+    .table th:nth-child(4), /* Phone Number */
+    .table td:nth-child(4) {
+        display: none;
+    }
 
+    .table th:nth-child(3), /* Last Name */
+    .table td:nth-child(3) {
+        display: none;
+    }
+
+    .table th:nth-child(6), /* Car Make */
+    .table td:nth-child(6) {
+        display: none;
+    }
+</style>
     <div class="container">
         <h1 class="mt-4 mb-4">Repair Shop Service Records</h1>
         <div id="alertPlaceholder"></div>
@@ -73,24 +165,24 @@
             </button>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Phone Number</th>
-                        <th scope="col">Email Address</th>
-                        <th scope="col">Car Make</th>
-                        <th scope="col">Car Model</th>
-                        <th scope="col">Repair Details</th>
-                        <th scope="col">Appointment Date and Time</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="table-container">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Phone Number</th>
+                    <th scope="col">Email Address</th>
+                    <th scope="col">Car Make</th>
+                    <th scope="col">Car Model</th>
+                    <th scope="col">Repair Details</th>
+                    <th scope="col">Appointment Date and Time</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
                 <?php
                 // Include your database connection file here
                 include('dbconfig.php');
