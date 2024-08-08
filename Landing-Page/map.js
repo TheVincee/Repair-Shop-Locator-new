@@ -11,20 +11,25 @@ function initMap() {
     });
     infowindow = new google.maps.InfoWindow();
 
-    // Get the location input field
+    // Add event listener to the location input field
     const locationInput = document.getElementById("location");
-
-    // Add an event listener for the 'keypress' event
     locationInput.addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
-            // If Enter key is pressed, trigger the search function
-            searchAutoRepairShops();
+            event.preventDefault(); // Prevent the form from submitting
+            searchAutoRepairShops(); // Trigger the search function
         }
     });
 }
 
 function searchAutoRepairShops() {
     const location = document.getElementById("location").value;
+
+    // If location input is empty, return early
+    if (!location) {
+        alert("Please enter a location.");
+        return;
+    }
+
     const request = {
         location: map.getCenter(),
         radius: 6000, // Search radius in meters
@@ -42,6 +47,8 @@ function displayAutoRepairShops(results, status) {
         for (let i = 0; i < results.length; i++) {
             createMarker(results[i]);
         }
+    } else {
+        alert("No results found.");
     }
 }
 
@@ -60,15 +67,9 @@ function createMarker(place) {
     });
 }
 
-
 function clearMarkers() {
     for (let i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
     }
     markers = [];
 }
-
-// ... (your existing code) ...
-
-
-// ... (your existing code) ...

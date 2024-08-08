@@ -92,17 +92,18 @@
     </ul>
   </div>
   <section class="home-section">
-      <div class="text">Dashboard</div>
   </section>
 
-  
-  <div class="collapse navbar-collapse" id="navbarNav">
-      <form class="form-inline ml-auto" onsubmit="event.preventDefault(); searchAutoRepairShops();">
-        <input class="form-control mr-sm-2" id="location" type="search" placeholder="Enter a location" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
-    </div>
-</nav>
+
+  <!-- Navbar HTML -->
+<div class="collapse navbar-collapse" id="navbarNav">
+  <form class="form-inline ml-auto d-flex align-items-center" onsubmit="event.preventDefault(); searchAutoRepairShops();">
+    <input class="form-control mr-2" id="location" type="search" placeholder="Enter a location" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+  </form>
+</div>
+
+
 
 <div id="map" class="custom-container"></div>
 

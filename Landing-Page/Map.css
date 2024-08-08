@@ -76,7 +76,7 @@ body, html {
 
 .sidebar .nav-list {
     margin-top: 20px;
-    height: 100%;
+    height: calc(100% - 60px); /* Adjust height to leave space for profile */
 }
 
 .sidebar li {
@@ -200,7 +200,7 @@ body, html {
     height: 60px;
     width: 78px;
     left: 0;
-    bottom: -8px;
+    bottom: 0; /* Changed to ensure profile section is visible */
     padding: 10px 14px;
     background: #1d1b31;
     transition: all 0.5s ease;
@@ -255,34 +255,52 @@ body, html {
     background: none;
 }
 
-/* Main content section */
-.home-section {
-    position: relative;
-    background: #E4E9F7;
-    min-height: 100vh;
+/* Map container and main content section */
+#map-container {
+    position: absolute;
+    left: 78px; /* Offset by the width of the sidebar */
     top: 0;
-    left: 78px;
-    width: calc(100% - 78px);
-    transition: all 0.5s ease;
-    z-index: 2;
+    height: calc(100vh - 56px); /* Adjust height to fit the viewport minus the height of the header if needed */
+    width: calc(100% - 78px); /* Adjust width to fit the viewport minus the sidebar */
+    z-index: 1;
 }
 
-.sidebar.open ~ .home-section {
-    left: 250px;
-    width: calc(100% - 250px);
-}
-
-.home-section .text {
-    display: inline-block;
-    color: #11101d;
-    font-size: 25px;
-    font-weight: 500;
-    margin: 18px;
+#map {
+    height: 100%;
+    width: 100%;
 }
 
 /* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px; /* Narrower sidebar for smaller screens */
+    }
+
+    .sidebar.open {
+        width: 200px;
+    }
+
+    #map-container {
+        left: 60px; /* Adjust position for narrower sidebar */
+        width: calc(100% - 60px); /* Adjust width for narrower sidebar */
+    }
+}
+
 @media (max-width: 420px) {
     .sidebar li .tooltip {
         display: none;
+    }
+
+    .sidebar {
+        width: 50px; /* Further narrow sidebar for very small screens */
+    }
+
+    .sidebar.open {
+        width: 180px;
+    }
+
+    #map-container {
+        left: 50px; /* Adjust position for very narrow sidebar */
+        width: calc(100% - 50px); /* Adjust width for very narrow sidebar */
     }
 }
