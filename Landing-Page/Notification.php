@@ -19,21 +19,46 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Modal with Toast Notifications</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
+        <!-- First Toast Example -->
+        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
           <div class="toast-header">
-            <img src="..." class="rounded mr-2" alt="...">
-            <strong class="mr-auto">Bootstrap</strong>
-            <small>11 mins ago</small>
-            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <img src="https://via.placeholder.com/20" class="rounded me-2" alt="...">
+            <strong class="me-auto">Bootstrap</strong>
+            <small class="text-muted">11 mins ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
           </div>
           <div class="toast-body">
             Hello, world! This is a toast message inside a modal.
+          </div>
+        </div>
+        
+        <!-- Second Toast Example -->
+        <div class="toast show mt-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+          <div class="toast-header">
+            <img src="https://via.placeholder.com/20" class="rounded me-2" alt="...">
+            <strong class="me-auto">Alert</strong>
+            <small class="text-muted">5 mins ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            This is a second toast notification.
+          </div>
+        </div>
+
+        <!-- Third Toast Example -->
+        <div class="toast show mt-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+          <div class="toast-header bg-success text-white">
+            <img src="https://via.placeholder.com/20/fff/28a745" class="rounded me-2" alt="...">
+            <strong class="me-auto">Success</strong>
+            <small class="text-white">Just now</small>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            This is a success notification with a green header.
           </div>
         </div>
       </div>
