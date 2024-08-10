@@ -7,7 +7,6 @@
   <title> Avilon Bootstrap Template</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
-
   
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
@@ -41,8 +40,6 @@
           <li><a href="#hero" class="active">Home</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#services">Services</a></li>
-          <li><a href="#portfolio">Portfolio</a></li>
-          <li><a href="#team">Team</a></li>
           <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="#">Dropdown 1</a></li>
@@ -156,7 +153,6 @@
 
       </div>
 
-    </section><!-- /Features 2 Section -->
 
     <!-- Services Section -->
     <section id="services" class="services section">
