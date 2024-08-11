@@ -130,10 +130,6 @@
         </li>
     </ul>
 </div>
-
-
-
-
 <section class="home-section">
     <div class="home-content">
         <i class='bx bx-menu'></i>
@@ -189,7 +185,7 @@
 
                 // Fetch customer details from the database
                 $query = "SELECT * FROM customer_details";
-                $result = mysqli_query($connection, $query);
+                $result = mysqli_query($conn, $query);
 
                 // Check if any records were fetched
                 if (mysqli_num_rows($result) > 0) {

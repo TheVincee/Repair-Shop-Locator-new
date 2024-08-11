@@ -25,10 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               WHERE customer_id='$customer_id'";
     
     // Execute query
-    if (mysqli_query($connection, $query)) {
+    if (mysqli_query($conn, $query)) {
         echo "Customer updated successfully";
     } else {
-        echo "Error updating record: " . mysqli_error($connection);
+        echo "Error updating record: " . mysqli_error($conn);
     }
 } else {
     echo "Invalid request method";

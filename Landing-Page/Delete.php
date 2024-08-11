@@ -6,10 +6,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $query = "DELETE FROM customer_details WHERE customer_id = '$customer_id'";
 
-    if (mysqli_query($connection, $query)) {
+    if (mysqli_query($conn, $query)) {
         echo "Success";
     } else {
-        echo "Error: " . mysqli_error($connection);
+        echo "Error: " . mysqli_error($conn);
     }
 }
 ?>

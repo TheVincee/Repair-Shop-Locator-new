@@ -7,7 +7,7 @@ if (isset($_POST['customer_id'])) {
 
     // Prepare the SQL statement to prevent SQL injection
     $query = "SELECT * FROM customer_details WHERE customer_id = ?";
-    $stmt = $connection->prepare($query);
+    $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $customer_id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -29,5 +29,5 @@ if (isset($_POST['customer_id'])) {
 }
 
 // Close the database connection
-$connection->close();
+$conn->close();
 ?>
