@@ -169,4 +169,3 @@ sidebarBtn.onclick = function() {
  </script>
 
 </body>
-</html><div class="open_grepper_editor" title="Edit & Save To Grepper"></div>
