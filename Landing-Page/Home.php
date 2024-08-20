@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title> Avilon Bootstrap Template</title>
+  <title>Shop Locator</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
   
@@ -32,7 +32,7 @@
 
       <a href="index.html" class="logo d-flex align-items-center">
         
-        <h1 class="sitename">Avilon</h1>
+        <h1 class="sitename">Locate-Mechanic</h1>
       </a>
 
       <nav id="navmenu" class="navmenu">
@@ -45,7 +45,7 @@
               <li><a href="#">Dropdown 1</a></li>
               <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
                 <ul>
-                  <li><a href="#">Deep Dropdown 1</a></li>
+                  <li><a href="Appointment-table.php">Deep Dropdown 1</a></li>
                   <li><a href="#">Deep Dropdown 2</a></li>
                   <li><a href="#">Deep Dropdown 3</a></li>
                   <li><a href="#">Deep Dropdown 4</a></li>
@@ -75,9 +75,9 @@
         <!-- Slide 1 -->
         <div class="carousel-item active">
           <div class="carousel-container">
-            <h2 class="animate__animated animate__fadeInDown">Welcome to <span>Our Avilon</span></h2>
+            <h2 class="animate__animated animate__fadeInDown">Welcome to <span>Our Website</span></h2>
             <p class="animate__animated animate__fadeInUp">Ut velit est quam dolor ad a aliquid qui aliquid. Sequi ea ut et est quaerat sequi nihil ut aliquam. Occaecati alias dolorem mollitia ut. Similique ea voluptatem. Esse doloremque accusamus repellendus deleniti vel. Minus et tempore modi architecto.</p>
-            <a href="#about" class="btn-get-started animate__animated animate__fadeInUp scrollto">Read More</a>
+            <a href="map.php" class="btn-get-started animate__animated animate__fadeInUp scrollto">Locate</a>
           </div>
         </div>
 

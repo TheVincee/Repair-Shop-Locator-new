@@ -9,97 +9,17 @@
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-  <!-- GOOD TO GO -->
-<div class="sidebar">
-    <div class="logo-details">
-        <i class='bx bxl-c-plus-plus icon'></i>
-        <div class="logo_name">CodingLab</div>
-        <i class='bx bx-menu' id="btn"></i>
-    </div>
-    <ul class="nav-list">
-        <li>
-            <i class='bx bx-search'></i>
-            <input type="text" placeholder="Search..." id="location">
-            <span class="tooltip">Search</span>
-        </li>
-        <li>
-            <a href="#">
-                <i class='bx bx-grid-alt'></i>
-                <span class="links_name">Dashboard</span>
-            </a>
-            <span class="tooltip">Dashboard</span>
-        </li>
-        <li>
-            <a href="#">
-                <i class='bx bx-user'></i>
-                <span class="links_name">User</span>
-            </a>
-            <span class="tooltip">User</span>
-        </li>
-        <li>
-            <a href="#">
-                <i class='bx bx-chat'></i>
-                <span class="links_name">Messages</span>
-            </a>
-            <span class="tooltip">Messages</span>
-        </li>
-        <li>
-            <a href="#">
-                <i class='bx bx-pie-chart-alt-2'></i>
-                <span class="links_name">Analytics</span>
-            </a>
-            <span class="tooltip">Analytics</span>
-        </li>
-        <li>
-            <a href="#">
-                <i class='bx bx-folder'></i>
-                <span class="links_name">File Manager</span>
-            </a>
-            <span class="tooltip">Files</span>
-        </li>
-        <li>
-            <a href="#">
-                <i class='bx bx-cart-alt'></i>
-                <span class="links_name">Order</span>
-            </a>
-            <span class="tooltip">Order</span>
-        </li>
-        <li>
-            <a href="#">
-                <i class='bx bx-heart'></i>
-                <span class="links_name">Saved</span>
-            </a>
-            <span class="tooltip">Saved</span>
-        </li>
-        <li>
-            <a href="#">
-                <i class='bx bx-cog'></i>
-                <span class="links_name">Setting</span>
-            </a>
-            <span class="tooltip">Setting</span>
-        </li>
-        <li class="profile">
-            <div class="profile-details">
-                <img src="profile.jpg" alt="profileImg">
-                <div class="name_job">
-                    <div class="name">Prem Shahi</div>
-                    <div class="job">Web designer</div>
-                </div>
-            </div>
-            <i class='bx bx-log-out' id="log_out"></i>
-        </li>
-    </ul>
-</div>
-<section class="home-section">
-</section>
 
-<!-- Navbar HTML -->
-<div class="collapse navbar-collapse" id="navbarNav">
+<!-- Navbar with Back Icon and Search Bar -->
+<nav class="navbar navbar-light bg-light">
+    <a href="Home.php" onclick="history.back();" class="navbar-brand">
+        <i class='bx bx-arrow-back'></i>
+    </a>
     <form class="form-inline ml-auto d-flex align-items-center" onsubmit="event.preventDefault(); searchAutoRepairShops();">
         <input class="form-control mr-2" id="location" type="search" placeholder="Enter a location" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
-</div>
+</nav>
 
 <div id="map" class="custom-container"></div>
 
@@ -195,29 +115,6 @@ function clearMarkers() {
 }
 
 document.addEventListener("DOMContentLoaded", initMap);
-
-// Sidebar Toggle Script
-let sidebar = document.querySelector(".sidebar");
-let closeBtn = document.querySelector("#btn");
-let searchBtn = document.querySelector(".bx-search");
-
-closeBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("open");
-    menuBtnChange(); // calling the function(optional)
-});
-
-searchBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("open");
-    menuBtnChange(); // calling the function(optional)
-});
-
-function menuBtnChange() {
-    if (sidebar.classList.contains("open")) {
-        closeBtn.classList.replace("bx-menu", "bx-menu-alt-right"); // replacing the icons class
-    } else {
-        closeBtn.classList.replace("bx-menu-alt-right", "bx-menu"); // replacing the icons class
-    }
-}
 </script>
 
 </body>

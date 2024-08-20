@@ -447,7 +447,7 @@
     // Fetch customer details for the given customer_id
     $.ajax({
         type: "POST",
-        url: "fetch.php",
+        url: "Fetch.php",
         data: { customer_id: customerId },
         dataType: "json",
         success: function(response) {
