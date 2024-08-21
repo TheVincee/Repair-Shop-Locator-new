@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <title>Drop Down Sidebar Menu | CodingLab</title>
+    <title>Dashboard with Sidebar and Modal</title>
     <link rel="stylesheet" href="Dashboard.css">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +20,7 @@
                     <span class="link_name">Dashboard</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Category</a></li>
+                    <li><a class="link_name" href="#">Dashboard</a></li>
                 </ul>
             </li>
             <li>
@@ -127,12 +127,13 @@
             </li>
         </ul>
     </div>
-    <section class="home-section">
-        <div class="home-content">
-            <i class='bx bx-menu'></i>
-            <div class="overview-boxes">
-                <div class="box">
-                    <div class="right-side">
+
+    <section class="dashboard-section">
+        <div class="dashboard-content">
+            <i class='bx bx-menu' id="hamburgerMenu"></i>
+            <div class="metrics-boxes">
+                <div class="metric-box">
+                    <div class="metric-details">
                         <div class="box-topic">Total Order</div>
                         <div class="number">40,876</div>
                         <div class="indicator">
@@ -142,8 +143,8 @@
                     </div>
                     <i class='bx bx-cart-alt cart'></i>
                 </div>
-                <div class="box">
-                    <div class="right-side">
+                <div class="metric-box">
+                    <div class="metric-details">
                         <div class="box-topic">Total Sales</div>
                         <div class="number">38,876</div>
                         <div class="indicator">
@@ -151,10 +152,10 @@
                             <span class="text">Up from yesterday</span>
                         </div>
                     </div>
-                    <i class='bx bxs-cart-add cart two' ></i>
+                    <i class='bx bxs-cart-add cart two'></i>
                 </div>
-                <div class="box">
-                    <div class="right-side">
+                <div class="metric-box">
+                    <div class="metric-details">
                         <div class="box-topic">Total Profit</div>
                         <div class="number">$12,876</div>
                         <div class="indicator">
@@ -162,10 +163,10 @@
                             <span class="text">Up from yesterday</span>
                         </div>
                     </div>
-                    <i class='bx bx-cart cart three' ></i>
+                    <i class='bx bx-cart cart three'></i>
                 </div>
-                <div class="box">
-                    <div class="right-side">
+                <div class="metric-box">
+                    <div class="metric-details">
                         <div class="box-topic">Total Return</div>
                         <div class="number">11,086</div>
                         <div class="indicator">
@@ -173,21 +174,95 @@
                             <span class="text">Down From Today</span>
                         </div>
                     </div>
-                    <i class='bx bxs-cart-download cart four' ></i>
+                    <i class='bx bxs-cart-download cart four'></i>
                 </div>
             </div>
         </div>
+
+        <!-- Pending Appointments Section -->
+        <div class="pending-appointments">
+            <h2>Pending Appointments</h2>
+            <table class="appointments-table">
+                <thead>
+                    <tr>
+                        <th>Appointment ID</th>
+                        <th>Client Name</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AP001</td>
+                        <td>John Doe</td>
+                        <td>2024-08-21</td>
+                        <td>Pending</td>
+                        <td><button class="view-btn" data-id="AP001">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>AP002</td>
+                        <td>Jane Smith</td>
+                        <td>2024-08-22</td>
+                        <td>Pending</td>
+                        <td><button class="view-btn" data-id="AP002">View</button></td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
     </section>
 
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <h2>Appointment Details</h2>
+            <form id="appointment-form">
+                <label for="status">Status:</label>
+                <select id="status" name="status">
+                    <option value="Approve">Approve</option>
+                    <option value="Reject">Reject</option>
+                    <option value="In Processing">In Processing</option>
+                </select>
+                <button type="submit" class="submit-btn">Submit</button>
+                <button type="button" class="close-btn" id="close-btn">Close</button>
+            </form>
+        </div>
+    </div>
+
     <script>
+        // Toggle sidebar
+        document.getElementById("hamburgerMenu").addEventListener("click", () => {
+            document.querySelector(".sidebar").classList.toggle("close");
+        });
+
+        // Toggle submenu
         document.querySelectorAll(".arrow").forEach(arrow => {
-            arrow.addEventListener("click", (e) => {
-                e.target.parentElement.parentElement.classList.toggle("showMenu");
+            arrow.addEventListener("click", () => {
+                const submenu = arrow.parentElement.nextElementSibling;
+                submenu.classList.toggle("show");
             });
         });
 
-        document.querySelector(".bx-menu").addEventListener("click", () => {
-            document.querySelector(".sidebar").classList.toggle("close");
+        // Show modal on button click
+        document.querySelectorAll(".view-btn").forEach(button => {
+            button.addEventListener("click", (e) => {
+                const appointmentId = e.target.getAttribute("data-id");
+                // Here, you can fetch and display specific details based on the appointmentId
+                document.getElementById("modal-overlay").style.display = "flex";
+            });
+        });
+
+        // Close modal on close button click
+        document.getElementById("close-btn").addEventListener("click", () => {
+            document.getElementById("modal-overlay").style.display = "none";
+        });
+
+        // Close modal on overlay click
+        document.getElementById("modal-overlay").addEventListener("click", (e) => {
+            if (e.target === document.getElementById("modal-overlay")) {
+                document.getElementById("modal-overlay").style.display = "none";
+            }
         });
     </script>
 </body>
