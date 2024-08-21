@@ -6,6 +6,105 @@
     <link rel="stylesheet" href="Dashboard.css">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Basic styling for the table */
+        .appointments-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+            text-align: left;
+        }
+        .appointments-table th, .appointments-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        .appointments-table th {
+            background-color: #f4f4f4;
+        }
+        .appointments-table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .appointments-table .action-btn {
+            padding: 6px 12px;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .appointments-table .view-btn {
+            background-color: #007bff;
+        }
+        .appointments-table .view-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Hide specific columns */
+        .appointments-table td.hide, .appointments-table th.hide {
+            display: none;
+        }
+
+        /* Modal styling */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+            max-width: 100%;
+            position: relative;
+        }
+        .modal h2 {
+            margin-top: 0;
+        }
+        .modal form {
+            display: flex;
+            flex-direction: column;
+        }
+        .modal label {
+            margin-bottom: 10px;
+        }
+        .modal select {
+            margin-bottom: 20px;
+            padding: 8px;
+            font-size: 16px;
+        }
+        .modal .submit-btn, .modal .close-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .modal .submit-btn {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .modal .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        .modal .close-btn {
+            background-color: #ccc;
+            color: #000;
+        }
+        .modal .close-btn:hover {
+            background-color: #999;
+        }
+        
+    </style>
 </head>
 <body>
     <div class="sidebar close">
@@ -163,18 +262,18 @@
                             <span class="text">Up from yesterday</span>
                         </div>
                     </div>
-                    <i class='bx bx-cart cart three'></i>
+                    <i class='bx bx-dollar cart three'></i>
                 </div>
                 <div class="metric-box">
                     <div class="metric-details">
-                        <div class="box-topic">Total Return</div>
-                        <div class="number">11,086</div>
+                        <div class="box-topic">Total Reviews</div>
+                        <div class="number">4,876</div>
                         <div class="indicator">
                             <i class='bx bx-down-arrow-alt down'></i>
-                            <span class="text">Down From Today</span>
+                            <span class="text">Down from yesterday</span>
                         </div>
                     </div>
-                    <i class='bx bxs-cart-download cart four'></i>
+                    <i class='bx bx-message-detail cart four'></i>
                 </div>
             </div>
         </div>
@@ -185,27 +284,48 @@
             <table class="appointments-table">
                 <thead>
                     <tr>
-                        <th>Appointment ID</th>
-                        <th>Client Name</th>
-                        <th>Date</th>
+                        <th>Customer ID</th>
+                        <th>First Name</th>
+                        <th class="hide">Last Name</th>
+                        <th>Phone Number</th>
+                        <th class="hide">Email Address</th>
+                        <th class="hide">Car Make</th>
+                        <th class="hide">Car Model</th>
+                        <th>Repair Details</th>
+                        <th>Appointment Time</th>
+                        <th>Appointment Date</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>AP001</td>
-                        <td>John Doe</td>
+                        <td>C001</td>
+                        <td>John</td>
+                        <td class="hide">Doe</td>
+                        <td>123-456-7890</td>
+                        <td class="hide">john.doe@example.com</td>
+                        <td class="hide">Toyota</td>
+                        <td class="hide">Camry</td>
+                        <td>Engine Repair</td>
+                        <td>10:00 AM</td>
                         <td>2024-08-21</td>
                         <td>Pending</td>
-                        <td><button class="view-btn" data-id="AP001">View</button></td>
+                        <td><button class="view-btn" data-id="C001">View</button></td>
                     </tr>
                     <tr>
-                        <td>AP002</td>
-                        <td>Jane Smith</td>
+                        <td>C002</td>
+                        <td>Jane</td>
+                        <td class="hide">Smith</td>
+                        <td>987-654-3210</td>
+                        <td class="hide">jane.smith@example.com</td>
+                        <td class="hide">Honda</td>
+                        <td class="hide">Civic</td>
+                        <td>Brake Replacement</td>
+                        <td>11:30 AM</td>
                         <td>2024-08-22</td>
                         <td>Pending</td>
-                        <td><button class="view-btn" data-id="AP002">View</button></td>
+                        <td><button class="view-btn" data-id="C002">View</button></td>
                     </tr>
                     <!-- Add more rows as needed -->
                 </tbody>
@@ -218,17 +338,32 @@
         <div class="modal">
             <h2>Appointment Details</h2>
             <form id="appointment-form">
-                <label for="status">Status:</label>
-                <select id="status" name="status">
-                    <option value="Approve">Approve</option>
-                    <option value="Reject">Reject</option>
-                    <option value="In Processing">In Processing</option>
-                </select>
+                <div class="custom-dropdown" id="status-dropdown">
+                    <div class="selected-option">
+                        <i class='bx bx-check icon'></i>
+                        <span class="selected-text">Select Status</span>
+                    </div>
+                    <div class="options-container">
+                        <div class="option" data-value="Approve">
+                            <i class='bx bx-check icon'></i>
+                            Approve
+                        </div>
+                        <div class="option" data-value="Reject">
+                            <i class='bx bx-x icon'></i>
+                            Reject
+                        </div>
+                        <div class="option" data-value="In Processing">
+                            <i class='bx bx-hourglass icon'></i>
+                            In Processing
+                        </div>
+                    </div>
+                </div>
                 <button type="submit" class="submit-btn">Submit</button>
                 <button type="button" class="close-btn" id="close-btn">Close</button>
             </form>
         </div>
     </div>
+
 
     <script>
         // Toggle sidebar
@@ -250,6 +385,37 @@
                 const appointmentId = e.target.getAttribute("data-id");
                 // Here, you can fetch and display specific details based on the appointmentId
                 document.getElementById("modal-overlay").style.display = "flex";
+            });
+        });
+
+        // Close modal on close button click
+        document.getElementById("close-btn").addEventListener("click", () => {
+            document.getElementById("modal-overlay").style.display = "none";
+        });
+
+        // Close modal on overlay click
+        document.getElementById("modal-overlay").addEventListener("click", (e) => {
+            if (e.target === document.getElementById("modal-overlay")) {
+                document.getElementById("modal-overlay").style.display = "none";
+            }
+        });
+    </script>
+    <script>
+        document.querySelector(".selected-option").addEventListener("click", () => {
+            const dropdown = document.querySelector(".custom-dropdown");
+            const optionsContainer = dropdown.querySelector(".options-container");
+            optionsContainer.classList.toggle("show");
+        });
+
+        // Handle option selection
+        document.querySelectorAll(".options-container .option").forEach(option => {
+            option.addEventListener("click", (e) => {
+                const value = e.target.getAttribute("data-value");
+                const icon = e.target.querySelector(".icon").classList;
+                const selectedOption = document.querySelector(".selected-option");
+                selectedOption.querySelector(".icon").className = icon;
+                selectedOption.querySelector(".selected-text").textContent = e.target.textContent.trim();
+                document.querySelector(".options-container").classList.remove("show");
             });
         });
 
