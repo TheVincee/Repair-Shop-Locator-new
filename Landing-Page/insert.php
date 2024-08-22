@@ -17,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $repairdetails = mysqli_real_escape_string($conn, $_POST['repairDetails']);
     $appointmentDate = mysqli_real_escape_string($conn, $_POST['appointmentDate']);
     $appointmentTime = mysqli_real_escape_string($conn, $_POST['appointmentTime']);
-    $Status = mysqli_real_escape_string($conn, $_POST['Status']);
-
+    $Status = isset($_POST['Status']) ? mysqli_real_escape_string($conn, $_POST['Status']) : 'Pending';
+    
     // Debug output
     var_dump($_POST);
     
