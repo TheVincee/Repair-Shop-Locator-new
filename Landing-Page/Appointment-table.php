@@ -18,12 +18,12 @@
     </div>
     <ul class="nav-links">
         <li>
-            <a href="#">
+            <a href="UserDashboard.php">
                 <i class='bx bx-grid-alt'></i>
                 <span class="link_name">Dashboard</span>
             </a>
             <ul class="sub-menu blank">
-                <li><a class="link_name" href="#">Dashboard</a></li>
+                <li><a class="link_name" href="UserDashboard.php">Dashboard</a></li>
             </ul>
         </li>
         <li>
