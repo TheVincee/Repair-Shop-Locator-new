@@ -1,0 +1,180 @@
+/* General modal overlay styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Ensure it is above other elements */
+}
+
+/* Modal styles */
+.modal {
+    background-color: #fff;
+    width: 500px; /* Medium size for the modal */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.4s ease-out;
+    position: relative; /* Allows for absolute positioning of elements inside */
+}
+
+/* Modal header styles */
+.modal-header {
+    background-color: #007bff; /* Blue background for header */
+    color: white;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px; /* Larger close button */
+    cursor: pointer;
+    color: #fff;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #f1f1f1;
+}
+
+/* Modal body styles */
+.modal-body {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px; /* Match button border radius */
+    font-size: 16px;
+}
+
+.form-group textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+/* Custom dropdown styles */
+.custom-dropdown {
+    position: relative;
+    cursor: pointer;
+    width: 100%; /* Full width for dropdown */
+}
+
+.selected-option {
+    padding: 12px; /* Increase padding */
+    border: 1px solid #ddd;
+    border-radius: 6px; /* Match button border radius */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+    user-select: none;
+    width: 100%; /* Full width for selected option */
+    font-size: 16px; /* Increase font size */
+}
+
+.selected-option .icon {
+    margin-right: 8px; /* Space between icon and text */
+}
+
+.options-container {
+    display: none;
+    position: absolute;
+    width: 100%; /* Full width for options */
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px; /* Match button border radius */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    overflow: hidden;
+}
+
+.option {
+    padding: 12px; /* Increase padding */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+    display: flex;
+    align-items: center; /* Align icon and text */
+}
+
+.option .icon {
+    margin-right: 8px; /* Space between icon and text */
+}
+
+.option:hover {
+    background-color: #f1f1f1; /* Highlight color on hover */
+}
+
+/* Modal footer styles */
+.modal-footer {
+    padding: 16px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.submit-btn,
+.delete-btn {
+    padding: 12px 24px; /* Consistent padding for both buttons */
+    border: none;
+    border-radius: 6px; /* Match border radius */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Add transition for hover effect */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the icon and text */
+    color: white;
+    font-size: 16px; /* Consistent font size */
+    text-align: center; /* Center text in button */
+    min-width: 120px; /* Ensure buttons have a minimum width */
+}
+
+/* Submit button */
+.submit-btn {
+    background-color: #007bff; /* Blue */
+    margin-right: 8px; /* Space between buttons */
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Delete button */
+.delete-btn {
+    background-color: #dc3545; /* Red */
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}

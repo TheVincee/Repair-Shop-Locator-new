@@ -80,12 +80,14 @@ session_start();
 
         <!-- Slide 1 -->
         <div class="carousel-item active">
-          <div class="carousel-container">
-            <h2 class="animate__animated animate__fadeInDown">Welcome to <span>Our Website</span></h2>
-            <p class="animate__animated animate__fadeInUp">Ut velit est quam dolor ad a aliquid qui aliquid. Sequi ea ut et est quaerat sequi nihil ut aliquam. Occaecati alias dolorem mollitia ut. Similique ea voluptatem. Esse doloremque accusamus repellendus deleniti vel. Minus et tempore modi architecto.</p>
-            <a href="map.php" class="btn-get-started animate__animated animate__fadeInUp scrollto">Locate</a>
-          </div>
-        </div>
+  <div class="carousel-container">
+    <h2 class="animate__animated animate__fadeInDown">Welcome to <span>Our Vehicle Repair Locator</span></h2>
+    <p class="animate__animated animate__fadeInUp">Find top-rated repair specialists for your car and motorcycle with ease. Our platform connects you with trusted professionals who can address your vehicle's needs efficiently. Explore our features and let us help you keep your vehicle in top shape.</p>
+    <a href="map.php" class="btn-get-started animate__animated animate__fadeInUp scrollto">Locate</a>
+  </div>
+</div>
+
+
 
         
       </div>
@@ -122,37 +124,39 @@ session_start();
           </div>
           <div class="col-lg-7 d-flex flex-column justify-content-center">
 
-            <div class="features-item d-flex" data-aos="fade-up" data-aos-delay="200">
-              <i class="bi bi-archive flex-shrink-0"></i>
-              <div>
-                <h4>Est labore ad</h4>
-                <p>Consequuntur sunt aut quasi enim aliquam quae harum pariatur laboris nisi ut aliquip</p>
-              </div>
-            </div><!-- End Features Item-->
+          <div class="features-item d-flex" data-aos="fade-up" data-aos-delay="200">
+  <i class="bi bi-archive flex-shrink-0"></i>
+  <div>
+    <h4>Wide Range of Services</h4>
+    <p>Our platform offers an extensive selection of services tailored to meet your specific needs. From quick repairs to comprehensive consultations, find the right solution with ease.</p>
+  </div>
+</div>
+<!-- End Features Item-->
 
-            <div class="features-item d-flex mt-5" data-aos="fade-up" data-aos-delay="300">
-              <i class="bi bi-basket flex-shrink-0"></i>
-              <div>
-                <h4>Harum esse qui</h4>
-                <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt</p>
-              </div>
-            </div><!-- End Features Item-->
+<div class="features-item d-flex mt-5" data-aos="fade-up" data-aos-delay="300">
+  <i class="bi bi-basket flex-shrink-0"></i>
+  <div>
+    <h4>High-Quality Products</h4>
+    <p>Experience top-notch quality with our curated selection of products and services. Each offering is designed to meet the highest standards, ensuring satisfaction and reliability.</p>
+  </div>
+</div>
 
-            <div class="features-item d-flex mt-5" data-aos="fade-up" data-aos-delay="400">
-              <i class="bi bi-broadcast flex-shrink-0"></i>
-              <div>
-                <h4>Aut occaecati</h4>
-                <p>Aut suscipit aut cum nemo deleniti aut omnis. Doloribus ut maiores omnis facere</p>
-              </div>
-            </div><!-- End Features Item-->
+  <div class="features-item d-flex mt-5" data-aos="fade-up" data-aos-delay="400">
+    <i class="bi bi-broadcast flex-shrink-0"></i>
+    <div>
+      <h4>Expert Assistance</h4>
+      <p>Receive professional guidance and support from our experienced team. We provide expert advice and solutions to address all your concerns efficiently and effectively.</p>
+    </div>
+  </div>
 
-            <div class="features-item d-flex mt-5 " data-aos="fade-up" data-aos-delay="500">
-              <i class="bi bi-camera-reels flex-shrink-0"></i>
-              <div>
-                <h4>Beatae veritatis</h4>
-                <p>Expedita veritatis consequuntur nihil tempore laudantium vitae denat pacta</p>
-              </div>
-            </div><!-- End Features Item-->
+
+  <div class="features-item d-flex mt-5 " data-aos="fade-up" data-aos-delay="500">
+  <i class="bi bi-camera-reels flex-shrink-0"></i>
+  <div>
+    <h4>Reliable Performance</h4>
+    <p>Count on our services for consistent and dependable results. We prioritize efficiency and effectiveness, ensuring that your needs are met with the highest level of reliability.</p>
+  </div>
+</div>
 
           </div>
         </div>
@@ -164,89 +168,91 @@ session_start();
     <section id="services" class="services section">
 
       <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Services</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-      </div><!-- End Section Title -->
+     <!-- Section Title -->
+<div class="container section-title" data-aos="fade-up">
+  <h2>Our Services</h2>
+  <p>Explore our range of services designed to provide exceptional solutions tailored to your needs. From expert repairs to top-notch customer support, we are committed to delivering excellence.</p>
+</div><!-- End Section Title -->
 
       <div class="container">
 
         <div class="row gy-4">
 
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-activity"></i>
-              </div>
-              <a href="service-details.html" class="stretched-link">
-                <h3>Nesciunt Mete</h3>
-              </a>
-              <p>Provident nihil minus qui consequatur non omnis maiores. Eos accusantium minus dolores iure perferendis tempore et consequatur.</p>
-            </div>
-          </div><!-- End Service Item -->
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+  <div class="service-item position-relative">
+    <div class="icon">
+      <i class="bi bi-activity"></i>
+    </div>
+    <a href="service-details.html" class="stretched-link">
+      <h3>Efficient Solutions</h3>
+    </a>
+    <p>Discover solutions that enhance efficiency and productivity. Our team is dedicated to delivering results that drive success and innovation.</p>
+  </div>
+</div><!-- End Service Item -->
 
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-broadcast"></i>
-              </div>
-              <a href="service-details.html" class="stretched-link">
-                <h3>Eosle Commodi</h3>
-              </a>
-              <p>Ut autem aut autem non a. Sint sint sit facilis nam iusto sint. Libero corrupti neque eum hic non ut nesciunt dolorem.</p>
-            </div>
-          </div><!-- End Service Item -->
+<div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+  <div class="service-item position-relative">
+    <div class="icon">
+      <i class="bi bi-broadcast"></i>
+    </div>
+    <a href="service-details.html" class="stretched-link">
+      <h3>Comprehensive Support</h3>
+    </a>
+    <p>Our comprehensive support services ensure you receive the help you need when you need it. We address your concerns with precision and care.</p>
+  </div>
+</div><!-- End Service Item -->
 
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-easel"></i>
-              </div>
-              <a href="service-details.html" class="stretched-link">
-                <h3>Ledo Markt</h3>
-              </a>
-              <p>Ut excepturi voluptatem nisi sed. Quidem fuga consequatur. Minus ea aut. Vel qui id voluptas adipisci eos earum corrupti.</p>
-            </div>
-          </div><!-- End Service Item -->
+<div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+  <div class="service-item position-relative">
+    <div class="icon">
+      <i class="bi bi-easel"></i>
+    </div>
+    <a href="service-details.html" class="stretched-link">
+      <h3>Creative Design</h3>
+    </a>
+    <p>Our creative design services bring your ideas to life with originality and flair. We craft designs that capture attention and convey your message effectively.</p>
+  </div>
+</div><!-- End Service Item -->
 
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-bounding-box-circles"></i>
-              </div>
-              <a href="service-details.html" class="stretched-link">
-                <h3>Asperiores Commodit</h3>
-              </a>
-              <p>Non et temporibus minus omnis sed dolor esse consequatur. Cupiditate sed error ea fuga sit provident adipisci neque.</p>
-              <a href="service-details.html" class="stretched-link"></a>
-            </div>
-          </div><!-- End Service Item -->
+<div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+  <div class="service-item position-relative">
+    <div class="icon">
+      <i class="bi bi-bounding-box-circles"></i>
+    </div>
+    <a href="service-details.html" class="stretched-link">
+      <h3>Advanced Analytics</h3>
+    </a>
+    <p>Utilize advanced analytics to gain valuable insights and make data-driven decisions. Our tools and expertise help you understand trends and improve outcomes.</p>
+    <a href="service-details.html" class="stretched-link"></a>
+  </div>
+</div><!-- End Service Item -->
 
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-calendar4-week"></i>
-              </div>
-              <a href="service-details.html" class="stretched-link">
-                <h3>Velit Doloremque</h3>
-              </a>
-              <p>Cumque et suscipit saepe. Est maiores autem enim facilis ut aut ipsam corporis aut. Sed animi at autem alias eius labore.</p>
-              <a href="service-details.html" class="stretched-link"></a>
-            </div>
-          </div><!-- End Service Item -->
+<div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+  <div class="service-item position-relative">
+    <div class="icon">
+      <i class="bi bi-calendar4-week"></i>
+    </div>
+    <a href="service-details.html" class="stretched-link">
+      <h3>Event Management</h3>
+    </a>
+    <p>Plan and execute memorable events with our professional event management services. We handle all the details to ensure a seamless and successful experience.</p>
+    <a href="service-details.html" class="stretched-link"></a>
+  </div>
+</div><!-- End Service Item -->
 
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-chat-square-text"></i>
-              </div>
-              <a href="service-details.html" class="stretched-link">
-                <h3>Dolori Architecto</h3>
-              </a>
-              <p>Hic molestias ea quibusdam eos. Fugiat enim doloremque aut neque non et debitis iure. Corrupti recusandae ducimus enim.</p>
-              <a href="service-details.html" class="stretched-link"></a>
-            </div>
-          </div><!-- End Service Item -->
+<div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+  <div class="service-item position-relative">
+    <div class="icon">
+      <i class="bi bi-chat-square-text"></i>
+    </div>
+    <a href="service-details.html" class="stretched-link">
+      <h3>Customer Engagement</h3>
+    </a>
+    <p>Enhance customer relationships with our engagement strategies. We help you connect with your audience and build lasting, meaningful interactions.</p>
+    <a href="service-details.html" class="stretched-link"></a>
+  </div>
+</div><!-- End Service Item -->
+<!-- End Service Item -->
 
         </div>
 
@@ -255,69 +261,78 @@ session_start();
     </section><!-- /Services Section -->
 
     <!-- Faq Section -->
-    <section id="faq" class="faq section">
+<!-- Faq Section -->
+<section id="faq" class="faq section">
 
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Frequently Asked Questions</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-      </div><!-- End Section Title -->
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Frequently Asked Questions</h2>
+    <p>Find answers to the most common questions about our repair shop locator and services.</p>
+  </div><!-- End Section Title -->
 
-      <div class="container">
+  <div class="container">
 
-        <div class="row justify-content-center">
+    <div class="row justify-content-center">
 
-          <div class="col-lg-10" data-aos="fade-up" data-aos-delay="100">
+      <div class="col-lg-10" data-aos="fade-up" data-aos-delay="100">
 
-            <div class="faq-container">
+        <div class="faq-container">
+        <div class="faq-item faq-active">
+  <h3>What types of repair services are available through your locator?</h3>
+  <div class="faq-content">
+    <p>Our locator provides access to a variety of repair services including electronics, automobiles, home appliances, plumbing, and more. You can easily search for specialists who are equipped to handle your specific repair needs in your area.</p>
+  </div>
+  <i class="faq-toggle bi bi-chevron-right"></i>
+</div>
 
-              <div class="faq-item faq-active">
-                <h3>Non consectetur a erat nam at lectus urna duis?</h3>
-                <div class="faq-content">
-                  <p>Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.</p>
-                </div>
-                <i class="faq-toggle bi bi-chevron-right"></i>
-              </div><!-- End Faq item-->
+          <div class="faq-item">
+            <h3>How do I find a repair shop near me?</h3>
+            <div class="faq-content">
+              <p>Use our search tool to enter your location or enable GPS. This will show you a list of repair shops in your area along with their contact details and reviews.</p>
+            </div>
+            <i class="faq-toggle bi bi-chevron-right"></i>
+          </div><!-- End Faq item-->
 
-              <div class="faq-item">
-                <h3>Feugiat scelerisque varius morbi enim nunc faucibus?</h3>
-                <div class="faq-content">
-                  <p>Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.</p>
-                </div>
-                <i class="faq-toggle bi bi-chevron-right"></i>
-              </div><!-- End Faq item-->
+          <div class="faq-item">
+            <h3>Can I read reviews about the repair shops?</h3>
+            <div class="faq-content">
+              <p>Yes, our platform includes customer reviews and ratings for many repair shops. You can read these reviews to make an informed decision about which repair shop to choose.</p>
+            </div>
+            <i class="faq-toggle bi bi-chevron-right"></i>
+          </div><!-- End Faq item-->
 
-              <div class="faq-item">
-                <h3>Dolor sit amet consectetur adipiscing elit pellentesque?</h3>
-                <div class="faq-content">
-                  <p>Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis</p>
-                </div>
-                <i class="faq-toggle bi bi-chevron-right"></i>
-              </div><!-- End Faq item-->
+          <div class="faq-item">
+            <h3>How do I book a repair service?</h3>
+            <div class="faq-content">
+              <p>After finding a repair shop, you can book a service directly through their contact information or website. Some shops offer online booking options through our platform.</p>
+            </div>
+            <i class="faq-toggle bi bi-chevron-right"></i>
+          </div><!-- End Faq item-->
 
-              <div class="faq-item">
-                <h3>Ac odio tempor orci dapibus. Aliquam eleifend mi in nulla?</h3>
-                <div class="faq-content">
-                  <p>Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.</p>
-                </div>
-                <i class="faq-toggle bi bi-chevron-right"></i>
-              </div><!-- End Faq item-->
+          <div class="faq-item">
+            <h3>What if I need to cancel or reschedule my appointment?</h3>
+            <div class="faq-content">
+              <p>Contact the repair shop directly to cancel or reschedule your appointment. Be sure to check their cancellation policy for any potential fees or time restrictions.</p>
+            </div>
+            <i class="faq-toggle bi bi-chevron-right"></i>
+          </div><!-- End Faq item-->
 
-              <div class="faq-item">
-                <h3>Tempus quam pellentesque nec nam aliquam sem et tortor?</h3>
-                <div class="faq-content">
-                  <p>Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in</p>
-                </div>
-                <i class="faq-toggle bi bi-chevron-right"></i>
-              </div><!-- End Faq item-->
+          <div class="faq-item">
+            <h3>Can I get a quote before booking a service?</h3>
+            <div class="faq-content">
+              <p>Many repair shops provide quotes or estimates based on your description of the problem. You can contact them directly through our platform to request a quote before booking the service.</p>
+            </div>
+            <i class="faq-toggle bi bi-chevron-right"></i>
+          </div><!-- End Faq item-->
 
-              <div class="faq-item">
-                <h3>Perspiciatis quod quo quos nulla quo illum ullam?</h3>
-                <div class="faq-content">
-                  <p>Enim ea facilis quaerat voluptas quidem et dolorem. Quis et consequatur non sed in suscipit sequi. Distinctio ipsam dolore et.</p>
-                </div>
-                <i class="faq-toggle bi bi-chevron-right"></i>
-              </div><!-- End Faq item-->
+        </div>
+
+      </div>
+
+    </div>
+
+
+</section><!-- End Faq Section -->
 
             </div>
 
@@ -335,9 +350,10 @@ session_start();
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>Contact</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-      </div><!-- End Section Title -->
+  <h2>Contact Us</h2>
+  <p>Get in touch with us for any inquiries or support related to vehicle repair services. We're here to assist you with all your needs.</p>
+</div>
+<!-- End Section Title -->
 
       <div class="container" data-aos="fade" data-aos-delay="100">
 
@@ -411,23 +427,24 @@ session_start();
   </main>
 
   <footer id="footer" class="footer light-background">
+  <div class="container">
+    <h3 class="sitename">RepairLocator</h3>
+    <p>Your go-to source for finding trusted repair services for cars, motorcycles, and more. We're dedicated to helping you find the right specialist for your vehicle's needs.</p>
+    <div class="social-links d-flex justify-content-center">
+      <a href=""><i class="bi bi-twitter"></i></a>
+      <a href=""><i class="bi bi-facebook"></i></a>
+      <a href=""><i class="bi bi-instagram"></i></a>
+      <a href=""><i class="bi bi-skype"></i></a>
+      <a href=""><i class="bi bi-linkedin"></i></a>
+    </div>
     <div class="container">
-      <h3 class="sitename">Avilon</h3>
-      <p>Et aut eum quis fuga eos sunt ipsa nihil. Labore corporis magni eligendi fuga maxime saepe commodi placeat.</p>
-      <div class="social-links d-flex justify-content-center">
-        <a href=""><i class="bi bi-twitter-x"></i></a>
-        <a href=""><i class="bi bi-facebook"></i></a>
-        <a href=""><i class="bi bi-instagram"></i></a>
-        <a href=""><i class="bi bi-skype"></i></a>
-        <a href=""><i class="bi bi-linkedin"></i></a>
-      </div>
-      <div class="container">
-        <div class="copyright">
-          <span>Copyright</span> <strong class="px-1 sitename">Avilon</strong> <span>All Rights Reserved</span>
-        </div>
+      <div class="copyright">
+        <span>Copyright</span> <strong class="px-1 sitename">RepairLocator</strong> <span>All Rights Reserved</span>
       </div>
     </div>
-  </footer>
+  </div>
+</footer>
+
 
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

@@ -9,6 +9,9 @@ session_start();
     <link rel="stylesheet" href="Dashboard.css">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="Modal.css">
+
     <style>
         /* Basic styling for the table */
         .appointments-table {
@@ -48,65 +51,7 @@ session_start();
             display: none;
         }
 
-        /* Modal styling */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            width: 400px;
-            max-width: 100%;
-            position: relative;
-        }
-        .modal h2 {
-            margin-top: 0;
-        }
-        .modal form {
-            display: flex;
-            flex-direction: column;
-        }
-        .modal label {
-            margin-bottom: 10px;
-        }
-        .modal select {
-            margin-bottom: 20px;
-            padding: 8px;
-            font-size: 16px;
-        }
-        .modal .submit-btn, .modal .close-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        .modal .submit-btn {
-            background-color: #007bff;
-            color: #fff;
-        }
-        .modal .submit-btn:hover {
-            background-color: #0056b3;
-        }
-        .modal .close-btn {
-            background-color: #ccc;
-            color: #000;
-        }
-        .modal .close-btn:hover {
-            background-color: #999;
-        }
-        
+     
     </style>
 </head>
 <body>
@@ -284,92 +229,73 @@ session_start();
             </div>
         </div>
 
-        <!-- Pending Appointments Section -->
         <div class="pending-appointments">
-            <h2>Pending Appointments</h2>
-            <table class="appointments-table">
-                <thead>
-                    <tr>
-                        <th>Customer ID</th>
-                        <th>First Name</th>
-                        <th class="hide">Last Name</th>
-                        <th>Phone Number</th>
-                        <th class="hide">Email Address</th>
-                        <th class="hide">Car Make</th>
-                        <th class="hide">Car Model</th>
-                        <th>Repair Details</th>
-                        <th>Appointment Time</th>
-                        <th>Appointment Date</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>C001</td>
-                        <td>John</td>
-                        <td class="hide">Doe</td>
-                        <td>123-456-7890</td>
-                        <td class="hide">john.doe@example.com</td>
-                        <td class="hide">Toyota</td>
-                        <td class="hide">Camry</td>
-                        <td>Engine Repair</td>
-                        <td>10:00 AM</td>
-                        <td>2024-08-21</td>
-                        <td>Pending</td>
-                        <td><button class="view-btn" data-id="C001">View</button></td>
-                    </tr>
-                    <tr>
-                        <td>C002</td>
-                        <td>Jane</td>
-                        <td class="hide">Smith</td>
-                        <td>987-654-3210</td>
-                        <td class="hide">jane.smith@example.com</td>
-                        <td class="hide">Honda</td>
-                        <td class="hide">Civic</td>
-                        <td>Brake Replacement</td>
-                        <td>11:30 AM</td>
-                        <td>2024-08-22</td>
-                        <td>Pending</td>
-                        <td><button class="view-btn" data-id="C002">View</button></td>
-                    </tr>
-                    <!-- Add more rows as needed -->
-                </tbody>
-            </table>
-        </div>
+        <h2>Pending Appointments</h2>
+        <table class="appointments-table">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>First Name</th>
+                    <th class="hide">Last Name</th>
+                    <th>Phone Number</th>
+                    <th class="hide">Email Address</th>
+                    <th class="hide">Car Make</th>
+                    <th class="hide">Car Model</th>
+                    <th>Repair Details</th>
+                    <th>Appointment Time</th>
+                    <th>Appointment Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="appointments-tbody">
+                <!-- Rows will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
     </section>
 
-    <!-- Modal -->
-    <div class="modal-overlay" id="modal-overlay">
-        <div class="modal">
-            <h2>Appointment Details</h2>
-            <form id="appointment-form">
-                <div class="custom-dropdown" id="status-dropdown">
-                    <div class="selected-option">
-                        <i class='bx bx-check icon'></i>
-                        <span class="selected-text">Select Status</span>
-                    </div>
-                    <div class="options-container">
-                        <div class="option" data-value="Approve">
+    <div class="modal-overlay" id="modal-overlay" style="display: none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h2><i class="fas fa-info-circle"></i> Appointment Details</h2>
+            <button class="close-btn" id="close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <form id="appointment-form">
+            <div class="modal-body">
+                <!-- Dropdown for Status -->
+                <div class="form-group">
+                    <label for="status-dropdown"><i class="fas fa-exchange-alt"></i> Change Status</label>
+                    <div class="custom-dropdown" id="status-dropdown">
+                        <div class="selected-option">
                             <i class='bx bx-check icon'></i>
-                            Approve
+                            <span class="selected-text">Select Status</span>
                         </div>
-                        <div class="option" data-value="Reject">
-                            <i class='bx bx-x icon'></i>
-                            Reject
-                        </div>
-                        <div class="option" data-value="In Processing">
-                            <i class='bx bx-hourglass icon'></i>
-                            In Processing
+                        <div class="options-container">
+                            <div class="option" data-value="Approve">
+                                <i class='bx bx-check icon'></i>
+                                Approve
+                            </div>
+                            <div class="option" data-value="Reject">
+                                <i class='bx bx-x icon'></i>
+                                Reject
+                            </div>
+                            <div class="option" data-value="In Processing">
+                                <i class='bx bx-hourglass icon'></i>
+                                In Processing
+                            </div>
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="submit-btn">Submit</button>
-                <button type="button" class="close-btn" id="close-btn">Close</button>
-            </form>
-        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Submit</button>
+                <button type="button" class="delete-btn" id="delete-btn"><i class="fas fa-trash-alt"></i> Delete</button>
+            </div>
+        </form>
     </div>
-
+</div>
 
     <script>
         // Toggle sidebar
@@ -437,5 +363,106 @@ session_start();
             }
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            // Function to fetch and display appointments
+            function fetchAppointments() {
+                $.ajax({
+                    url: 'fetch_appointment_details.php', // URL to the PHP script
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        // Clear any existing rows
+                        $('#appointments-tbody').empty();
+
+                        // Check if there is data returned
+                        if (data.length > 0) {
+                            data.forEach(function(appointment) {
+                                // Create a new row
+                                var row = $('<tr>');
+
+                                // Create cells for each field
+                                row.append($('<td>').text(appointment.customer_id));
+                                row.append($('<td>').text(appointment.firstname));
+                                row.append($('<td class="hide">').text(appointment.lastname));
+                                row.append($('<td>').text(appointment.phoneNumber));
+                                row.append($('<td class="hide">').text(appointment.emailAddress));
+                                row.append($('<td class="hide">').text(appointment.carmake));
+                                row.append($('<td class="hide">').text(appointment.carmodel));
+                                row.append($('<td>').text(appointment.repairdetails));
+                                row.append($('<td>').text(appointment.appointment_time));
+                                row.append($('<td>').text(appointment.appointment_date));
+                                row.append($('<td>').text(appointment.Status));
+
+                                // Create action button
+                                var actionCell = $('<td>');
+                                var viewButton = $('<button>')
+                                    .addClass('view-btn')
+                                    .text('View')
+                                    .attr('data-id', appointment.customer_id);
+                                actionCell.append(viewButton);
+                                row.append(actionCell);
+
+                                // Append the row to the tbody
+                                $('#appointments-tbody').append(row);
+                            });
+                        } else {
+                            // If no data, display a message or handle accordingly
+                            $('#appointments-tbody').append($('<tr>').append($('<td colspan="12">').text('No pending appointments found.')));
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            }
+
+            // Fetch and display appointments on page load
+            fetchAppointments();
+
+            // Additional JavaScript for modal functionality (if needed)
+            $('#close-btn').on('click', function() {
+                $('#modal-overlay').hide();
+            });
+
+            // Add click event for view buttons dynamically
+            $('#appointments-tbody').on('click', '.view-btn', function() {
+                var customerId = $(this).data('id');
+                // You can load more details into the modal based on the customerId if needed
+                $('#modal-overlay').show();
+            });
+        });
+    </script>
+   <script>
+    // JavaScript for handling dropdown functionality
+document.addEventListener('DOMContentLoaded', function () {
+    // Handle dropdown toggle
+    const statusDropdown = document.getElementById('status-dropdown');
+    const selectedOption = statusDropdown.querySelector('.selected-option');
+    const optionsContainer = statusDropdown.querySelector('.options-container');
+
+    selectedOption.addEventListener('click', function () {
+        optionsContainer.style.display = optionsContainer.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Handle option selection
+    statusDropdown.querySelectorAll('.option').forEach(function (option) {
+        option.addEventListener('click', function () {
+            const selectedValue = this.getAttribute('data-value');
+            selectedOption.querySelector('.selected-text').textContent = this.textContent;
+            optionsContainer.style.display = 'none';
+            // You can also do something with the selectedValue here, e.g., update the form
+        });
+    });
+
+    // Close the dropdown if clicked outside
+    document.addEventListener('click', function (event) {
+        if (!statusDropdown.contains(event.target)) {
+            optionsContainer.style.display = 'none';
+        }
+    });
+});
+
+   </script>
 </body>
 </html>
