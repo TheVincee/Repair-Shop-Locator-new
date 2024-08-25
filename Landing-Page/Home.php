@@ -63,8 +63,11 @@ session_start();
           <li><a href="#contact">Contact</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        
       </nav>
-
+      <form class="d-flex">
+      <a href="/REPAIRSHOP-LOCATOR-REVISE/LOGIN/Sign-in.php" class="btn btn-outline-danger">Logout</a>
+      </form>
     </div>
   </header>
 

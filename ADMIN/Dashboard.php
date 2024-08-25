@@ -216,16 +216,19 @@ session_start();
                 </ul>
             </li>
             <li>
-                <div class="profile-details">
-                    <div class="profile-content">
-                        <img src="image/profile.jpg" alt="profileImg">
-                    </div>
-                    <div class="name-job">
-                        <div class="profile_name">Prem Shahi</div>
-                        <div class="job">Web Designer</div>
-                    </div>
-                    <i class='bx bx-log-out'></i>
-                </div>
+            <div class="profile-details">
+    <div class="profile-content">
+        <img src="image/profile.jpg" alt="profileImg">
+    </div>
+    <div class="name-job">
+        <div class="profile_name">Prem Shahi</div>
+        <div class="job">Web Designer</div>
+    </div>
+    <!-- Wrap the logout icon with a link to the logout page -->
+    <a href="/REPAIRSHOP-LOCATOR-REVISE/LOGIN/Sign-in.php" class="logout-link">
+        <i class='bx bx-log-out'></i>
+    </a>
+</div>
             </li>
         </ul>
     </div>
