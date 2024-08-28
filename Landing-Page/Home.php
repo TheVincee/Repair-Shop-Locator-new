@@ -113,9 +113,9 @@ session_start();
     <section id="features-2" class="features section features-2">
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>Features</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-      </div><!-- End Section Title -->
+    <h2>Features</h2>
+    <p>Find reliable vehicle repair services near you with our easy-to-use locator tool.</p>
+</div>
 
       <div class="container">
         <div class="row gy-4 justify-content-between">
@@ -127,8 +127,9 @@ session_start();
           <div class="features-item d-flex" data-aos="fade-up" data-aos-delay="200">
   <i class="bi bi-archive flex-shrink-0"></i>
   <div>
-    <h4>Wide Range of Services</h4>
-    <p>Our platform offers an extensive selection of services tailored to meet your specific needs. From quick repairs to comprehensive consultations, find the right solution with ease.</p>
+  <h4>Wide Range of Repair Services</h4>
+<p>Our platform provides access to a broad spectrum of vehicle repair services. Whether you need routine maintenance or urgent repairs, easily connect with local experts who can address your vehicle’s specific needs.</p>
+
   </div>
 </div>
 <!-- End Features Item-->
@@ -136,16 +137,16 @@ session_start();
 <div class="features-item d-flex mt-5" data-aos="fade-up" data-aos-delay="300">
   <i class="bi bi-basket flex-shrink-0"></i>
   <div>
-    <h4>High-Quality Products</h4>
-    <p>Experience top-notch quality with our curated selection of products and services. Each offering is designed to meet the highest standards, ensuring satisfaction and reliability.</p>
+  <h4>High-Quality Repair Services</h4>
+<p>Experience exceptional quality with our carefully vetted repair services. Each provider is selected to ensure top-notch workmanship and reliability, giving you peace of mind for all your vehicle repair needs.</p>
   </div>
 </div>
 
   <div class="features-item d-flex mt-5" data-aos="fade-up" data-aos-delay="400">
     <i class="bi bi-broadcast flex-shrink-0"></i>
     <div>
-      <h4>Expert Assistance</h4>
-      <p>Receive professional guidance and support from our experienced team. We provide expert advice and solutions to address all your concerns efficiently and effectively.</p>
+    <h4>Expert Assistance</h4>
+<p>Get professional guidance and support from our network of experienced repair specialists. We offer expert advice and solutions to address all your vehicle concerns quickly and effectively.</p>
     </div>
   </div>
 

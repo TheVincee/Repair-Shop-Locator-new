@@ -1,6 +1,3 @@
-<?php
-session_start();
-?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -11,6 +8,8 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="Modal.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 
     <style>
         /* Basic styling for the table */
@@ -79,7 +78,7 @@ session_start();
                     <i class='bx bxs-chevron-down arrow'></i>
                 </div>
                 <ul class="sub-menu">
-                    <li><a class="link_name" href="#">Category</a></li>
+                    <li><a class="link_name" href="">Category</a></li>
                     <li><a href="#">HTML & CSS</a></li>
                     <li><a href="#">JavaScript</a></li>
                     <li><a href="#">PHP & MySQL</a></li>
@@ -128,9 +127,9 @@ session_start();
                 </div>
                 <ul class="sub-menu">
                     <li><a class="link_name" href="#">Plugins</a></li>
-                    <li><a href="#">UI Face</a></li>
-                    <li><a href="#">Pigments</a></li>
-                    <li><a href="#">Box Icons</a></li>
+                    <li><a href="WalkinAppointments.php">UI Face</a></li>
+                    <li><a href="ApprovedAppoitnments.php">Pigments</a></li>
+                    <li><a href="Unapproved.php">Box Icons</a></li>
                 </ul>
             </li>
             <li>
@@ -143,7 +142,7 @@ session_start();
                 </ul>
             </li>
             <li>
-                <a href="#">
+                <a href="History.php">
                     <i class='bx bx-history'></i>
                     <span class="link_name">History</span>
                 </a>
@@ -255,15 +254,28 @@ session_start();
     </div>
 
     </section>
-
     <div class="modal-overlay" id="modal-overlay" style="display: none;">
     <div class="modal">
         <div class="modal-header">
-            <h2><i class="fas fa-info-circle"></i> Appointment Details</h2>
+            <h2><i class="fas fa-info-circle"></i> Customer Details</h2>
             <button class="close-btn" id="close-btn"><i class="fas fa-times"></i></button>
         </div>
         <form id="appointment-form">
             <div class="modal-body">
+                <!-- Display Customer Details -->
+                <div class="form-group">
+                    <label for="customer-id"><i class="fas fa-user"></i> Customer ID</label>
+                    <input type="text" id="customer-id" name="customer-id" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="first-name"><i class="fas fa-user"></i> First Name</label>
+                    <input type="text" id="first-name" name="first-name" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="repair-details"><i class="fas fa-tools"></i> Repair Details</label>
+                    <textarea id="repair-details" name="repair-details" rows="4" readonly></textarea>
+                </div>
+
                 <!-- Dropdown for Status -->
                 <div class="form-group">
                     <label for="status-dropdown"><i class="fas fa-exchange-alt"></i> Change Status</label>
@@ -291,47 +303,12 @@ session_start();
             </div>
             <div class="modal-footer">
                 <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Submit</button>
-                <button type="button" class="delete-btn" id="delete-btn"><i class="fas fa-trash-alt"></i> Delete</button>
             </div>
         </form>
     </div>
 </div>
 
-    <script>
-        // Toggle sidebar
-        document.getElementById("hamburgerMenu").addEventListener("click", () => {
-            document.querySelector(".sidebar").classList.toggle("close");
-        });
 
-        // Toggle submenu
-        document.querySelectorAll(".arrow").forEach(arrow => {
-            arrow.addEventListener("click", () => {
-                const submenu = arrow.parentElement.nextElementSibling;
-                submenu.classList.toggle("show");
-            });
-        });
-
-        // Show modal on button click
-        document.querySelectorAll(".view-btn").forEach(button => {
-            button.addEventListener("click", (e) => {
-                const appointmentId = e.target.getAttribute("data-id");
-                // Here, you can fetch and display specific details based on the appointmentId
-                document.getElementById("modal-overlay").style.display = "flex";
-            });
-        });
-
-        // Close modal on close button click
-        document.getElementById("close-btn").addEventListener("click", () => {
-            document.getElementById("modal-overlay").style.display = "none";
-        });
-
-        // Close modal on overlay click
-        document.getElementById("modal-overlay").addEventListener("click", (e) => {
-            if (e.target === document.getElementById("modal-overlay")) {
-                document.getElementById("modal-overlay").style.display = "none";
-            }
-        });
-    </script>
     <script>
         document.querySelector(".selected-option").addEventListener("click", () => {
             const dropdown = document.querySelector(".custom-dropdown");
@@ -463,6 +440,25 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-   </script>
+</script>
+<script>
+    let arrow = document.querySelectorAll(".arrow");
+  for (var i = 0; i < arrow.length; i++) {
+    arrow[i].addEventListener("click", (e)=>{
+   let arrowParent = e.target.parentElement.parentElement;//selecting main parent of arrow
+   arrowParent.classList.toggle("showMenu");
+    });
+  }
+  let sidebar = document.querySelector(".sidebar");
+  let sidebarBtn = document.querySelector(".bx-menu");
+  console.log(sidebarBtn);
+  sidebarBtn.addEventListener("click", ()=>{
+    sidebar.classList.toggle("close");
+  });
+</script>
+<script>
+</script>
+
+
 </body>
 </html>
