@@ -127,7 +127,7 @@
                 </div>
                 <ul class="sub-menu">
                     <li><a class="link_name" href="#">Plugins</a></li>
-                    <li><a href="WalkinAppointments.php">UI Face</a></li>
+                    <li><a href="walkin_appointments.php">UI Face</a></li>
                     <li><a href="ApprovedAppoitnments.php">Pigments</a></li>
                     <li><a href="Unapproved.php">Box Icons</a></li>
                 </ul>

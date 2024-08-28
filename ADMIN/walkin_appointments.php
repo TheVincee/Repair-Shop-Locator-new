@@ -289,7 +289,7 @@ $(document).on('click', '.btn-update', function() {
     
     // Fetch current details for the appointment
     $.ajax({
-        url: 'fetch_appointment_details.php',
+        url: 'fetch_appointments_details.php',
         type: 'GET',
         data: { customer_id: customerId },
         dataType: 'json',
