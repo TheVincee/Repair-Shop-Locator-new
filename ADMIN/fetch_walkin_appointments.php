@@ -1,34 +1,29 @@
 <?php
 // fetch_walkin_appointments.php
+require 'db_connection.php'; // Include your database connection file
 
-// Database configuration
-$host = 'localhost'; // Change to your database host
-$dbname = 'repair-shop-locator'; // Change to your database name
-$username = 'root'; // Change to your database username
-$password = ''; // Change to your database password
+header('Content-Type: application/json'); // Set the content type to JSON
 
-// Create a new mysqli instance
-$mysqli = new mysqli($host, $username, $password, $dbname);
+// Prepare and execute the SQL query to fetch all walk-in appointments
+$query = "SELECT * FROM walkin_appointments";
+$result = $conn->query($query);
 
-// Check connection
-if ($mysqli->connect_error) {
-    die(json_encode(['error' => $mysqli->connect_error]));
-}
-
-// Fetch pending appointments
-$query = "SELECT * FROM walkin_appointments WHERE status = 'pending'";
-$result = $mysqli->query($query);
-
+// Check if the query was successful
 if ($result) {
     $appointments = [];
+
+    // Fetch all rows as an associative array
     while ($row = $result->fetch_assoc()) {
         $appointments[] = $row;
     }
+
+    // Output the results in JSON format
     echo json_encode($appointments);
 } else {
-    echo json_encode(['error' => $mysqli->error]);
+    // If there was an error with the query, output an error message
+    echo json_encode(['status' => 'error', 'message' => 'Error fetching data']);
 }
 
-// Close the connection
-$mysqli->close();
+// Close the database connection
+$conn->close();
 ?>

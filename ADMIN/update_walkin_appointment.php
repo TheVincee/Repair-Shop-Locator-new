@@ -1,46 +1,36 @@
 <?php
+require 'db_connection.php';
+
 header('Content-Type: application/json');
 
-// Database connection parameters
-$servername = "localhost"; // Update with your server details
-$username = "root";        // Update with your database username
-$password = "";            // Update with your database password
-$dbname = "repair-shop-locator"; // Update with your database name
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $customer_id = $_POST['customer_id'];
+    $firstname = $_POST['firstname'];
+    $phoneNumber = $_POST['phoneNumber'];
+    $emailAddress = $_POST['emailAddress'];
+    $repairdetails = $_POST['repairdetails'];
+    $appointment_time = $_POST['appointment_time'];
+    $appointment_date = $_POST['appointment_date'];
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+    // Check for missing parameters
+    if (empty($customer_id) || empty($firstname) || empty($phoneNumber) || empty($emailAddress) || empty($repairdetails) || empty($appointment_time) || empty($appointment_date)) {
+        echo json_encode(['status' => 'error', 'message' => 'Missing parameters']);
+        exit;
+    }
 
-// Check connection
-if ($conn->connect_error) {
-    echo json_encode(['status' => 'error', 'message' => 'Connection failed: ' . $conn->connect_error]);
-    exit;
-}
+    // Prepare and execute the update query
+    $stmt = $conn->prepare("UPDATE walkin_appointments SET firstname = ?, phoneNumber = ?, emailAddress = ?, repairdetails = ?, appointment_time = ?, appointment_date = ? WHERE customer_id = ?");
+    $stmt->bind_param("ssssssi", $firstname, $phoneNumber, $emailAddress, $repairdetails, $appointment_time, $appointment_date, $customer_id);
 
-// Get POST data
-$customer_id = isset($_POST['customer_id']) ? $conn->real_escape_string($_POST['customer_id']) : '';
-$firstname = isset($_POST['firstname']) ? $conn->real_escape_string($_POST['firstname']) : '';
-$phoneNumber = isset($_POST['phoneNumber']) ? $conn->real_escape_string($_POST['phoneNumber']) : '';
-$emailAddress = isset($_POST['emailAddress']) ? $conn->real_escape_string($_POST['emailAddress']) : '';
-$repairdetails = isset($_POST['repairdetails']) ? $conn->real_escape_string($_POST['repairdetails']) : '';
-$appointment_time = isset($_POST['appointment_time']) ? $conn->real_escape_string($_POST['appointment_time']) : '';
-$appointment_date = isset($_POST['appointment_date']) ? $conn->real_escape_string($_POST['appointment_date']) : '';
-$status = isset($_POST['status']) ? $conn->real_escape_string($_POST['status']) : '';
+    if ($stmt->execute()) {
+        echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => $stmt->error]); // Return detailed error message
+    }
 
-// Validate input
-if (empty($customer_id) || empty($firstname) || empty($phoneNumber) || empty($emailAddress) || empty($repairdetails) || empty($appointment_time) || empty($appointment_date)) {
-    echo json_encode(['status' => 'error', 'message' => 'All fields are required.']);
-    exit;
-}
-
-// Update query
-$sql = "UPDATE walkin_appointments 
-        SET firstname='$firstname', phoneNumber='$phoneNumber', emailAddress='$emailAddress', repairdetails='$repairdetails', appointment_time='$appointment_time', appointment_date='$appointment_date', Status='$status'
-        WHERE customer_id='$customer_id'";
-
-if ($conn->query($sql) === TRUE) {
-    echo json_encode(['status' => 'success', 'message' => 'Appointment updated successfully.']);
+    $stmt->close();
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'Error updating appointment: ' . $conn->error]);
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 
 $conn->close();

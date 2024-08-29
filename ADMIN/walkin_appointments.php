@@ -176,15 +176,6 @@
                             <input type="date" class="form-control" id="update_appointment_date" name="appointment_date" required>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="update_Status" class="form-label">Status</label>
-                        <select class="form-select" id="update_Status" name="Status" required>
-                            <option value="Pending">Pending</option>
-                            <option value="Approved">Approved</option>
-                            <option value="Rejected">Rejected</option>
-                            <option value="In Processing">In Processing</option>
-                        </select>
-                    </div>
                     <button type="submit" class="btn btn-primary">Update</button>
                 </form>
             </div>
@@ -212,161 +203,161 @@
     </div>
 </div>
 
-
-
-<!-- Bootstrap JS (Optional, for interactive elements like dropdowns) -->
+<!-- Bootstrap JS Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 <script>
 $(document).ready(function() {
-    // Function to fetch walk-in appointments with a status of 'pending'
-    function fetchWalkinAppointments() {
-        $.ajax({
-            url: 'fetch_walkin_appointments.php',
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                var tableBody = $('table tbody');
-                tableBody.empty(); // Clear existing rows
+    // Fetch appointments on page load
+    fetchAppointments();
 
-                // Iterate over the data and create table rows
-                $.each(data, function(index, appointment) {
-                    var row = '<tr>' +
-                        '<td>' + appointment.customer_id + '</td>' +
-                        '<td>' + appointment.firstname + '</td>' +
-                        '<td>' + appointment.phoneNumber + '</td>' +
-                        '<td>' + appointment.emailAddress + '</td>' +
-                        '<td>' + appointment.repairdetails + '</td>' +
-                        '<td>' + appointment.appointment_time + '</td>' +
-                        '<td>' + appointment.appointment_date + '</td>' +
-                        '<td>' + appointment.Status + '</td>' +
-                        '<td class="action-buttons">' +
-                            '<button type="button" class="btn btn-delete btn-sm" data-id="' + appointment.customer_id + '">Delete</button>' +
-                            '<button type="button" class="btn btn-update btn-sm" data-id="' + appointment.customer_id + '">Update</button>' +
-                        '</td>' +
-                    '</tr>';
-                    tableBody.append(row);
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching data:', error);
-            }
-        });
-    }
-
-    // Call the fetchWalkinAppointments function on page load
-    fetchWalkinAppointments();
-
-    $('#addWalkinForm').on('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
-
-        var formData = $(this).serialize();
-        console.log('Form Data:', formData); // Log the serialized data
-
+    // Add appointment form submission
+    $('#addWalkinForm').submit(function(e) {
+        e.preventDefault();
         $.ajax({
             url: 'add_walkin_appointment.php',
-            type: 'POST',
-            data: formData,
-            dataType: 'json', // Expect JSON response
+            method: 'POST',
+            data: $(this).serialize(),
             success: function(response) {
                 if (response.status === 'success') {
-                    $('#addWalkinModal').modal('hide'); // Hide the modal after submission
-                    fetchWalkinAppointments(); // Refresh the table
+                    $('#addWalkinModal').modal('hide');
+                    fetchAppointments();
                 } else {
-                    console.error('Error adding appointment:', response.message);
+                    console.error('Failed to add appointment:', response.message);
                 }
             },
             error: function(xhr, status, error) {
-                console.error('Error adding appointment:', error);
+                console.error('AJAX error:', status, error);
+            }
+        });
+    });
+
+    // Update appointment form submission
+    $('#updateWalkinForm').submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: 'update_walkin_appointment.php',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                if (response.status === 'success') {
+                    $('#updateWalkinModal').modal('hide');
+                    fetchAppointments();
+                } else {
+                    console.error('Failed to update appointment:', response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX error:', status, error);
+            }
+        });
+    });
+
+    $(document).ready(function() {
+    // Delete appointment button click
+    $('#confirmDeleteButton').click(function() {
+        const customerId = $('#delete_customer_id').val();
+        $.ajax({
+            url: 'delete_walkin_appointment.php',
+            method: 'POST',
+            data: { customer_id: customerId },
+            dataType: 'json',
+            success: function(response) {
+                console.log('Response:', response); // Log the response to check its structure
+                if (response.success) {
+                    $('#deleteWalkinModal').modal('hide');
+                    fetchAppointments();
+                } else {
+                    console.error('Failed to delete appointment:', response.error || 'Unknown error');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX error:', status, error);
+                console.error('Response:', xhr.responseText); // Log the response text
             }
         });
     });
 });
 
+});
 
-$(document).on('click', '.btn-update', function() {
-    var customerId = $(this).data('id');
-    
-    // Fetch current details for the appointment
+
+function fetchAppointments() {
     $.ajax({
-        url: 'fetch_appointments_details.php',
-        type: 'GET',
-        data: { customer_id: customerId },
+        url: 'fetch_walkin_appointments.php',
+        method: 'GET',
         dataType: 'json',
-        success: function(data) {
-            if (data) {
-                $('#update_customer_id').val(data.customer_id);
-                $('#update_firstname').val(data.firstname);
-                $('#update_phoneNumber').val(data.phoneNumber);
-                $('#update_emailAddress').val(data.emailAddress);
-                $('#update_repairdetails').val(data.repairdetails);
-                $('#update_appointment_time').val(data.appointment_time);
-                $('#update_appointment_date').val(data.appointment_date);
-                $('#update_Status').val(data.Status);
-                $('#updateWalkinModal').modal('show');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error fetching appointment details:', error);
-        }
-    });
-});
-
-
-$('#updateWalkinForm').on('submit', function(event) {
-    event.preventDefault(); // Prevent the default form submission
-
-    var formData = $(this).serialize();
-    console.log('Form Data:', formData); // Log the serialized data
-
-    $.ajax({
-        url: 'update_walkin_appointment.php',
-        type: 'POST',
-        data: formData,
-        dataType: 'json', // Expect JSON response
         success: function(response) {
-            if (response.status === 'success') {
-                $('#updateWalkinModal').modal('hide'); // Hide the modal after submission
-                fetchWalkinAppointments(); // Refresh the table
-            } else {
-                console.error('Error updating appointment:', response.message);
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error updating appointment:', error);
-        }
-    });
-});
+            console.log(response); // Log the response to check its structure
+            const tbody = $('tbody');
+            tbody.empty(); // Clear the existing table data
 
+            if (Array.isArray(response)) {
+                response.forEach(appointment => {
+                    const row = `
+                        <tr>
+                            <td>${appointment.customer_id}</td>
+                            <td>${appointment.firstname}</td>
+                            <td>${appointment.phoneNumber}</td>
+                            <td>${appointment.emailAddress}</td>
+                            <td>${appointment.repairdetails}</td>
+                            <td>${appointment.appointment_time}</td>
+                            <td>${appointment.appointment_date}</td>
+                            <td>${appointment.Status}</td>
+                            <td class="action-buttons">
+                                <button class="btn btn-update btn-sm" data-id="${appointment.customer_id}" data-bs-toggle="modal" data-bs-target="#updateWalkinModal"><i class="fas fa-edit"></i> Update</button>
+                                <button class="btn btn-delete btn-sm" data-id="${appointment.customer_id}" data-bs-toggle="modal" data-bs-target="#deleteWalkinModal"><i class="fas fa-trash"></i> Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.append(row);
+                });
 
-
-$(document).on('click', '.btn-delete', function() {
-    var customerId = $(this).data('id');
-    $('#delete_customer_id').val(customerId);
-    $('#deleteWalkinModal').modal('show');
-});
-
-$('#confirmDeleteButton').on('click', function() {
-    var customerId = $('#delete_customer_id').val();
-
+                // Bind update and delete button click events
+                $('.btn-update').click(function() {
+    const customerId = $(this).data('id');
     $.ajax({
-        url: 'delete_walkin_appointment.php',
-        type: 'POST',
+        url: 'get_walkin_appointment.php',
+        method: 'POST',
         data: { customer_id: customerId },
         dataType: 'json',
         success: function(response) {
+            console.log(response); // Log the response to see its structure
             if (response.status === 'success') {
-                $('#deleteWalkinModal').modal('hide'); // Hide the modal after deletion
-                fetchWalkinAppointments(); // Refresh the table
+                const appointment = response.data;
+                $('#update_customer_id').val(appointment.customer_id);
+                $('#update_firstname').val(appointment.firstname);
+                $('#update_phoneNumber').val(appointment.phoneNumber);
+                $('#update_emailAddress').val(appointment.emailAddress);
+                $('#update_repairdetails').val(appointment.repairdetails);
+                $('#update_appointment_time').val(appointment.appointment_time);
+                $('#update_appointment_date').val(appointment.appointment_date);
             } else {
-                console.error('Error deleting appointment:', response.message);
+                console.error('Failed to fetch appointment details:', response.message);
             }
         },
         error: function(xhr, status, error) {
-            console.error('Error deleting appointment:', error);
+            console.error('AJAX error:', status, error);
         }
     });
 });
+
+
+                $('.btn-delete').click(function() {
+                    const customerId = $(this).data('id');
+                    $('#delete_customer_id').val(customerId);
+                });
+            } else {
+                console.error('Invalid response structure:', response);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX error:', status, error);
+        }
+    });
+}
 
 </script>
 
