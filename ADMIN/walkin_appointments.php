@@ -74,7 +74,7 @@
     </div>
 
     <div class="table-container">
-        <h2 class="mb-4 text-center">Walk-in Appointments (Pending)</h2>
+        <h2 class="mb-4 text-center">Admin Walk-in Appointments (Pending)</h2>
         <table class="table table-hover">
             <thead class="table-light">
                 <tr>
@@ -358,7 +358,9 @@ function fetchAppointments() {
         }
     });
 }
-
+</script>
+<script>
+    
 </script>
 
 </body>

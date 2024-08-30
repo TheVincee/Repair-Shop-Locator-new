@@ -229,7 +229,7 @@
         </div>
 
         <div class="pending-appointments">
-        <h2>Pending Appointments</h2>
+        <h2>User Pending Appointments</h2>
         <table class="appointments-table">
             <thead>
                 <tr>
@@ -262,43 +262,20 @@
         </div>
         <form id="appointment-form">
             <div class="modal-body">
-                <!-- Display Customer Details -->
+                <!-- Display Customer ID -->
                 <div class="form-group">
                     <label for="customer-id"><i class="fas fa-user"></i> Customer ID</label>
                     <input type="text" id="customer-id" name="customer-id" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="first-name"><i class="fas fa-user"></i> First Name</label>
-                    <input type="text" id="first-name" name="first-name" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="repair-details"><i class="fas fa-tools"></i> Repair Details</label>
-                    <textarea id="repair-details" name="repair-details" rows="4" readonly></textarea>
                 </div>
 
                 <!-- Dropdown for Status -->
                 <div class="form-group">
                     <label for="status-dropdown"><i class="fas fa-exchange-alt"></i> Change Status</label>
-                    <div class="custom-dropdown" id="status-dropdown">
-                        <div class="selected-option">
-                            <i class='bx bx-check icon'></i>
-                            <span class="selected-text">Select Status</span>
-                        </div>
-                        <div class="options-container">
-                            <div class="option" data-value="Approve">
-                                <i class='bx bx-check icon'></i>
-                                Approve
-                            </div>
-                            <div class="option" data-value="Reject">
-                                <i class='bx bx-x icon'></i>
-                                Reject
-                            </div>
-                            <div class="option" data-value="In Processing">
-                                <i class='bx bx-hourglass icon'></i>
-                                In Processing
-                            </div>
-                        </div>
-                    </div>
+                    <select id="status-dropdown" name="status-dropdown" class="form-control">
+                        <option value="Approve">Approve</option>
+                        <option value="Reject">Reject</option>
+                        <option value="In Processing">In Processing</option>
+                    </select>
                 </div>
             </div>
             <div class="modal-footer">
@@ -309,156 +286,137 @@
 </div>
 
 
-    <script>
-        document.querySelector(".selected-option").addEventListener("click", () => {
-            const dropdown = document.querySelector(".custom-dropdown");
-            const optionsContainer = dropdown.querySelector(".options-container");
-            optionsContainer.classList.toggle("show");
-        });
-
-        // Handle option selection
-        document.querySelectorAll(".options-container .option").forEach(option => {
-            option.addEventListener("click", (e) => {
-                const value = e.target.getAttribute("data-value");
-                const icon = e.target.querySelector(".icon").classList;
-                const selectedOption = document.querySelector(".selected-option");
-                selectedOption.querySelector(".icon").className = icon;
-                selectedOption.querySelector(".selected-text").textContent = e.target.textContent.trim();
-                document.querySelector(".options-container").classList.remove("show");
-            });
-        });
-
-        // Close modal on close button click
-        document.getElementById("close-btn").addEventListener("click", () => {
-            document.getElementById("modal-overlay").style.display = "none";
-        });
-
-        // Close modal on overlay click
-        document.getElementById("modal-overlay").addEventListener("click", (e) => {
-            if (e.target === document.getElementById("modal-overlay")) {
-                document.getElementById("modal-overlay").style.display = "none";
-            }
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            // Function to fetch and display appointments
-            function fetchAppointments() {
-                $.ajax({
-                    url: 'fetch_appointment_details.php', // URL to the PHP script
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        // Clear any existing rows
-                        $('#appointments-tbody').empty();
-
-                        // Check if there is data returned
-                        if (data.length > 0) {
-                            data.forEach(function(appointment) {
-                                // Create a new row
-                                var row = $('<tr>');
-
-                                // Create cells for each field
-                                row.append($('<td>').text(appointment.customer_id));
-                                row.append($('<td>').text(appointment.firstname));
-                                row.append($('<td class="hide">').text(appointment.lastname));
-                                row.append($('<td>').text(appointment.phoneNumber));
-                                row.append($('<td class="hide">').text(appointment.emailAddress));
-                                row.append($('<td class="hide">').text(appointment.carmake));
-                                row.append($('<td class="hide">').text(appointment.carmodel));
-                                row.append($('<td>').text(appointment.repairdetails));
-                                row.append($('<td>').text(appointment.appointment_time));
-                                row.append($('<td>').text(appointment.appointment_date));
-                                row.append($('<td>').text(appointment.Status));
-
-                                // Create action button
-                                var actionCell = $('<td>');
-                                var viewButton = $('<button>')
-                                    .addClass('view-btn')
-                                    .text('View')
-                                    .attr('data-id', appointment.customer_id);
-                                actionCell.append(viewButton);
-                                row.append(actionCell);
-
-                                // Append the row to the tbody
-                                $('#appointments-tbody').append(row);
-                            });
-                        } else {
-                            // If no data, display a message or handle accordingly
-                            $('#appointments-tbody').append($('<tr>').append($('<td colspan="12">').text('No pending appointments found.')));
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error fetching data:', error);
+   <script>
+ document.addEventListener('DOMContentLoaded', function() {
+            // JavaScript for handling sidebar toggle
+            let arrow = document.querySelectorAll(".arrow");
+            arrow.forEach(a => {
+                a.addEventListener("click", (e) => {
+                    let arrowParent = e.target.closest('.iocn-link');
+                    if (arrowParent) {
+                        arrowParent.classList.toggle("showMenu");
                     }
+                });
+            });
+
+            let sidebar = document.querySelector(".sidebar");
+            let sidebarBtn = document.querySelector("#hamburgerMenu");
+            if (sidebarBtn) {
+                sidebarBtn.addEventListener("click", () => {
+                    sidebar.classList.toggle("close");
                 });
             }
 
-            // Fetch and display appointments on page load
-            fetchAppointments();
+            // JavaScript for handling modal visibility
+            const modalOverlay = document.getElementById('modal-overlay');
+            const closeBtn = document.getElementById('close-btn');
+            const form = document.getElementById('appointment-form');
 
-            // Additional JavaScript for modal functionality (if needed)
-            $('#close-btn').on('click', function() {
-                $('#modal-overlay').hide();
-            });
+            function showModal(customerId) {
+                fetch(`fetch_customer.php?customer_id=${customerId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.error) {
+                            document.getElementById('customer-id').value = data.customer_id;
+                            document.getElementById('status-dropdown').value = data.Status; // Preselect current status
+                            modalOverlay.style.display = 'block';
+                        } else {
+                            alert(data.error);
+                        }
+                    });
+            }
 
-            // Add click event for view buttons dynamically
-            $('#appointments-tbody').on('click', '.view-btn', function() {
-                var customerId = $(this).data('id');
-                // You can load more details into the modal based on the customerId if needed
-                $('#modal-overlay').show();
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    modalOverlay.style.display = 'none';
+                });
+            }
+
+            if (form) {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+
+                    const customerId = document.getElementById('customer-id').value;
+                    const status = document.getElementById('status-dropdown').value;
+
+                    fetch('update_status.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: new URLSearchParams({
+                            'customer_id': customerId,
+                            'status': status
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Status updated successfully!');
+                            modalOverlay.style.display = 'none';
+                        } else {
+                            alert('Error updating status: ' + data.error);
+                        }
+                    });
+                });
+            }
+
+            // Fetch appointments and handle view button clicks
+            $(document).ready(function() {
+                function fetchAppointments() {
+                    $.ajax({
+                        url: 'fetch_appointment_details.php',
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#appointments-tbody').empty();
+
+                            if (data.length > 0) {
+                                data.forEach(function(appointment) {
+                                    var row = $('<tr>');
+                                    row.append($('<td>').text(appointment.customer_id));
+                                    row.append($('<td>').text(appointment.firstname));
+                                    row.append($('<td class="hide">').text(appointment.lastname));
+                                    row.append($('<td>').text(appointment.phoneNumber));
+                                    row.append($('<td class="hide">').text(appointment.emailAddress));
+                                    row.append($('<td class="hide">').text(appointment.carmake));
+                                    row.append($('<td class="hide">').text(appointment.carmodel));
+                                    row.append($('<td>').text(appointment.repairdetails));
+                                    row.append($('<td>').text(appointment.appointment_time));
+                                    row.append($('<td>').text(appointment.appointment_date));
+                                    row.append($('<td>').text(appointment.Status));
+
+                                    var actionCell = $('<td>');
+                                    var viewButton = $('<button>')
+                                        .addClass('view-btn')
+                                        .text('View')
+                                        .attr('data-id', appointment.customer_id);
+                                    actionCell.append(viewButton);
+                                    row.append(actionCell);
+
+                                    $('#appointments-tbody').append(row);
+                                });
+                            } else {
+                                $('#appointments-tbody').append($('<tr>').append($('<td colspan="12">').text('No pending appointments found.')));
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error fetching data:', error);
+                        }
+                    });
+                }
+
+                fetchAppointments();
+
+                $('#appointments-tbody').on('click', '.view-btn', function() {
+                    var customerId = $(this).data('id');
+                    showModal(customerId);
+                });
             });
         });
-    </script>
-   <script>
-    // JavaScript for handling dropdown functionality
-document.addEventListener('DOMContentLoaded', function () {
-    // Handle dropdown toggle
-    const statusDropdown = document.getElementById('status-dropdown');
-    const selectedOption = statusDropdown.querySelector('.selected-option');
-    const optionsContainer = statusDropdown.querySelector('.options-container');
+   </script>
 
-    selectedOption.addEventListener('click', function () {
-        optionsContainer.style.display = optionsContainer.style.display === 'block' ? 'none' : 'block';
-    });
-
-    // Handle option selection
-    statusDropdown.querySelectorAll('.option').forEach(function (option) {
-        option.addEventListener('click', function () {
-            const selectedValue = this.getAttribute('data-value');
-            selectedOption.querySelector('.selected-text').textContent = this.textContent;
-            optionsContainer.style.display = 'none';
-            // You can also do something with the selectedValue here, e.g., update the form
-        });
-    });
-
-    // Close the dropdown if clicked outside
-    document.addEventListener('click', function (event) {
-        if (!statusDropdown.contains(event.target)) {
-            optionsContainer.style.display = 'none';
-        }
-    });
-});
-
-</script>
-<script>
-    let arrow = document.querySelectorAll(".arrow");
-  for (var i = 0; i < arrow.length; i++) {
-    arrow[i].addEventListener("click", (e)=>{
-   let arrowParent = e.target.parentElement.parentElement;//selecting main parent of arrow
-   arrowParent.classList.toggle("showMenu");
-    });
-  }
-  let sidebar = document.querySelector(".sidebar");
-  let sidebarBtn = document.querySelector(".bx-menu");
-  console.log(sidebarBtn);
-  sidebarBtn.addEventListener("click", ()=>{
-    sidebar.classList.toggle("close");
-  });
-</script>
-<script>
-</script>
-
+    
 
 </body>
 </html>
