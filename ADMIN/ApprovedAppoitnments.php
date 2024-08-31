@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,93 +12,226 @@
     <!-- Custom CSS -->
     <style>
         body {
-            background-color: #f8f9fa;
+            background: #f4f4f4;
             font-family: 'Arial', sans-serif;
             padding: 20px;
         }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
         .table-container {
-            background-color: #ffffff;
+            background: #ffffff;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
+
         .back-button {
             display: inline-block;
             margin-bottom: 20px;
-            font-weight: bold;
             color: #007bff;
             text-decoration: none;
+            font-size: 0.9em;
         }
+
         .back-button:hover {
             text-decoration: underline;
         }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+
+        table {
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
         }
-        .grid-item {
-            background-color: #ffffff;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
-        }
-        .grid-item h5 {
-            margin-bottom: 15px;
-            font-weight: bold;
-            color: #333333;
-        }
-        .grid-item p {
-            margin-bottom: 10px;
-            color: #555555;
-            font-weight: 500;
-        }
-        .grid-item .status-approved {
-            background-color: #28a745;
-            color: #ffffff;
-            padding: 5px 10px;
-            border-radius: 5px;
+
+        table th,
+        table td {
+            padding: 10px;
+            text-align: left;
+            vertical-align: middle;
             font-size: 0.9em;
-            text-align: center;
         }
-        .grid-item .btn-view {
+
+        table th {
+            background: #007bff;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        table tbody tr {
+            transition: background 0.2s ease-in-out;
+        }
+
+        table tbody tr:hover {
+            background: #f1f1f1;
+        }
+
+        .status-approved {
+            background: #28a745;
+            color: #ffffff;
+            padding: 4px 8px;
+            border-radius: 3px;
+            display: inline-block;
+            font-size: 0.8em;
+        }
+
+        .btn-view {
             font-weight: bold;
             color: #ffffff;
-            background-color: #007bff;
+            background: #007bff;
+            border-radius: 5px;
+            padding: 4px 10px;
+            border: none;
+            font-size: 0.8em;
+            transition: background 0.3s ease;
         }
-        .back-button i {
-            margin-right: 5px;
+
+        .btn-view:hover {
+            background: #0056b3;
+        }
+
+        .modal-content {
+            border-radius: 10px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+
+        .modal-title {
+            font-size: 1.1em;
+        }
+
+        .modal-body p {
+            margin-bottom: 10px;
         }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <a href="Dashboard.php" class="back-button"><i class="fas fa-arrow-left"></i> Back to Previous Page</a>
-    <div class="table-container">
-        <h2 class="mb-4 text-center">Approved Appointments</h2>
-        <div class="grid-container">
-            <div class="grid-item">
-                <h5>Customer ID: 31</h5>
-                <p><strong>First Name:</strong> asd</p>
-                <p><strong>Phone Number:</strong> 23123</p>
-                <p><strong>Email Address:</strong> ursa@gmail.com</p>
-                <p><strong>Repair Details:</strong> asd</p>
-                <p><strong>Appointment Time:</strong> 21:32:00</p>
-                <p><strong>Appointment Date:</strong> 2024-07-27</p>
-                <p><strong>Status:</strong> <span class="status-approved">Approved</span></p>
-                <div>
-                    <button type="button" class="btn btn-view btn-sm">View</button>
-                </div>
-            </div>
-            <!-- Add more grid items as needed -->
+    <div class="container">
+        <a href="Dashboard.php" class="back-button"><i class="fas fa-arrow-left"></i> Back to Previous Page</a>
+        <div class="table-container">
+            <h2 class="mb-4 text-center">Approved Appointments</h2>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Customer ID</th>
+                        <th>First Name</th>
+                        <th>Phone Number</th>
+                        <th>Email Address</th>
+                        <th>Repair Details</th>
+                        <th>Appointment Time</th>
+                        <th>Appointment Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="appointmentsTableBody">
+                    <!-- Rows will be dynamically inserted here -->
+                </tbody>
+            </table>
         </div>
     </div>
-</div>
 
-<!-- Bootstrap JS (Optional, for interactive elements like dropdowns) -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <!-- Modal Structure -->
+    <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewModalLabel">Appointment Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Customer ID:</strong> <span id="modalCustomerId"></span></p>
+                    <p><strong>First Name:</strong> <span id="modalFirstName"></span></p>
+                    <p><strong>Phone Number:</strong> <span id="modalPhoneNumber"></span></p>
+                    <p><strong>Email Address:</strong> <span id="modalEmailAddress"></span></p>
+                    <p><strong>Repair Details:</strong> <span id="modalRepairDetails"></span></p>
+                    <p><strong>Appointment Time:</strong> <span id="modalAppointmentTime"></span></p>
+                    <p><strong>Appointment Date:</strong> <span id="modalAppointmentDate"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (Optional, for interactive elements like modals) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <!-- jQuery (Required for AJAX) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+    $(document).ready(function () {
+        // Fetch and display approved appointments on page load
+        $.ajax({
+            url: 'fetchApprovedAppointments.php', // URL to your PHP script
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.length === 0) {
+                    $('#appointmentsTableBody').html('<tr><td colspan="9" class="text-center">No approved appointments found</td></tr>');
+                } else {
+                    var rows = '';
+                    $.each(data, function (index, appointment) {
+                        rows += '<tr>';
+                        rows += '<td>' + appointment.customer_id + '</td>';
+                        rows += '<td>' + appointment.firstname + '</td>';
+                        rows += '<td>' + appointment.phoneNumber + '</td>';
+                        rows += '<td>' + appointment.emailAddress + '</td>';
+                        rows += '<td>' + appointment.repairdetails + '</td>';
+                        rows += '<td>' + appointment.appointment_time + '</td>';
+                        rows += '<td>' + appointment.appointment_date + '</td>';
+                        rows += '<td><span class="status-approved">' + appointment.Status + '</span></td>';
+                        rows += '<td><button type="button" class="btn btn-view" data-bs-toggle="modal" data-bs-target="#viewModal" data-id="' + appointment.customer_id + '">View</button></td>';
+                        rows += '</tr>';
+                    });
+                    $('#appointmentsTableBody').html(rows);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+                $('#appointmentsTableBody').html('<tr><td colspan="9" class="text-center">Failed to fetch data. Please try again.</td></tr>');
+            }
+        });
+
+        // Set up the modal to load data when shown
+        $('#viewModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var customerId = button.data('id'); // Extract info from data-id attribute
+
+            // Fetch the appointment details
+            $.ajax({
+                url: 'getAppointmentDetails.php',
+                type: 'GET',
+                data: { id: customerId },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        $('#modalCustomerId').text(data.customer_id);
+                        $('#modalFirstName').text(data.firstname);
+                        $('#modalPhoneNumber').text(data.phoneNumber);
+                        $('#modalEmailAddress').text(data.emailAddress);
+                        $('#modalRepairDetails').text(data.repairdetails);
+                        $('#modalAppointmentTime').text(data.appointment_time);
+                        $('#modalAppointmentDate').text(data.appointment_date);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                    alert('Failed to fetch data. Please try again.');
+                }
+            });
+        });
+    });
+    </script>
 </body>
+
 </html>
