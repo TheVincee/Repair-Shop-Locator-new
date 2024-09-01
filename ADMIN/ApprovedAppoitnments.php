@@ -153,6 +153,7 @@
                     <p><strong>Repair Details:</strong> <span id="modalRepairDetails"></span></p>
                     <p><strong>Appointment Time:</strong> <span id="modalAppointmentTime"></span></p>
                     <p><strong>Appointment Date:</strong> <span id="modalAppointmentDate"></span></p>
+                    <p><strong>Status:</strong> <span id="modalStatus"></span></p> <!-- Added Status -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -222,6 +223,8 @@
                         $('#modalRepairDetails').text(data.repairdetails);
                         $('#modalAppointmentTime').text(data.appointment_time);
                         $('#modalAppointmentDate').text(data.appointment_date);
+                        $('#modalStatus').text(data.Status); // Display status
+
                     }
                 },
                 error: function (xhr, status, error) {

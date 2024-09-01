@@ -360,7 +360,47 @@ function fetchAppointments() {
 }
 </script>
 <script>
-    
+    $(document).on('click', '.viewWalkinAppointment', function(){
+    var customer_id = $(this).data('id');
+    console.log('Customer ID:', customer_id);
+
+    $.ajax({
+        url: 'fetch_walkin_appointments.php',
+        type: 'POST',
+        data: {customer_id: customer_id},
+        success: function(response){
+            console.log('Raw Response:', response); // Log raw response
+
+            try {
+                var data = JSON.parse(response);
+                console.log('Parsed Data:', data); // Log parsed data
+
+                if (data) {
+                    $('#walkinCustomerID').text(data.customer_id);
+                    $('#walkinFirstName').text(data.first_name);
+                    $('#walkinPhoneNumber').text(data.phone_number);
+                    $('#walkinEmailAddress').text(data.email_address);
+                    $('#walkinRepairDetails').text(data.repair_details);
+                    $('#walkinAppointmentTime').text(data.appointment_time);
+                    $('#walkinAppointmentDate').text(data.appointment_date);
+                    $('#walkinStatus').text(data.status);
+                } else {
+                    $('#walkinAppointmentModal .modal-body').html('<p>No data found.</p>');
+                }
+
+                $('#walkinAppointmentModal').modal('show');
+            } catch (e) {
+                console.error('Error parsing JSON:', e);
+                $('#walkinAppointmentModal .modal-body').html('<p>There was an error fetching the data.</p>');
+                $('#walkinAppointmentModal').modal('show');
+            }
+        },
+        error: function(xhr, status, error){
+            console.error('AJAX Error:', xhr.responseText);
+        }
+    });
+});
+
 </script>
 
 </body>

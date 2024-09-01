@@ -20,7 +20,7 @@
                     <span class="link_name">Dashboard</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Category</a></li>
+                    <li><a class="link_name" href="Home.php">Category</a></li>
                 </ul>
             </li>
             <li>
@@ -32,15 +32,15 @@
                     <i class='bx bxs-chevron-down arrow'></i>
                 </div>
                 <ul class="sub-menu">
-                    <li><a class="link_name" href="#">Category</a></li>
-                    <li><a href="#">HTML & CSS</a></li>
-                    <li><a href="#">JavaScript</a></li>
+                    <li><a class="link_name" href="Appointment-table.php">Category</a></li>
+                    <li><a href="map.php">HTML & CSS</a></li>
+                    <li><a href="Notification.php">JavaScript</a></li>
                     <li><a href="#">PHP & MySQL</a></li>
                 </ul>
             </li>
             <li>
                 <div class="iocn-link">
-                    <a href="#">
+                    <a href="ChatSystem.php">
                         <i class='bx bx-book-alt'></i>
                         <span class="link_name">Posts</span>
                     </a>
@@ -63,7 +63,7 @@
                 </ul>
             </li>
             <li>
-                <a href="#">
+                <a href="Ratings.php">
                     <i class='bx bx-line-chart'></i>
                     <span class="link_name">Chart</span>
                 </a>

@@ -1,0 +1,106 @@
+/* General Font Family */
+body {
+    font-family: 'Arial', sans-serif; /* You can change this to any font family you prefer */
+    margin: 0;
+    padding: 0;
+}
+
+/* Styling for Walk-In Appointments Section */
+.walkin-appointments {
+    margin: 20px;
+}
+
+.walkin-appointments h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Styling for Walk-In Appointments Table */
+.walkin-appointments-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+    border: 2px solid #ddd; /* Thicker border for the table */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+}
+
+.walkin-appointments-table th,
+.walkin-appointments-table td {
+    padding: 16px; /* Increased padding for thicker design */
+    border-bottom: 2px solid #ddd; /* Thicker border for table cells */
+}
+
+.walkin-appointments-table th {
+    background-color: #f4f4f4;
+    color: #333;
+    font-weight: bold; /* Makes header text bold */
+}
+
+.walkin-appointments-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.walkin-appointments-table .view-btn {
+    padding: 8px 16px; /* Increased padding for buttons */
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #007bff;
+    transition: background-color 0.3s;
+}
+
+.walkin-appointments-table .view-btn:hover {
+    background-color: #0056b3;
+}
+
+.walkin-appointments-table .hide {
+    display: none;
+}
+
+/* Status Styling */
+.status {
+    font-weight: bold;
+    text-align: center;
+}
+
+.status.in-processing {
+    color: #ffc107; /* Yellow color for 'In Processing' */
+}
+
+.status .icon {
+    margin-right: 4px; /* Adds space between icon and text */
+}
+
+/* Button Styling */
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 0 4px; /* Adds spacing between buttons */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+button.edit-btn {
+    background-color: #28a745; /* Green for edit */
+    color: #fff;
+}
+
+button.edit-btn:hover {
+    background-color: #218838;
+}
+
+button.delete-btn {
+    background-color: #dc3545; /* Red for delete */
+    color: #fff;
+}
+
+button.delete-btn:hover {
+    background-color: #c82333;
+}
