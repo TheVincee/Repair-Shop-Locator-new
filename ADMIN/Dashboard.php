@@ -291,8 +291,6 @@
         </tbody>
     </table>
 </div>
-
-
     </section>
     <div class="modal-overlay" id="modal-overlay" style="display: none;">
     <div class="modal modern-modal">
@@ -328,49 +326,32 @@
         </form>
     </div>
 </div>
-
-<div id="walkin-modal" class="modal-overlay">
-    <div class="modal-content">
-        <form id="walkin-form">
-            <div class="modal-header">
-                <h5 class="modal-title">Walk-In Appointment Details</h5>
-                <button type="button" class="close-modal-btn">&times;</button>
+<div id="viewWalkinModal" class="overlay-modal">
+    <div class="modal-container">
+        <div class="modal-top">
+            <h2>View Walk-In Appointment</h2>
+            <span class="modal-close">&times;</span>
+        </div>
+        <div class="modal-content">
+            <div class="input-group">
+                <label for="customer-id-input">Customer ID</label>
+                <input type="text" id="customer-id-input" class="input-customer-id" name="customer_id" disabled>
             </div>
-            <div class="modal-body">
-                <!-- Display Customer ID -->
-                <div class="form-group">
-                    <label for="customer-id"><i class="fas fa-user"></i> Customer ID</label>
-                    <input type="text" id="customer-id" name="customer-id" readonly class="input-field">
-                </div>
-
-                <!-- Display Appointment Details -->
-                <div class="form-group">
-                    <label for="appointment-time"><i class="fas fa-calendar-clock"></i> Appointment Time</label>
-                    <input type="text" id="appointment-time" name="appointment-time" readonly class="input-field">
-                </div>
-                <div class="form-group">
-                    <label for="repair-details"><i class="fas fa-wrench"></i> Repair Details</label>
-                    <textarea id="repair-details" name="repair-details" readonly class="input-field"></textarea>
-                </div>
-
-                <!-- Dropdown for Status -->
-                <div class="form-group">
-                    <label for="status-dropdown"><i class="fas fa-exchange-alt"></i> Change Status</label>
-                    <select id="status-dropdown" name="status-dropdown" class="form-control input-field">
-                        <option value="Approve" class="approve-option">Approve &#x2714;</option>
-                        <option value="Reject" class="reject-option">Reject &#x2716;</option>
-                        <option value="In Processing" class="processing-option">In Processing &#x231B;</option>
-                    </select>
-                </div>
+            <div class="input-group">
+                <label for="status-dropdown">Status</label>
+                <select id="status-dropdown" class="dropdown-status">
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                    <option value="In Processing">In Processing</option>
+                </select>
             </div>
-            <div class="modal-footer">
-                <button type="submit" class="submit-btn modern-btn">
-                    <i class="fas fa-paper-plane"></i> Submit
-                </button>
-            </div>
-        </form>
+        </div>
+        <div class="modal-bottom">
+            <button type="button" class="modal-close-button">Close</button>
+        </div>
     </div>
 </div>
+
 <<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -507,128 +488,37 @@
         
     });
 </script>
+
 <script>
- document.addEventListener('DOMContentLoaded', function() {
-    // Fetch Walk-In Appointments
-    function fetchWalkinAppointments() {
-        $.ajax({
-            url: 'fetch_walkin_appointments.php',
-            method: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                $('#walkin_appointments-tbody').empty();
+document.getElementById('status-dropdown').addEventListener('change', function () {
+    const selectedStatus = this.value;
+    const customerIdInput = document.getElementById('customer-id');
 
-                if (data.length > 0) {
-                    data.forEach(function(appointment) {
-                        var row = $('<tr>');
-                        row.append($('<td>').text(appointment.customer_id));
-                        row.append($('<td>').text(appointment.first_name));
-                        row.append($('<td class="hide">').text(appointment.last_name));
-                        row.append($('<td>').text(appointment.phone_number));
-                        row.append($('<td class="hide">').text(appointment.email_address));
-                        row.append($('<td class="hide">').text(appointment.car_make));
-                        row.append($('<td class="hide">').text(appointment.car_model));
-                        row.append($('<td>').text(appointment.repair_details));
-                        row.append($('<td>').text(appointment.appointment_time));
-                        row.append($('<td>').text(appointment.appointment_date));
-                        row.append($('<td>').text(appointment.status));
+    // Assuming you have the customer_id stored in a data attribute or available in your code
+    const customerId = customerIdInput.value;
 
-                        var actionCell = $('<td>');
-                        var viewButton = $('<button>')
-                            .addClass('viewWalkinAppointment')
-                            .text('View')
-                            .data('id', appointment.customer_id);
-                        actionCell.append(viewButton);
-                        row.append(actionCell);
-
-                        $('#walkin_appointments-tbody').append(row);
-                    });
-                } else {
-                    $('#walkin_appointments-tbody').append($('<tr>').append($('<td colspan="12">').text('No walk-in appointments found.')));
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching data:', error);
-            }
-        });
-    }
-
-    // Fetch Walk-In Appointments on page load
-    fetchWalkinAppointments();
-
-    // View Walk-In Appointment Modal
-    $(document).on('click', '.viewWalkinAppointment', function() {
-        var customerId = $(this).data('id');
-        console.log('Customer ID:', customerId); // Debugging - check if ID is correctly passed
-
-        $.ajax({
-            url: 'fetch_walkin_appointments.php',
-            type: 'POST',
-            data: { customer_id: customerId },
-            success: function(response) {
-                console.log('Response from Server:', response); // Debugging - check the server's response
-
-                try {
-                    var data = JSON.parse(response); // Parsing JSON response
-                    console.log('Parsed Data:', data); // Additional debug log for parsed data
-
-                    if (data && data.customer_id) {
-                        $('#customer-id').val(data.customer_id || 'N/A');
-                        $('#appointment-time').val(data.appointment_time || 'N/A');
-                        $('#repair-details').val(data.repair_details || 'N/A');
-                        $('#status-dropdown').val(data.status || 'In Processing'); // Default to 'In Processing'
-
-                        $('#walkin-modal').show(); // Show modal
-                    } else {
-                        $('#walkin-modal .modal-body').html('<p>No data found.</p>');
-                        $('#walkin-modal').show(); // Show modal
-                    }
-                } catch (e) {
-                    console.error('Error parsing JSON:', e); // Debugging - check if there's an error in parsing
-                    $('#walkin-modal .modal-body').html('<p>There was an error parsing the data.</p>');
-                    $('#walkin-modal').show(); // Show modal
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX Error:', xhr.responseText); // Log the full response text
-                $('#walkin-modal .modal-body').html('<p>There was an error fetching the data.</p>');
-                $('#walkin-modal').show(); // Show modal
-            }
-        });
-    });
-
-    // Close modal
-    $(document).on('click', '.close-modal-btn', function() {
-        $('#walkin-modal').hide(); // Hide modal
-    });
-
-    // Handle walk-in form submission
-    $('#walkin-form').submit(function(event) {
-        event.preventDefault(); // Prevent default form submission
-
-        var customerId = $('#customer-id').val();
-        var status = $('#status-dropdown').val();
-
-        $.ajax({
-            url: 'update_walkin_status.php',
-            type: 'POST',
-            data: { customer_id: customerId, status: status },
-            success: function(response) {
-                alert('Status updated successfully.');
-                $('#walkin-modal').hide(); // Hide modal
-                fetchWalkinAppointments(); // Refresh the appointments list
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error updating status:', textStatus, errorThrown);
-                alert('An error occurred while updating status.');
-            }
-        });
-    });
+    // Perform an AJAX request to fetch the walk-in appointment details based on the customer_id and status
+    fetch('fetch_walkin_appointments.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ customer_id: customerId, status: selectedStatus })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Populate the modal with the fetched data
+            customerIdInput.value = data.customer_id;
+            // Optionally update the dropdown if needed
+            document.getElementById('status-dropdown').value = data.status;
+        } else {
+            alert('No data found for the selected status.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
 });
 
 </script>
-
-
-
 </body>
 </html>

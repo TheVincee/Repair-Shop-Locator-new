@@ -28,7 +28,7 @@
         </li>
         <li>
             <div class="iocn-link">
-                <a href="#">
+                <a href="Home.php">
                     <i class='bx bx-collection'></i>
                     <span class="link_name">Category</span>
                 </a>
