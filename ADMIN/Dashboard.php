@@ -4,68 +4,52 @@
     <meta charset="UTF-8">
     <title>Dashboard with Sidebar and Modal</title>
     <link rel="stylesheet" href="Dashboard.css">
-    <link rel="stylesheet" href="Appointment.css">
-    <link rel="stylesheet" href="Modal.css">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="Modal.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <style>
-        /* Styling for Walk-In Appointments Section */
-.walkin-appointments {
-    margin: 20px;
-}
+        /* Basic styling for the table */
+        .appointments-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+            text-align: left;
+        }
+        .appointments-table th, .appointments-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        .appointments-table th {
+            background-color: #f4f4f4;
+        }
+        .appointments-table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .appointments-table .action-btn {
+            padding: 6px 12px;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .appointments-table .view-btn {
+            background-color: #007bff;
+        }
+        .appointments-table .view-btn:hover {
+            background-color: #0056b3;
+        }
 
-.walkin-appointments h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
-}
+        /* Hide specific columns */
+        .appointments-table td.hide, .appointments-table th.hide {
+            display: none;
+        }
 
-/* Styling for Walk-In Appointments Table */
-.walkin-appointments-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 16px;
-    text-align: left;
-    border: 1px solid #ddd;
-}
-
-.walkin-appointments-table th,
-.walkin-appointments-table td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-}
-
-.walkin-appointments-table th {
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-.walkin-appointments-table tr:hover {
-    background-color: #f1f1f1;
-}
-
-.walkin-appointments-table .view-btn {
-    padding: 6px 12px;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 14px;
-    background-color: #007bff;
-    transition: background-color 0.3s;
-}
-
-.walkin-appointments-table .view-btn:hover {
-    background-color: #0056b3;
-}
-
-.walkin-appointments-table .hide {
-    display: none;
-}
+     
     </style>
 </head>
 <body>
@@ -141,7 +125,7 @@
                     <i class='bx bxs-chevron-down arrow'></i>
                 </div>
                 <ul class="sub-menu">
-                    <li><a class="link_name" href="InProcessing.php">Plugins</a></li>
+                    <li><a class="link_name" href="#">Plugins</a></li>
                     <li><a href="walkin_appointments.php">UI Face</a></li>
                     <li><a href="ApprovedAppoitnments.php">Pigments</a></li>
                     <li><a href="Unapproved.php">Box Icons</a></li>
@@ -184,7 +168,7 @@
         <div class="job">Web Designer</div>
     </div>
     <!-- Wrap the logout icon with a link to the logout page -->
-    <a href="/Repair-Shop-Locator-new-Shop/LOGIN/Sign-in.php" class="logout-link">
+    <a href="/REPAIRSHOP-LOCATOR-REVISE/LOGIN/Sign-in.php" class="logout-link">
         <i class='bx bx-log-out'></i>
     </a>
 </div>
@@ -267,95 +251,80 @@
             </tbody>
         </table>
     </div>
-    <div class="walkin-appointments">
-    <h2>Walk-In Appointments</h2>
-    <table class="walkin-appointments-table">
-        <thead>
-            <tr>
-                <th>Customer ID</th>
-                <th>First Name</th>
-                <th class="hide">Last Name</th>
-                <th>Phone Number</th>
-                <th class="hide">Email Address</th>
-                <th class="hide">Car Make</th>
-                <th class="hide">Car Model</th>
-                <th>Repair Details</th>
-                <th>Appointment Time</th>
-                <th>Appointment Date</th>
-                <th>Status</th>
-                <th>Action</th> <!-- Added Action header -->
-            </tr>
-        </thead>
-        <tbody id="walkin_appointments-tbody">
-            <!-- Rows will be inserted here by JavaScript -->
-        </tbody>
-    </table>
-</div>
+
+    <table id="walkin-appointments-table" class="walkin-appointments-table">
+    <thead>
+        <tr>
+            <th>Customer ID</th>
+            <th>First Name</th>
+            <th class="hide-column">Last Name</th>
+            <th>Phone Number</th>
+            <th>Email Address</th>
+            <th class="hide-column">Car Make</th>
+            <th class="hide-column">Car Model</th>
+            <th>Repair Details</th>
+            <th>Appointment Time</th>
+            <th>Appointment Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="walkin-appointments-tbody">
+        <!-- Rows will be dynamically added here -->
+    </tbody>
+</table>
+
     </section>
     <div class="modal-overlay" id="modal-overlay" style="display: none;">
-    <div class="modal modern-modal">
+    <div class="modal">
         <div class="modal-header">
             <h2><i class="fas fa-info-circle"></i> Customer Details</h2>
-            <button class="close-btn" id="close-btn">
-                <i class="fas fa-times"></i>
-            </button>
+            <button class="close-btn" id="close-btn"><i class="fas fa-times"></i></button>
         </div>
         <form id="appointment-form">
             <div class="modal-body">
                 <!-- Display Customer ID -->
                 <div class="form-group">
                     <label for="customer-id"><i class="fas fa-user"></i> Customer ID</label>
-                    <input type="text" id="customer-id" name="customer-id" readonly class="input-field">
+                    <input type="text" id="customer-id" name="customer-id" readonly>
                 </div>
 
                 <!-- Dropdown for Status -->
                 <div class="form-group">
                     <label for="status-dropdown"><i class="fas fa-exchange-alt"></i> Change Status</label>
-                    <select id="status-dropdown" name="status-dropdown" class="form-control input-field">
-                        <option value="Approve" class="approve-option">Approve &#x2714;</option>
-                        <option value="Reject" class="reject-option">Reject &#x2716;</option>
-                        <option value="In Processing" class="processing-option">In Processing &#x231B;</option>
+                    <select id="status-dropdown" name="status-dropdown" class="form-control">
+                        <option value="Approve">Approve</option>
+                        <option value="Reject">Reject</option>
+                        <option value="In Processing">In Processing</option>
                     </select>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="submit-btn modern-btn">
-                    <i class="fas fa-paper-plane"></i> Submit
-                </button>
+                <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Submit</button>
             </div>
         </form>
     </div>
 </div>
-<div id="viewWalkinModal" class="overlay-modal">
-    <div class="modal-container">
-        <div class="modal-top">
-            <h2>View Walk-In Appointment</h2>
-            <span class="modal-close">&times;</span>
-        </div>
-        <div class="modal-content">
-            <div class="input-group">
-                <label for="customer-id-input">Customer ID</label>
-                <input type="text" id="customer-id-input" class="input-customer-id" name="customer_id" disabled>
-            </div>
-            <div class="input-group">
-                <label for="status-dropdown">Status</label>
-                <select id="status-dropdown" class="dropdown-status">
-                    <option value="Approved">Approved</option>
-                    <option value="Rejected">Rejected</option>
-                    <option value="In Processing">In Processing</option>
-                </select>
-            </div>
-        </div>
-        <div class="modal-bottom">
-            <button type="button" class="modal-close-button">Close</button>
-        </div>
+
+<div id="walkin-modal-container">
+    <div id="walkin-modal-content">
+        <span id="walkin-modal-close">&times;</span>
+        <form id="walkin-modal-form">
+            <input type="text" id="walkin-modal-customer-id" readonly>
+            <label for="walkin-modal-status-dropdown">Status:</label>
+            <select id="walkin-modal-status-dropdown">
+                <option value="In Progress">In Progress</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+            <button type="submit">Update Status</button>
+        </form>
     </div>
 </div>
 
-<<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
+   <script>
+   document.addEventListener('DOMContentLoaded', function() {
         // Sidebar toggle
         let arrow = document.querySelectorAll(".arrow");
         arrow.forEach(function(item) {
@@ -487,38 +456,126 @@
         });
         
     });
-</script>
-
+   </script>
 <script>
-document.getElementById('status-dropdown').addEventListener('change', function () {
-    const selectedStatus = this.value;
-    const customerIdInput = document.getElementById('customer-id');
+     document.addEventListener('DOMContentLoaded', function() {
+        const modalContainer = document.getElementById('walkin-modal-container');
+        const modalClose = document.getElementById('walkin-modal-close');
+        const modalForm = document.getElementById('walkin-modal-form');
 
-    // Assuming you have the customer_id stored in a data attribute or available in your code
-    const customerId = customerIdInput.value;
-
-    // Perform an AJAX request to fetch the walk-in appointment details based on the customer_id and status
-    fetch('fetch_walkin_appointments.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ customer_id: customerId, status: selectedStatus })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Populate the modal with the fetched data
-            customerIdInput.value = data.customer_id;
-            // Optionally update the dropdown if needed
-            document.getElementById('status-dropdown').value = data.status;
-        } else {
-            alert('No data found for the selected status.');
+        function showModal(customerId) {
+            fetch(`get_walkin_appointment.php?customer_id=${customerId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.error) {
+                        document.getElementById('walkin-modal-customer-id').value = data.customer_id;
+                        document.getElementById('walkin-modal-status-dropdown').value = data.Status;
+                        modalContainer.style.display = 'flex';
+                        setTimeout(() => {
+                            modalContainer.classList.add('show');
+                        }, 10);
+                    } else {
+                        alert(data.error);
+                    }
+                })
+                .catch(error => console.error('Error fetching customer data:', error));
         }
-    })
-    .catch(error => console.error('Error:', error));
-});
 
+        if (modalClose) {
+            modalClose.addEventListener('click', function() {
+                modalContainer.classList.remove('show');
+                setTimeout(() => {
+                    modalContainer.style.display = 'none';
+                }, 300);
+            });
+        }
+
+        if (modalForm) {
+            modalForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const customerId = document.getElementById('walkin-modal-customer-id').value;
+                const status = document.getElementById('walkin-modal-status-dropdown').value;
+
+                fetch('update_walkin_status.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        'customer_id': customerId,
+                        'status': status
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Status updated successfully!');
+                        modalContainer.classList.remove('show');
+                        setTimeout(() => {
+                            modalContainer.style.display = 'none';
+                        }, 300);
+                        fetchAppointments(); // Refresh the table to show updated status
+                    } else {
+                        alert('Error updating status: ' + data.error);
+                    }
+                })
+                .catch(error => console.error('Error updating status:', error));
+            });
+        }
+
+        function fetchAppointments() {
+            $.ajax({
+                url: 'fetch_walkin_appointments.php',
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#walkin-appointments-tbody').empty();
+
+                    if (data.length > 0) {
+                        data.forEach(function(appointment) {
+                            var row = $('<tr>');
+                            row.append($('<td>').text(appointment.customer_id));
+                            row.append($('<td>').text(appointment.firstname));
+                            row.append($('<td class="hide-column">').text(appointment.lastname)); // Hidden column
+                            row.append($('<td>').text(appointment.phoneNumber));
+                            row.append($('<td>').text(appointment.emailAddress));
+                            row.append($('<td class="hide-column">').text(appointment.carmake)); // Hidden column
+                            row.append($('<td class="hide-column">').text(appointment.carmodel)); // Hidden column
+                            row.append($('<td>').text(appointment.repairdetails));
+                            row.append($('<td>').text(appointment.appointment_time));
+                            row.append($('<td>').text(appointment.appointment_date));
+                            row.append($('<td>').text(appointment.Status));
+
+                            var actionCell = $('<td>');
+                            var viewButton = $('<button>')
+                                .addClass('view-btn')
+                                .text('View')
+                                .attr('data-id', appointment.customer_id);
+                            actionCell.append(viewButton);
+                            row.append(actionCell);
+
+                            $('#walkin-appointments-tbody').append(row);
+                        });
+                    } else {
+                        $('#walkin-appointments-tbody').append($('<tr>').append($('<td colspan="12">').text('No pending appointments found.')));
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+        }
+
+        fetchAppointments();
+
+        $('#walkin-appointments-tbody').on('click', '.view-btn', function() {
+            var customerId = $(this).data('id');
+            showModal(customerId);
+        });
+    }); 
 </script>
+    
+
 </body>
 </html>
