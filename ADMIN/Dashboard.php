@@ -11,6 +11,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <style>
+        .hide-column {
+    display: none;
+}
+
         /* Basic styling for the table */
         .appointments-table {
             width: 100%;
@@ -328,6 +332,7 @@
     </tbody>
 </table>
 
+
     </section>
     <div class="modal-overlay" id="modal-overlay" style="display: none;">
     <div class="modal">
@@ -360,19 +365,31 @@
     </div>
 </div>
 
-<div id="walkin-modal-container">
-    <div id="walkin-modal-content">
-        <span id="walkin-modal-close">&times;</span>
-        <form id="walkin-modal-form">
-            <input type="text" id="walkin-modal-customer-id" readonly>
-            <label for="walkin-modal-status-dropdown">Status:</label>
-            <select id="walkin-modal-status-dropdown">
-                <option value="In Progress">In Progress</option>
-                <option value="Approved">Approved</option>
-                <option value="Rejected">Rejected</option>
-            </select>
-            <button type="submit">Update Status</button>
-        </form>
+<div id="walkin-modal-container" class="modal-overlay">
+    <div id="walkin-modal-content" class="modal">
+        <div class="modal-header">
+            <h2>Update Status</h2>
+            <span id="walkin-modal-close" class="close-btn">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="walkin-modal-form">
+                <div class="form-group">
+                    <label for="walkin-modal-customer-id">Customer ID:</label>
+                    <input type="text" id="walkin-modal-customer-id" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="walkin-modal-status-dropdown">Status:</label>
+                    <select id="walkin-modal-status-dropdown" class="custom-dropdown">
+                        <option value="In Progress">In Progress</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="submit-btn">Update Status</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
