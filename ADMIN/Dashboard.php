@@ -176,17 +176,17 @@
             </li>
             <li>
                 <div class="iocn-link">
-                    <a href="#">
+                    <a href="walkin_appointments.php">
                         <i class='bx bx-plug'></i>
-                        <span class="link_name">Plugins</span>
+                        <span class="link_name">Appointments</span>
                     </a>
                     <i class='bx bxs-chevron-down arrow'></i>
                 </div>
                 <ul class="sub-menu">
-                    <li><a class="link_name" href="#">Plugins</a></li>
-                    <li><a href="walkin_appointments.php">UI Face</a></li>
-                    <li><a href="ApprovedAppoitnments.php">Pigments</a></li>
-                    <li><a href="Unapproved.php">Box Icons</a></li>
+                    <li><a class="link_name" href="walkin_appointments.php">walk-in</a></li>
+                    <li><a href="InProcessingAppointment.php">In Processing</a></li>
+                    <li><a href="ApprovedAppoitnments.php">Approve</a></li>
+                    <li><a href="RejectedAppointments.php">Reject</a></li>
                 </ul>
             </li>
             <li>
