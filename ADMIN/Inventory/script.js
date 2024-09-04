@@ -1,53 +1,49 @@
-const body = document.querySelector("body");
-const darkLight = document.querySelector("#darkLight");
-const sidebar = document.querySelector(".sidebar");
-const submenuItems = document.querySelectorAll(".submenu_item");
-const sidebarOpen = document.querySelector("#sidebarOpen");
-const sidebarClose = document.querySelector(".collapse_sidebar");
-const sidebarExpand = document.querySelector(".expand_sidebar");
-sidebarOpen.addEventListener("click", () => sidebar.classList.toggle("close"));
+function openModal(action, id) {
+  const modal = document.getElementById('modal');
+  const modalTitle = document.getElementById('modal-title');
+  const modalMessage = document.getElementById('modal-message');
+  const modalForm = document.getElementById('modal-form');
+  const modalBack = document.getElementById('modal-back');
+  const modalConfirm = document.getElementById('modal-confirm');
 
-sidebarClose.addEventListener("click", () => {
-  sidebar.classList.add("close", "hoverable");
-});
-sidebarExpand.addEventListener("click", () => {
-  sidebar.classList.remove("close", "hoverable");
-});
-
-sidebar.addEventListener("mouseenter", () => {
-  if (sidebar.classList.contains("hoverable")) {
-    sidebar.classList.remove("close");
+  modalTitle.textContent = `${action} Part`;
+  if (action === 'Add') {
+      modalMessage.style.display = 'none';
+      modalForm.style.display = 'block';
+      modalBack.style.display = 'none';
+      modalConfirm.textContent = 'Add';
+  } else if (action === 'Edit') {
+      modalMessage.textContent = `Editing Part ID ${id}`;
+      modalMessage.style.display = 'block';
+      modalForm.style.display = 'none';
+      modalBack.style.display = 'block';
+      modalConfirm.textContent = 'Save';
+  } else if (action === 'Delete') {
+      modalMessage.textContent = `Are you sure you want to delete Part ID ${id}?`;
+      modalMessage.style.display = 'block';
+      modalForm.style.display = 'none';
+      modalBack.style.display = 'none';
+      modalConfirm.textContent = 'Delete';
+  } else if (action === 'View') {
+      modalMessage.textContent = `Viewing details for Part ID ${id}`;
+      modalMessage.style.display = 'block';
+      modalForm.style.display = 'none';
+      modalBack.style.display = 'block';
+      modalConfirm.style.display = 'none';
   }
-});
-sidebar.addEventListener("mouseleave", () => {
-  if (sidebar.classList.contains("hoverable")) {
-    sidebar.classList.add("close");
-  }
-});
 
-darkLight.addEventListener("click", () => {
-  body.classList.toggle("dark");
-  if (body.classList.contains("dark")) {
-    document.setI
-    darkLight.classList.replace("bx-sun", "bx-moon");
-  } else {
-    darkLight.classList.replace("bx-moon", "bx-sun");
-  }
-});
+  modal.style.display = 'block';
+}
 
-submenuItems.forEach((item, index) => {
-  item.addEventListener("click", () => {
-    item.classList.toggle("show_submenu");
-    submenuItems.forEach((item2, index2) => {
-      if (index !== index2) {
-        item2.classList.remove("show_submenu");
-      }
-    });
-  });
-});
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+}
 
-if (window.innerWidth < 768) {
-  sidebar.classList.add("close");
-} else {
-  sidebar.classList.remove("close");
+function goBack() {
+  const modalBack = document.getElementById('modal-back');
+  modalBack.style.display = 'none'; // Hide Back button
+  const modalConfirm = document.getElementById('modal-confirm');
+  modalConfirm.style.display = 'block'; // Show Confirm button
+  document.getElementById('modal-message').style.display = 'block';
+  document.getElementById('modal-form').style.display = 'none';
 }

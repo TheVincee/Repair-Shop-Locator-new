@@ -48,8 +48,62 @@
         .appointments-table td.hide, .appointments-table th.hide {
             display: none;
         }
-
-     
+    </style>
+    <style>
+         /* Modern Table Styles */
+         .walkin-appointments-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .walkin-appointments-table th, .walkin-appointments-table td {
+            border: none;
+            padding: 12px 15px;
+            text-align: left;
+            background-color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        .walkin-appointments-table th {
+            background-color: #f7f9fc;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .walkin-appointments-table th:hover {
+            background-color: #e1e9f4;
+        }
+        .walkin-appointments-table tr:hover td {
+            background-color: #f1f5fb;
+        }
+        .walkin-appointments-table td {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .walkin-appointments-table thead {
+                display: none;
+            }
+            .walkin-appointments-table, .walkin-appointments-table tbody, .walkin-appointments-table tr, .walkin-appointments-table td {
+                display: block;
+                width: 100%;
+            }
+            .walkin-appointments-table tr {
+                margin-bottom: 15px;
+            }
+            .walkin-appointments-table td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+            .walkin-appointments-table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+        }
     </style>
 </head>
 <body>
@@ -168,7 +222,7 @@
         <div class="job">Web Designer</div>
     </div>
     <!-- Wrap the logout icon with a link to the logout page -->
-    <a href="/REPAIRSHOP-LOCATOR-REVISE/LOGIN/Sign-in.php" class="logout-link">
+    <a href="/Repair-Shop-Locator-new-Shop/LOGIN/Sign-in.php" class="logout-link">
         <i class='bx bx-log-out'></i>
     </a>
 </div>

@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $_SESSION['usertype'] = $row['usertype'];
 
                 // Redirect to admin dashboard
-                header("Location: /REPAIRSHOP-LOCATOR-REVISE/ADMIN/Dashboard.php");
+                header("Location: /Repair-Shop-Locator-new-Shop/ADMIN/Dashboard.php");
                 exit();
             } else {
                 echo "Password verification failed. Invalid email or password.";
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $_SESSION['usertype'] = $row['usertype'];
 
                 // Redirect to user home page
-                header("Location: /REPAIRSHOP-LOCATOR-REVISE/Landing-Page/Home.php");
+                header("Location: /Repair-Shop-Locator-new-Shop/Landing-Page/Home.php");
                 exit();
             } else {
                 echo "Password verification failed. Invalid email or password.";

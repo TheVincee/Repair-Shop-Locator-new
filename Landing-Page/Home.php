@@ -66,7 +66,7 @@ session_start();
         
       </nav>
       <form class="d-flex">
-      <a href="/REPAIRSHOP-LOCATOR-REVISE/LOGIN/Sign-in.php" class="btn btn-outline-danger">Logout</a>
+      <a href="/Repair-Shop-Locator-new-Shop/LOGIN/Sign-in.php" class="btn btn-outline-danger">Logout</a>
       </form>
     </div>
   </header>
