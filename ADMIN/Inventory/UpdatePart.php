@@ -40,7 +40,19 @@ if (isset($data['product_id'], $data['vehicle_type'], $data['part_name'], $data[
 
         // Execute the statement
         if ($stmt->execute()) {
-            echo json_encode(["status" => "success", "message" => "Part updated successfully."]);
+            // Fetch updated part to return in the response
+            $sql = "SELECT * FROM inventory_tb WHERE product_id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $product_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $part = $result->fetch_assoc();
+
+            echo json_encode([
+                "status" => "success",
+                "message" => "Part updated successfully.",
+                "part" => $part
+            ]);
         } else {
             echo json_encode(["status" => "error", "message" => "Failed to update part."]);
         }

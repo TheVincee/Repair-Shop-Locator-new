@@ -7,17 +7,23 @@
     <link rel="stylesheet" href="Product.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* Add any custom styles here */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+        }
+
         .container {
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .back-button, .add-button {
@@ -25,45 +31,63 @@
             padding: 10px 20px;
             text-decoration: none;
             color: #fff;
-            border-radius: 5px;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.3s;
         }
 
         .back-button {
             background-color: #007bff;
         }
 
+        .back-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
         .add-button {
             background-color: #28a745;
+        }
+
+        .add-button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
         }
 
         .inventory-table {
             width: 100%;
             border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #fff;
         }
 
         .inventory-table th, .inventory-table td {
             border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        .inventory-table th {
-            background-color: #f4f4f4;
+            padding: 12px;
             text-align: left;
         }
 
+        .inventory-table th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: 500;
+        }
+
         .inventory-table tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: #f2f2f2;
         }
 
         .inventory-table tr:hover {
-            background-color: #f1f1f1;
+            background-color: #e9ecef;
         }
 
         .action-button {
-            padding: 5px 10px;
+            padding: 6px 12px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
         }
 
         .edit {
@@ -71,14 +95,43 @@
             color: #fff;
         }
 
+        .edit:hover {
+            background-color: #e0a800;
+            transform: scale(1.05);
+        }
+
         .delete {
             background-color: #dc3545;
             color: #fff;
         }
 
+        .delete:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
+        }
+
         .view {
             background-color: #17a2b8;
             color: #fff;
+        }
+
+        .view:hover {
+            background-color: #138496;
+            transform: scale(1.05);
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #ddd;
         }
     </style>
 </head>
@@ -147,8 +200,9 @@
     <!-- Include Bootstrap JS and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
+        <script>
        // Function to open the modal for adding or editing parts
+// Function to open the modal for adding or editing parts
 function openModal(action, id = null) {
     $('#modal').modal('show');
     $('#modal-title').text(action + ' Part');
@@ -222,16 +276,24 @@ function openModal(action, id = null) {
                                 contentType: 'application/json',
                                 success: function(response) {
                                     console.log('Update Part Response:', response);
-                                    try {
-                                        response = JSON.parse(response);
-                                        if (response.status === 'success') {
+                                    if (typeof response === 'string') {
+                                        try {
+                                            response = JSON.parse(response); // Parse if response is string
+                                        } catch (e) {
+                                            console.error('Failed to parse response:', response);
+                                            return;
+                                        }
+                                    }
+
+                                    if (response.status === 'success') {
+                                        if (response.part && response.part.product_id) {
                                             updateTableRow(id, response.part); // Update the table row
                                             $('#modal').modal('hide'); // Close the modal
                                         } else {
-                                            alert('Error: ' + response.message);
+                                            console.error('Error: part object is missing or invalid in the response');
                                         }
-                                    } catch (e) {
-                                        console.error('Failed to parse response:', response);
+                                    } else {
+                                        alert('Error: ' + response.message);
                                     }
                                 },
                                 error: function(xhr, status, error) {
@@ -324,5 +386,7 @@ $(document).ready(function() {
 });
 
     </script>
+
+
 </body>
 </html>
