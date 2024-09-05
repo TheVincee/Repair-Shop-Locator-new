@@ -261,37 +261,28 @@
             }
 
             // View Part
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('view-btn')) {
-        const partID = e.target.getAttribute('data-id');
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', `inventory.php?action=view&id=${partID}`, true);
-        xhr.onload = function() {
-            if (this.status == 200) {
-                const data = JSON.parse(this.responseText);
-                if (!data.error) {
-                    document.getElementById('viewDetails').innerHTML = `
-                        <p><strong>Part ID:</strong> ${data.partID}</p>
-                        <p><strong>Part Name:</strong> ${data.partName}</p>
-                        <p><strong>Category:</strong> ${data.category}</p>
-                        <p><strong>Quantity:</strong> ${data.quantity}</p>
-                        <p><strong>Price:</strong> $${data.price.toFixed(2)}</p>
-                        <p><strong>Supplier:</strong> ${data.supplier}</p>
-                    `;
-                    document.getElementById('viewModal').style.display = 'block';
-                } else {
-                    alert(data.error);
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('view-btn')) {
+                    const partID = e.target.getAttribute('data-id');
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', `inventory.php?action=view&id=${partID}`, true);
+                    xhr.onload = function() {
+                        if (this.status == 200) {
+                            const data = JSON.parse(this.responseText);
+                            document.getElementById('viewDetails').innerHTML = `
+                                <p><strong>Part ID:</strong> ${data.partID}</p>
+                                <p><strong>Part Name:</strong> ${data.partName}</p>
+                                <p><strong>Category:</strong> ${data.category}</p>
+                                <p><strong>Quantity:</strong> ${data.quantity}</p>
+                                <p><strong>Price:</strong> $${data.price.toFixed(2)}</p>
+                                <p><strong>Supplier:</strong> ${data.supplier}</p>
+                            `;
+                            document.getElementById('viewModal').style.display = 'block';
+                        }
+                    }
+                    xhr.send();
                 }
-            }
-        }
-        xhr.send();
-    }
-});
-
-document.getElementById('closeView').onclick = function() {
-    document.getElementById('viewModal').style.display = 'none';
-}
-
+            });
         });
     </script>
 </body>
