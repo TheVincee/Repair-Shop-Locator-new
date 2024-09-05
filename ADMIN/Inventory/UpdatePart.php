@@ -1,40 +1,56 @@
 <?php
-// Database connection
-$servername = "localhost"; // Update with your database server
-$username = "root"; // Update with your database username
-$password = ""; // Update with your database password
-$dbname = "repair-shop-locator"; // Update with your database name
+// Database connection details
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "repair-shop-locator";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die(json_encode(["status" => "error", "message" => "Connection failed: " . $conn->connect_error]));
 }
 
 // Get the JSON data from the request body
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (isset($data['product_id']) && isset($data['vehicle_type']) && isset($data['part_name']) && isset($data['quantity']) && isset($data['price'])) {
-    $product_id = $data['product_id'];
-    $vehicle_type = $conn->real_escape_string($data['vehicle_type']);
-    $part_name = $conn->real_escape_string($data['part_name']);
-    $quantity = (int)$data['quantity'];
-    $price = (float)$data['price'];
+// Check if JSON data is valid
+if (json_last_error() !== JSON_ERROR_NONE) {
+    echo json_encode(["status" => "error", "message" => "Invalid JSON data."]);
+    exit;
+}
 
-    // Prepare and execute the update statement
+// Check if required fields are set
+if (isset($data['product_id'], $data['vehicle_type'], $data['part_name'], $data['quantity'], $data['price'])) {
+    $product_id = (int) $data['product_id']; // Ensure product_id is an integer
+    $vehicle_type = $data['vehicle_type'];
+    $part_name = $data['part_name'];
+    $quantity = (int) $data['quantity']; // Cast quantity to integer
+    $price = (float) $data['price']; // Cast price to float
+
+    // Prepare the update SQL statement
     $sql = "UPDATE inventory_tb SET vehicle_type = ?, part_name = ?, quantity = ?, price = ? WHERE product_id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssidi", $vehicle_type, $part_name, $quantity, $price, $product_id);
 
-    if ($stmt->execute()) {
-        echo json_encode(["status" => "success", "message" => "Part updated successfully."]);
+    // Check if statement preparation is successful
+    if ($stmt) {
+        $stmt->bind_param("ssidi", $vehicle_type, $part_name, $quantity, $price, $product_id);
+
+        // Execute the statement
+        if ($stmt->execute()) {
+            echo json_encode(["status" => "success", "message" => "Part updated successfully."]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Failed to update part."]);
+        }
+
+        $stmt->close();
     } else {
-        echo json_encode(["status" => "error", "message" => "Failed to update part."]);
+        // Log error and send failure message
+        error_log("SQL Error: " . $conn->error); // Logs SQL error to server log
+        echo json_encode(["status" => "error", "message" => "SQL preparation failed."]);
     }
-
-    $stmt->close();
 } else {
     echo json_encode(["status" => "error", "message" => "Invalid input."]);
 }

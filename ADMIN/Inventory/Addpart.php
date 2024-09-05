@@ -27,8 +27,21 @@ $part_name = $data['part_name'] ?? null;
 $quantity = $data['quantity'] ?? null;
 $price = $data['price'] ?? null;
 
+// Validate input data
 if (!$vehicle_type || !$part_name || !$quantity || !$price) {
     echo json_encode(["status" => "error", "message" => "All fields are required"]);
+    exit;
+}
+
+// Ensure quantity is a valid integer
+if (!is_numeric($quantity) || intval($quantity) < 0) {
+    echo json_encode(["status" => "error", "message" => "Quantity must be a valid positive number"]);
+    exit;
+}
+
+// Ensure price is a valid numeric value
+if (!is_numeric($price) || floatval($price) < 0) {
+    echo json_encode(["status" => "error", "message" => "Price must be a valid positive number"]);
     exit;
 }
 
