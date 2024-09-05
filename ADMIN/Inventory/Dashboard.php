@@ -32,7 +32,7 @@
                     <i class='bx bxs-chevron-down arrow'></i>
                 </div>
                 <ul class="sub-menu">
-                    <li><a class="link_name" href="#">Category</a></li>
+                    <li><a class="link_name" href="ListOfProducts.php">Category</a></li>
                     <li><a href="#">HTML & CSS</a></li>
                     <li><a href="#">JavaScript</a></li>
                     <li><a href="#">PHP & MySQL</a></li>

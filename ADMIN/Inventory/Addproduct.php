@@ -6,7 +6,6 @@
     <title>Parts Inventory</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Custom CSS -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -104,8 +103,8 @@
         <table class="inventory-table">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Type</th>
+                    <th>Product ID</th>
+                    <th>Vehicle Type</th>
                     <th>Part Name</th>
                     <th>Quantity</th>
                     <th>Price</th>
@@ -123,30 +122,33 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 id="modal-title" class="modal-title">Modal Title</h5>
+                    <h5 id="modal-title" class="modal-title">Add New Part</h5>
                     <button type="button" class="close close-button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div id="modal-body" class="modal-body">
-                    <form id="part-form" style="display: none;">
+                    <form id="part-form">
                         <div class="form-group">
-                            <input type="text" id="part-type" name="part-type" class="form-control" placeholder="Type">
+                            <label for="vehicle-type">Vehicle Type</label>
+                            <input type="text" id="vehicle-type" name="vehicle-type" class="form-control" placeholder="Vehicle Type" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" id="part-name" name="part-name" class="form-control" placeholder="Part Name">
+                            <label for="part-name">Part Name</label>
+                            <input type="text" id="part-name" name="part-name" class="form-control" placeholder="Part Name" required>
                         </div>
                         <div class="form-group">
-                            <input type="number" id="part-quantity" name="part-quantity" class="form-control" placeholder="Quantity">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" id="quantity" name="quantity" class="form-control" placeholder="Quantity" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" id="part-price" name="part-price" class="form-control" placeholder="Price">
+                            <label for="price">Price</label>
+                            <input type="text" id="price" name="price" class="form-control" placeholder="Price" required>
                         </div>
                     </form>
-                    <p id="modal-message">Modal content goes here.</p>
                 </div>
                 <div class="modal-footer">
-                    <button id="modal-confirm" class="modal-button">Confirm</button>
+                    <button id="modal-confirm" class="modal-button">Add Part</button>
                     <button id="modal-cancel" class="modal-button" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
@@ -157,115 +159,112 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
     <script>
-        // Function to open modal
-        function openModal(action, id = null) {
-            $('#modal').modal('show');
-            $('#modal-title').text(action + ' Part');
-            $('#modal-form').hide();
-            $('#modal-message').show();
-            $('#modal-confirm').off('click'); // Clear previous event handlers
+       // Function to open modal
+function openModal(action, id = null) {
+    $('#modal').modal('show');
+    $('#modal-title').text(action + ' Part');
+    $('#part-form').show();
+    $('#modal-confirm').off('click'); // Clear previous event handlers
 
-            if (action === 'Add') {
-                $('#modal-form').show();
-                $('#modal-message').hide();
-                $('#modal-confirm').text('Add Part').on('click', function() {
-                    var formData = {
-                        type: $('#part-type').val(),
-                        part_name: $('#part-name').val(),
-                        quantity: $('#part-quantity').val(),
-                        price: $('#part-price').val()
-                    };
-                    $.post('add_part.php', formData, function(response) {
-                        if (response.success) {
-                            alert('Part added successfully!');
-                            location.reload();
-                        } else {
-                            alert('Error: ' + response.error);
-                        }
-                    }, 'json');
-                });
-            } else if (action === 'Edit') {
-                $('#modal-form').show();
-                $('#modal-message').hide();
-                $('#modal-confirm').text('Update Part').on('click', function() {
-                    var formData = {
-                        id: id,
-                        type: $('#part-type').val(),
-                        part_name: $('#part-name').val(),
-                        quantity: $('#part-quantity').val(),
-                        price: $('#part-price').val()
-                    };
-                    $.post('update_part.php', formData, function(response) {
-                        if (response.success) {
-                            alert('Part updated successfully!');
-                            location.reload();
-                        } else {
-                            alert('Error: ' + response.error);
-                        }
-                    }, 'json');
-                });
-            } else if (action === 'Delete') {
-                $('#modal-message').text('Are you sure you want to delete this part?');
-                $('#modal-confirm').text('Delete Part').on('click', function() {
-                    $.post('delete_part.php', { id: id }, function(response) {
-                        if (response.success) {
-                            alert('Part deleted successfully!');
-                            location.reload();
-                        } else {
-                            alert('Error: ' + response.error);
-                        }
-                    }, 'json');
-                });
-            } else if (action === 'View') {
-                $('#modal-form').hide();
-                $('#modal-message').show();
-                $.get('fetch_inventory.php', function(response) {
-                    var part = response.find(item => item.id == id);
-                    if (part) {
-                        $('#modal-message').html(`
-                            <p><strong>Type:</strong> ${part.type}</p>
-                            <p><strong>Part Name:</strong> ${part.part_name}</p>
-                            <p><strong>Quantity:</strong> ${part.quantity}</p>
-                            <p><strong>Price:</strong> $${part.price}</p>
-                        `);
+    if (action === 'Add') {
+        $('#part-form')[0].reset(); // Clear the form fields
+        $('#modal-confirm').text('Add Part').on('click', function() {
+            var formData = {
+                vehicle_type: $('#vehicle-type').val(),
+                part_name: $('#part-name').val(),
+                quantity: $('#quantity').val(),
+                price: $('#price').val()
+            };
+            $.ajax({
+                url: 'Addpart.php',
+                type: 'POST',
+                data: JSON.stringify(formData),
+                contentType: 'application/json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        addToTable(response.part); 
+                        $('#modal').modal('hide'); // Close the modal
+                    } else {
+                        alert('Error: ' + response.message);
                     }
-                }, 'json');
-                $('#modal-confirm').hide();
-            }
-        }
-
-        // Function to close modal
-        function closeModal() {
-            $('#modal').modal('hide');
-        }
-
-        // Refresh the table with data
-        function refreshTable() {
-            $.get('fetch_inventory.php', function(data) {
-                var rows = '';
-                data.forEach(function(item) {
-                    rows += `<tr>
-                        <td>${item.id}</td>
-                        <td>${item.type}</td>
-                        <td>${item.part_name}</td>
-                        <td>${item.quantity}</td>
-                        <td>$${item.price}</td>
-                        <td>
-                            <button class="action-button edit" onclick="openModal('Edit', ${item.id})">Edit</button>
-                            <button class="action-button delete" onclick="openModal('Delete', ${item.id})">Delete</button>
-                            <button class="action-button view" onclick="openModal('View', ${item.id})">View</button>
-                        </td>
-                    </tr>`;
-                });
-                $('#inventoryTableBody').html(rows);
-            }, 'json');
-        }
-
-        // Initial table load
-        $(document).ready(function() {
-            refreshTable();
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
         });
+    } else if (action === 'Edit') {
+        $.ajax({
+            url: 'GetPart.php', // Fetch existing part data
+            type: 'POST',
+            data: JSON.stringify({ product_id: id }),
+            contentType: 'application/json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    $('#vehicle-type').val(response.part.vehicle_type);
+                    $('#part-name').val(response.part.part_name);
+                    $('#quantity').val(response.part.quantity);
+                    $('#price').val(response.part.price);
+
+                    $('#modal-confirm').text('Update Part').on('click', function() {
+                        var formData = {
+                            product_id: id,
+                            vehicle_type: $('#vehicle-type').val(),
+                            part_name: $('#part-name').val(),
+                            quantity: $('#quantity').val(),
+                            price: $('#price').val()
+                        };
+                        $.ajax({
+                            url: 'UpdatePart.php',
+                            type: 'POST',
+                            data: JSON.stringify(formData),
+                            contentType: 'application/json',
+                            success: function(response) {
+                                if (response.status === 'success') {
+                                    updateTableRow(id, response.part); 
+                                    $('#modal').modal('hide'); // Close the modal
+                                } else {
+                                    alert('Error: ' + response.message);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error);
+                            }
+                        });
+                    });
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+}
+
+// Function to update an existing table row
+function updateTableRow(id, part) {
+    var row = `
+        <tr>
+            <td>${part.product_id}</td>
+            <td>${part.vehicle_type}</td>
+            <td>${part.part_name}</td>
+            <td>${part.quantity}</td>
+            <td>$${part.price}</td>
+            <td>
+                <button class="action-button edit" onclick="openModal('Edit', ${part.product_id})">Edit</button>
+                <button class="action-button delete" onclick="openModal('Delete', ${part.product_id})">Delete</button>
+                <button class="action-button view" onclick="openModal('View', ${part.product_id})">View</button>
+            </td>
+        </tr>`;
+    $('#inventoryTableBody tr').filter(function() {
+        return $(this).find('td').eq(0).text() == id;
+    }).replaceWith(row);
+}
+
     </script>
 </body>
 </html>
