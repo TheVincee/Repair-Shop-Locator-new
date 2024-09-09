@@ -29,7 +29,7 @@ if ($action == 'list') {
 }
 
 if ($action == 'view') {
-    $partID = $_GET['id'];
+    $partID = $conn->real_escape_string($_GET['id']);
     $sql = "SELECT * FROM inventory WHERE partID='$partID'";
     $result = $conn->query($sql);
 
@@ -41,13 +41,32 @@ if ($action == 'view') {
 }
 
 if ($action == 'delete') {
-    $partID = $_GET['id'];
+    $partID = $conn->real_escape_string($_GET['id']);
     $sql = "DELETE FROM inventory WHERE partID='$partID'";
 
     if ($conn->query($sql) === TRUE) {
         echo json_encode(['success' => 'Record deleted successfully']);
     } else {
         echo json_encode(['error' => 'Error deleting record: ' . $conn->error]);
+    }
+}
+
+if ($action == 'edit') {
+    // Retrieve POST data
+    $partID = $conn->real_escape_string($_POST['partID']);
+    $partName = $conn->real_escape_string($_POST['partName']);
+    $category = $conn->real_escape_string($_POST['category']);
+    $quantity = $conn->real_escape_string($_POST['quantity']);
+    $price = $conn->real_escape_string($_POST['price']);
+    $supplier = $conn->real_escape_string($_POST['supplier']);
+    
+    // Update SQL query
+    $sql = "UPDATE inventory SET partName='$partName', category='$category', quantity='$quantity', price='$price', supplier='$supplier' WHERE partID='$partID'";
+
+    if ($conn->query($sql) === TRUE) {
+        echo json_encode(['success' => 'Record updated successfully']);
+    } else {
+        echo json_encode(['error' => 'Error updating record: ' . $conn->error]);
     }
 }
 

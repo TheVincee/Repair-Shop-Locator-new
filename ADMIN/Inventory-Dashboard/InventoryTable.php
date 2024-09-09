@@ -6,6 +6,36 @@
     <title>Repair Shop Inventory</title>
     <style>
         /* Add your styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button, input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        button:hover, input[type="submit"]:hover {
+            background-color: #0056b3;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
         .modal {
             display: none; 
             position: fixed; 
@@ -15,41 +45,41 @@
             width: 100%;
             height: 100%;
             overflow: auto; 
-            background-color: rgb(0,0,0); 
-            background-color: rgba(0,0,0,0.4); 
+            background-color: rgba(0, 0, 0, 0.4); 
             padding-top: 60px;
         }
         .modal-content {
-            background-color: #fefefe;
+            background-color: #fff;
             margin: 5% auto;
             padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 70%;
         }
         .close {
             color: #aaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
             cursor: pointer;
+        }
+        .close:hover {
+            color: #000;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
+            border: 2px solid #ddd;
         }
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            border: 2px solid #ddd;
+            padding: 12px;
             text-align: left;
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #007bff;
+            color: white;
         }
         tr:nth-child(even) {
             background-color: #f9f9f9;
@@ -57,97 +87,116 @@
         tr:hover {
             background-color: #f1f1f1;
         }
+        .back-btn {
+            display: inline-block;
+            margin: 20px 0;
+            text-decoration: none;
+            color: #007bff;
+            font-size: 18px;
+            font-weight: bold;
+            border: 1px solid #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .back-btn:hover {
+            background-color: #007bff;
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <h1>Repair Shop Inventory</h1>
-    <button id="addBtn">Add Part</button>
-    <table>
-        <thead>
-            <tr>
-                <th>Part ID</th>
-                <th>Part Name</th>
-                <th>Category</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Supplier</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="inventoryTable">
-            <!-- Dynamic rows will be loaded here -->
-        </tbody>
-    </table>
+    <div class="container">
+        <h1>Repair Shop Inventory</h1>
+        <a href="DashboardInventory.php" class="back-btn">&larr; Back</a>
+        <button id="addBtn">Add Part</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Part ID</th>
+                    <th>Part Name</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Supplier</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="inventoryTable">
+                <!-- Dynamic rows will be loaded here -->
+            </tbody>
+        </table>
 
-    <!-- Add Modal -->
-    <div id="addModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeAdd">&times;</span>
-            <h2>Add New Part</h2>
-            <form id="addForm">
-                <label for="partName">Part Name:</label>
-                <input type="text" id="partName" name="partName" required><br><br>
-                <label for="category">Category:</label>
-                <select id="category" name="category" required>
-                    <option value="Motorcycle">Motorcycle</option>
-                    <option value="Car">Car</option>
-                </select><br><br>
-                <label for="quantity">Quantity:</label>
-                <input type="number" id="quantity" name="quantity" required><br><br>
-                <label for="price">Price:</label>
-                <input type="number" id="price" name="price" step="0.01" required><br><br>
-                <label for="supplier">Supplier:</label>
-                <input type="text" id="supplier" name="supplier" required><br><br>
-                <input type="submit" value="Add Part">
-            </form>
+        <!-- Add Modal -->
+        <div id="addModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeAdd">&times;</span>
+                <h2>Add New Part</h2>
+                <form id="addForm">
+                    <label for="partName">Part Name:</label>
+                    <input type="text" id="partName" name="partName" required><br><br>
+                    <label for="category">Category:</label>
+                    <select id="category" name="category" required>
+                        <option value="Motorcycle">Motorcycle</option>
+                        <option value="Car">Car</option>
+                    </select><br><br>
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" required><br><br>
+                    <label for="price">Price:</label>
+                    <input type="number" id="price" name="price" step="0.01" required><br><br>
+                    <label for="supplier">Supplier:</label>
+                    <input type="text" id="supplier" name="supplier" required><br><br>
+                    <input type="submit" value="Add Part">
+                </form>
+            </div>
         </div>
-    </div>
 
-    <!-- Edit Modal -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeEdit">&times;</span>
-            <h2>Edit Part</h2>
-            <form id="editForm">
-                <input type="hidden" id="editPartID" name="partID">
-                <label for="editPartName">Part Name:</label>
-                <input type="text" id="editPartName" name="partName" required><br><br>
-                <label for="editCategory">Category:</label>
-                <select id="editCategory" name="category" required>
-                    <option value="Motorcycle">Motorcycle</option>
-                    <option value="Car">Car</option>
-                </select><br><br>
-                <label for="editQuantity">Quantity:</label>
-                <input type="number" id="editQuantity" name="quantity" required><br><br>
-                <label for="editPrice">Price:</label>
-                <input type="number" id="editPrice" name="price" step="0.01" required><br><br>
-                <label for="editSupplier">Supplier:</label>
-                <input type="text" id="editSupplier" name="supplier" required><br><br>
-                <input type="submit" value="Save Changes">
-            </form>
+        <!-- Edit Modal -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeEdit">&times;</span>
+                <h2>Edit Part</h2>
+                <form id="editForm">
+                    <input type="hidden" id="editPartID" name="partID">
+                    <label for="editPartName">Part Name:</label>
+                    <input type="text" id="editPartName" name="partName" required><br><br>
+                    <label for="editCategory">Category:</label>
+                    <select id="editCategory" name="category" required>
+                        <option value="Motorcycle">Motorcycle</option>
+                        <option value="Car">Car</option>
+                    </select><br><br>
+                    <label for="editQuantity">Quantity:</label>
+                    <input type="number" id="editQuantity" name="quantity" required><br><br>
+                    <label for="editPrice">Price:</label>
+                    <input type="number" id="editPrice" name="price" step="0.01" required><br><br>
+                    <label for="editSupplier">Supplier:</label>
+                    <input type="text" id="editSupplier" name="supplier" required><br><br>
+                    <input type="submit" value="Save Changes">
+                </form>
+            </div>
         </div>
-    </div>
 
-    <!-- Delete Modal -->
-    <div id="deleteModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeDelete">&times;</span>
-            <h2>Delete Part</h2>
-            <p>Are you sure you want to delete this part?</p>
-            <form id="deleteForm">
-                <input type="hidden" id="deletePartID" name="partID">
-                <input type="submit" value="Delete">
-            </form>
+        <!-- Delete Modal -->
+        <div id="deleteModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeDelete">&times;</span>
+                <h2>Delete Part</h2>
+                <p>Are you sure you want to delete this part?</p>
+                <form id="deleteForm">
+                    <input type="hidden" id="deletePartID" name="partID">
+                    <input type="submit" value="Delete">
+                </form>
+            </div>
         </div>
-    </div>
 
-    <!-- View Modal -->
-    <div id="viewModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeView">&times;</span>
-            <h2>View Part</h2>
-            <div id="viewDetails">
-                <!-- Part details will be loaded here -->
+        <!-- View Modal -->
+        <div id="viewModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeView">&times;</span>
+                <h2>View Part</h2>
+                <div id="viewDetails">
+                    <!-- Part details will be loaded here -->
+                </div>
             </div>
         </div>
     </div>
@@ -268,18 +317,33 @@
                     xhr.open('GET', `inventory.php?action=view&id=${partID}`, true);
                     xhr.onload = function() {
                         if (this.status == 200) {
-                            const data = JSON.parse(this.responseText);
-                            document.getElementById('viewDetails').innerHTML = `
-                                <p><strong>Part ID:</strong> ${data.partID}</p>
-                                <p><strong>Part Name:</strong> ${data.partName}</p>
-                                <p><strong>Category:</strong> ${data.category}</p>
-                                <p><strong>Quantity:</strong> ${data.quantity}</p>
-                                <p><strong>Price:</strong> $${data.price.toFixed(2)}</p>
-                                <p><strong>Supplier:</strong> ${data.supplier}</p>
-                            `;
-                            document.getElementById('viewModal').style.display = 'block';
+                            try {
+                                const data = JSON.parse(this.responseText);
+
+                                // Ensure price is a valid number before calling .toFixed()
+                                const price = parseFloat(data.price);
+                                const formattedPrice = isNaN(price) ? "N/A" : `$${price.toFixed(2)}`;
+
+                                // Display part details in the view modal
+                                document.getElementById('viewDetails').innerHTML = `
+                                    <p><strong>Part ID:</strong> ${data.partID || 'N/A'}</p>
+                                    <p><strong>Part Name:</strong> ${data.partName || 'N/A'}</p>
+                                    <p><strong>Category:</strong> ${data.category || 'N/A'}</p>
+                                    <p><strong>Quantity:</strong> ${data.quantity || 'N/A'}</p>
+                                    <p><strong>Price:</strong> ${formattedPrice}</p>
+                                    <p><strong>Supplier:</strong> ${data.supplier || 'N/A'}</p>
+                                `;
+                                document.getElementById('viewModal').style.display = 'block';
+                            } catch (error) {
+                                console.error("Error parsing JSON data:", error);
+                            }
+                        } else {
+                            console.error('Error loading part data:', this.statusText);
                         }
                     }
+                    xhr.onerror = function() {
+                        console.error('Request failed');
+                    };
                     xhr.send();
                 }
             });

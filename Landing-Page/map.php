@@ -1,121 +1,158 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<!-- Coding by CodingNepal | www.codingnepalweb.com -->
+<html lang="en" dir="ltr">
+  <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Repair Shop Locator</title>
+    <title> Drop Down Sidebar Menu | CodingLab </title>
     <link rel="stylesheet" href="Map.css">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Boxiocns CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-</head>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   </head>
 <body>
-
-<!-- Navbar with Back Icon and Search Bar -->
-<nav class="navbar navbar-light bg-light">
-    <a href="Home.php" onclick="history.back();" class="navbar-brand">
-        <i class='bx bx-arrow-back'></i>
-    </a>
-    <form class="form-inline ml-auto d-flex align-items-center" onsubmit="event.preventDefault(); searchAutoRepairShops();">
-        <input class="form-control mr-2" id="location" type="search" placeholder="Enter a location" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
-</nav>
-
-<div id="map" class="custom-container"></div>
-
-<!-- Bootstrap JS and dependencies -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<!-- Google Maps API -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBskJAbt6y3jJ-cb4IuRumlwCh-NafTn5A&libraries=places&callback=initMap" async defer></script>
-
-<!-- Custom JavaScript for the map -->
-<script>
-let map;
-let service;
-let infowindow;
-let markers = [];
-
-function initMap() {
-    const mapCenter = { lat: 11.0382, lng: 124.0097 }; // Bogo City, Cebu
-    map = new google.maps.Map(document.getElementById("map"), {
-        center: mapCenter,
-        zoom: 12
+  <div class="sidebar close">
+    <div class="logo-details">
+      <i class='bx bxl-c-plus-plus'></i>
+      <span class="logo_name">CodingLab</span>
+    </div>
+    <div class="search-box">
+      <input type="text" placeholder="Search...">
+      <i class='bx bx-search'></i>
+    </div>
+    <ul class="nav-links">
+      <li>
+        <a href="UserDashboard.php">
+          <i class='bx bx-grid-alt' ></i>
+          <span class="link_name">Dashboard</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="UserDashboard.php"></a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="iocn-link">
+          <a href="Appointment-table.php">
+            <i class='bx bx-collection' ></i>
+            <span class="link_name">Category</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow' ></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="Appointment-table.php">Category</a></li>
+          <li><a href="#">HTML & CSS</a></li>
+          <li><a href="#">JavaScript</a></li>
+          <li><a href="#">PHP & MySQL</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="iocn-link">
+          <a href="#">
+            <i class='bx bx-book-alt' ></i>
+            <span class="link_name">Posts</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow' ></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="#">Posts</a></li>
+          <li><a href="#">Web Design</a></li>
+          <li><a href="#">Login Form</a></li>
+          <li><a href="#">Card Design</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="Home.php">
+          <i class='bx bx-pie-chart-alt-2' ></i>
+          <span class="link_name">Analytics</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="Home.php">Analytics</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">
+          <i class='bx bx-line-chart' ></i>
+          <span class="link_name">Chart</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="#">Chart</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="iocn-link">
+          <a href="#">
+            <i class='bx bx-plug' ></i>
+            <span class="link_name">Plugins</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow' ></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="#">Plugins</a></li>
+          <li><a href="#">UI Face</a></li>
+          <li><a href="#">Pigments</a></li>
+          <li><a href="#">Box Icons</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">
+          <i class='bx bx-compass' ></i>
+          <span class="link_name">Explore</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="#">Explore</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">
+          <i class='bx bx-history'></i>
+          <span class="link_name">History</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="#">History</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">
+          <i class='bx bx-cog' ></i>
+          <span class="link_name">Setting</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="#">Setting</a></li>
+        </ul>
+      </li>
+      <li>
+    <div class="profile-details">
+      <div class="profile-content">
+        <img src="image/profile.jpg" alt="profileImg">
+      </div>
+      <div class="name-job">
+        <div class="profile_name">Prem Shahi</div>
+        <div class="job">Web Desginer</div>
+      </div>
+      <i class='bx bx-log-out' ></i>
+    </div>
+  </li>
+</ul>
+  </div>
+  <section class="home-section">
+    <div class="home-content">
+      <i class='bx bx-menu' ></i>
+      <span class="text">Drop Down Sidebar</span>
+    </div>
+  </section>
+  <script>
+  let arrow = document.querySelectorAll(".arrow");
+  for (var i = 0; i < arrow.length; i++) {
+    arrow[i].addEventListener("click", (e)=>{
+   let arrowParent = e.target.parentElement.parentElement;//selecting main parent of arrow
+   arrowParent.classList.toggle("showMenu");
     });
-    infowindow = new google.maps.InfoWindow();
-
-    // Add event listener to the location input field
-    const locationInput = document.getElementById("location");
-    locationInput.addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault(); // Prevent the form from submitting
-            searchAutoRepairShops(); // Trigger the search function
-        }
-    });
-}
-
-function searchAutoRepairShops() {
-    const location = document.getElementById("location").value;
-
-    if (!location) {
-        alert("Please enter a location.");
-        return;
-    }
-
-    const request = {
-        location: map.getCenter(),
-        radius: 6000, // Search radius in meters
-        query: `Auto Repair Shop near ${location}`
-    };
-
-    service = new google.maps.places.PlacesService(map);
-    service.textSearch(request, displayAutoRepairShops);
-}
-
-function displayAutoRepairShops(results, status) {
-    if (status === google.maps.places.PlacesServiceStatus.OK) {
-        if (results.length > 0) {
-            // Center the map on the first result
-            map.setCenter(results[0].geometry.location);
-            map.setZoom(15); // Zoom in when results are displayed
-        }
-        
-        clearMarkers();
-        for (let i = 0; i < results.length; i++) {
-            createMarker(results[i]);
-        }
-    } else {
-        alert("No results found or an error occurred: " + status);
-        console.error("Google Places Service Status: ", status);
-    }
-}
-
-function createMarker(place) {
-    const marker = new google.maps.Marker({
-        map: map,
-        position: place.geometry.location
-    });
-
-    markers.push(marker);
-
-    google.maps.event.addListener(marker, "click", function() {
-        infowindow.setContent(place.name);
-        infowindow.open(map, this);
-        document.getElementById("selectedShop").innerText = "Selected Auto Repair Shop: " + place.name;
-    });
-}
-
-function clearMarkers() {
-    for (let i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
-    }
-    markers = [];
-}
-
-document.addEventListener("DOMContentLoaded", initMap);
-</script>
-
+  }
+  let sidebar = document.querySelector(".sidebar");
+  let sidebarBtn = document.querySelector(".bx-menu");
+  console.log(sidebarBtn);
+  sidebarBtn.addEventListener("click", ()=>{
+    sidebar.classList.toggle("close");
+  });
+  </script>
 </body>
 </html>

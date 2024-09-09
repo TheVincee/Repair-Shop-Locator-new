@@ -258,28 +258,3 @@
     left: 0;
   }
 }
-/* Style for the search box */
-.search-box {
-    position: relative;
-    margin: 15px;
-  }
-  
-  .search-box input {
-    width: calc(100% - 30px);
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    outline: none;
-    background-color: #f1f1f1;
-  }
-  
-  .search-box i {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 20px;
-    color: #aaa;
-  }
-  

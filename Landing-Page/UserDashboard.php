@@ -15,7 +15,7 @@
         </div>
         <ul class="nav-links">
             <li>
-                <a href="#">
+                <a href="map.php">
                     <i class='bx bx-grid-alt'></i>
                     <span class="link_name">Dashboard</span>
                 </a>
@@ -63,12 +63,12 @@
                 </ul>
             </li>
             <li>
-                <a href="#">
+                <a href="Home.php">
                     <i class='bx bx-line-chart'></i>
                     <span class="link_name">Chart</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Chart</a></li>
+                    <li><a class="link_name" href="Home.php">Chart</a></li>
                 </ul>
             </li>
             <li>
