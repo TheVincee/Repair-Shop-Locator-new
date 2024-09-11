@@ -19,6 +19,13 @@
             color: #333;
         }
 
+        h2 {
+            text-align: center;
+            margin: 10px auto;
+            font-size: 1.2rem; /* Reduced the font size for Motorcycle and Car Parts */
+            color: #333;
+        }
+
         /* Table Styles */
         table {
             width: 90%;
@@ -59,6 +66,22 @@
         }
         button:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* Back Button */
+        .back-button {
+            display: inline-block;
+            margin: 20px 20px;
+            padding: 10px 15px;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #555;
             transform: scale(1.05);
         }
 
@@ -130,7 +153,8 @@
 </head>
 <body>
     <h1>Inventory Management</h1>
-    
+    <a href="dashboard.html" class="back-button">Back to Dashboard</a>
+
     <!-- Motorcycle Table -->
     <h2>Motorcycle Parts</h2>
     <table id="motorcycleTable">
@@ -178,43 +202,7 @@
         </div>
     </div>
 
-    <!-- Edit Modal -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeEdit">&times;</span>
-            <h2>Edit Part</h2>
-            <form id="editForm">
-                <input type="hidden" id="editPartID" name="partID">
-                <label for="editPartName">Part Name:</label>
-                <input type="text" id="editPartName" name="partName" required><br>
-                <label for="editCategory">Category:</label>
-                <select id="editCategory" name="category" required>
-                    <option value="Motorcycle">Motorcycle</option>
-                    <option value="Car">Car</option>
-                </select><br>
-                <label for="editQuantity">Quantity:</label>
-                <input type="number" id="editQuantity" name="quantity" required><br>
-                <label for="editPrice">Price:</label>
-                <input type="number" id="editPrice" name="price" step="0.01" required><br>
-                <label for="editSupplier">Supplier:</label>
-                <input type="text" id="editSupplier" name="supplier" required><br>
-                <input type="submit" value="Save Changes">
-            </form>
-        </div>
-    </div>
-
-    <!-- Delete Modal -->
-    <div id="deleteModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeDelete">&times;</span>
-            <h2>Delete Part</h2>
-            <p>Are you sure you want to delete this part?</p>
-            <form id="deleteForm">
-                <input type="hidden" id="deletePartID" name="partID">
-                <input type="submit" value="Delete">
-            </form>
-        </div>
-    </div>
+    
 
     <!-- JavaScript -->
     <script>
@@ -239,8 +227,6 @@
                                     <td>${part.supplier}</td>
                                     <td>
                                         <button class='view-btn' data-id='${part.partID}'>View</button>
-                                        <button class='edit-btn' data-id='${part.partID}'>Edit</button>
-                                        <button class='delete-btn' data-id='${part.partID}'>Delete</button>
                                     </td>
                                 </tr>`;
 
@@ -351,37 +337,7 @@
                 }
             }
 
-            // Edit Part
-            document.getElementById('editForm').onsubmit = function(e) {
-                e.preventDefault();
-                const formData = new FormData(this);
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', 'InventoryCetegory.php?action=edit', true);
-                xhr.onload = function() {
-                    if (this.status == 200) {
-                        loadInventory();
-                        document.getElementById('editModal').style.display = 'none';
-                        document.getElementById('editModal').querySelector('.modal-content').classList.remove('show');
-                    }
-                }
-                xhr.send(formData);
-            }
-
-            // Delete Part
-            document.getElementById('deleteForm').onsubmit = function(e) {
-                e.preventDefault();
-                const formData = new FormData(this);
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', 'InventoryCetegory.php?action=delete', true);
-                xhr.onload = function() {
-                    if (this.status == 200) {
-                        loadInventory();
-                        document.getElementById('deleteModal').style.display = 'none';
-                        document.getElementById('deleteModal').querySelector('.modal-content').classList.remove('show');
-                    }
-                }
-                xhr.send(formData);
-            }
+          
         });
     </script>
 </body>
