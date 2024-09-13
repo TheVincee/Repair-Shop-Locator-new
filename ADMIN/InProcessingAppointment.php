@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>In Processing Appointments</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -18,10 +19,11 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 25px;
             margin-bottom: 20px;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
         }
         .card-title {
             font-size: 28px;
@@ -75,7 +77,7 @@
             display: flex;
             gap: 10px;
         }
-        .action-link {
+        .action-btn {
             display: inline-block;
             padding: 10px 20px;
             border-radius: 8px;
@@ -86,16 +88,10 @@
             transition: background-color 0.3s ease, transform 0.3s ease;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        .action-link.view {
+        .action-btn.view {
             background-color: #17a2b8;
         }
-        .action-link.update {
-            background-color: #ffc107;
-        }
-        .action-link.delete {
-            background-color: #dc3545;
-        }
-        .action-link:hover {
+        .action-btn:hover {
             opacity: 0.85;
             transform: translateY(-2px);
         }
@@ -103,6 +99,10 @@
             display: inline-block;
             margin-right: 8px;
             vertical-align: middle;
+        }
+        .status-in-processing {
+            color: #007bff;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -134,88 +134,118 @@
             </table>
         </div>
     </div>
-    
+
+   <!-- View Modal -->
+<div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewModalLabel">Appointment Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-detail">
+                    <p><strong>Customer ID:</strong> <span id="modalCustomerId"></span></p>
+                    <p><strong>First Name:</strong> <span id="modalFirstName"></span></p>
+                    <p><strong>Last Name:</strong> <span id="modalLastName"></span></p>
+                    <p><strong>Phone Number:</strong> <span id="modalPhoneNumber"></span></p>
+                    <p><strong>Email Address:</strong> <span id="modalEmailAddress"></span></p>
+                    <p><strong>Car Make:</strong> <span id="modalCarMake"></span></p>
+                    <p><strong>Car Model:</strong> <span id="modalCarModel"></span></p>
+                    <p><strong>Repair Details:</strong> <span id="modalRepairDetails"></span></p>
+                    <p><strong>Appointment Time:</strong> <span id="modalAppointmentTime"></span></p>
+                    <p><strong>Appointment Date:</strong> <span id="modalAppointmentDate"></span></p>
+                    <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            // Fetch and display "In Processing" appointments on page load
-            $.ajax({
-                url: 'InProcessingFetch.php', // Correct URL to your PHP script
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    if (Array.isArray(data) && data.length === 0) {
-                        $('#appointmentsTableBody').html('<tr><td colspan="12" class="text-center">No "In Processing" appointments found</td></tr>');
-                    } else if (data.error) {
-                        $('#appointmentsTableBody').html('<tr><td colspan="12" class="text-center">' + data.error + '</td></tr>');
-                    } else {
-                        var rows = '';
-                        $.each(data, function (index, appointment) {
-                            rows += '<tr>';
-                            rows += '<td>' + appointment.customer_id + '</td>';
-                            rows += '<td>' + appointment.firstname + '</td>';
-                            rows += '<td class="hide-col">' + appointment.lastname + '</td>';
-                            rows += '<td>' + appointment.phoneNumber + '</td>';
-                            rows += '<td class="hide-col">' + appointment.emailAddress + '</td>';
-                            rows += '<td class="hide-col">' + appointment.carmake + '</td>';
-                            rows += '<td class="hide-col">' + appointment.carmodel + '</td>';
-                            rows += '<td>' + appointment.repairdetails + '</td>';
-                            rows += '<td>' + appointment.appointment_time + '</td>';
-                            rows += '<td>' + appointment.appointment_date + '</td>';
-                            rows += '<td><span class="status-icon">&#10060;</span> ' + appointment.Status + '</td>';
-                            rows += '<td>';
-                            rows += '<div class="action-buttons">';
-                            rows += '<a href="#" class="action-link view" data-bs-toggle="modal" data-bs-target="#viewModal" data-id="' + appointment.customer_id + '">View</a>';
-                            rows += '<a href="#" class="action-link update">Update</a>';
-                            rows += '<a href="#" class="action-link delete">Delete</a>';
-                            rows += '</div>';
-                            rows += '</td>';
-                            rows += '</tr>';
-                        });
-                        $('#appointmentsTableBody').html(rows);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('AJAX Error:', status, error);
-                    $('#appointmentsTableBody').html('<tr><td colspan="12" class="text-center">Failed to fetch data. Please try again.</td></tr>');
-                }
-            });
+     $(document).ready(function () {
+    function fetchAppointments() {
+        $.ajax({
+            url: 'InProcessingFetch.php', // URL to the PHP backend script
+            type: 'GET',
+            dataType: 'json', // Expect JSON response
+            success: function (data) {
+                let rows = '';
 
-            // Set up the modal to load data when shown
-            $('#viewModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget);
-                var customerId = button.data('id');
-
-                // AJAX request to fetch the details of the selected appointment
-                $.ajax({
-                    url: 'Get_In_Processing.php', // Correct URL to your PHP script
-                    type: 'GET',
-                    data: { id: customerId },
-                    dataType: 'json',
-                    success: function (appointment) {
-                        if (appointment.error) {
-                            $('#modalContent').html('<p class="text-danger">' + appointment.error + '</p>');
-                        } else {
-                            $('#modalCustomerId').text(appointment.customer_id);
-                            $('#modalFirstName').text(appointment.firstname);
-                            $('#modalLastName').text(appointment.lastname);
-                            $('#modalPhoneNumber').text(appointment.phoneNumber);
-                            $('#modalEmailAddress').text(appointment.emailAddress);
-                            $('#modalCarMake').text(appointment.carmake);
-                            $('#modalCarModel').text(appointment.carmodel);
-                            $('#modalRepairDetails').text(appointment.repairdetails);
-                            $('#modalAppointmentTime').text(appointment.appointment_time);
-                            $('#modalAppointmentDate').text(appointment.appointment_date);
-                            $('#modalStatus').text(appointment.Status);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('AJAX Error:', status, error);
-                        $('#modalContent').html('<p class="text-danger">Failed to fetch data. Please try again.</p>');
-                    }
+                // Loop through each appointment and create rows for the table
+                $.each(data, function (index, appointment) {
+                    rows += '<tr>';
+                    rows += '<td>' + appointment.customer_id + '</td>';  // Customer ID
+                    rows += '<td>' + appointment.firstname + '</td>';   // First Name
+                    rows += '<td class="hide-col">' + appointment.lastname + '</td>';  // Last Name (hidden)
+                    rows += '<td>' + appointment.phoneNumber + '</td>';  // Phone Number
+                    rows += '<td class="hide-col">' + appointment.emailAddress + '</td>';  // Email Address (hidden)
+                    rows += '<td class="hide-col">' + appointment.carmake + '</td>';  // Car Make (hidden)
+                    rows += '<td class="hide-col">' + appointment.carmodel + '</td>';  // Car Model (hidden)
+                    rows += '<td>' + appointment.repairdetails + '</td>';  // Repair Details
+                    rows += '<td>' + appointment.appointment_time + '</td>';  // Appointment Time
+                    rows += '<td>' + appointment.appointment_date + '</td>';  // Appointment Date
+                    rows += '<td><span class="status-approved">' + appointment.Status + '</span></td>';  // Status
+                    rows += '<td><button type="button" class="btn btn-view" data-bs-toggle="modal" data-bs-target="#viewModal" data-id="' + appointment.customer_id + '">View</button></td>';  // View button
+                    rows += '</tr>';
                 });
-            });
+                $('#appointmentsTableBody').html(rows);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('AJAX Error:', textStatus, errorThrown);
+                alert('Failed to load appointments.');
+            }
         });
+    }
+
+    // Call fetchAppointments when the page is ready
+    fetchAppointments();
+
+    $(document).on('click', '.btn-view', function () {
+        const appointmentId = $(this).data('id'); // Fetch the customer_id from the button's data-id attribute
+
+        $.ajax({
+            url: 'InprocessviewAppointment.php',  // Path to your PHP script
+            type: 'GET',
+            dataType: 'json',  // Expect JSON response
+            data: { id: appointmentId },  // Send the customer_id as GET parameter
+            success: function (response) {
+                // Check for errors in the response
+                if (response.error) {
+                    alert(response.error);
+                    return;
+                }
+
+                // Fill modal fields with the fetched data
+                $('#modalCustomerId').text(response.customer_id || 'N/A');
+                $('#modalFirstName').text(response.firstname || 'N/A');
+                $('#modalLastName').text(response.lastname || 'N/A');
+                $('#modalPhoneNumber').text(response.phoneNumber || 'N/A');
+                $('#modalEmailAddress').text(response.emailAddress || 'N/A');
+                $('#modalCarMake').text(response.carmake || 'N/A');
+                $('#modalCarModel').text(response.carmodel || 'N/A');
+                $('#modalRepairDetails').text(response.repairdetails || 'N/A');
+                $('#modalAppointmentTime').text(response.appointment_time || 'N/A');
+                $('#modalAppointmentDate').text(response.appointment_date || 'N/A');
+                $('#modalStatus').text(response.Status || 'N/A');
+
+                // Show the modal
+                const viewModal = new bootstrap.Modal(document.getElementById('viewModal'));
+                viewModal.show();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('AJAX Error:', textStatus, errorThrown);
+                alert('Failed to load appointment details.');
+            }
+        });
+    });
+});
+
     </script>
 </body>
 </html>

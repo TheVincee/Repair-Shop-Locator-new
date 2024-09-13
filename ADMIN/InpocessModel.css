@@ -1,0 +1,106 @@
+/* Modal Background */
+.modal-backdrop {
+    opacity: 0.5 !important;
+}
+
+/* Modal Content */
+.modal-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+}
+
+/* Modal Header */
+.modal-header {
+    border-bottom: 1px solid #ddd;
+    background-color: #f8f9fa;
+    border-radius: 12px 12px 0 0;
+    padding: 16px 24px;
+}
+
+.modal-header .modal-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+}
+
+.modal-header .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 24px;
+    font-size: 16px;
+    color: #555;
+}
+
+/* Form Elements */
+.form-select {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal Footer */
+.modal-footer {
+    border-top: 1px solid #ddd;
+    padding: 16px 24px;
+    background-color: #f8f9fa;
+    border-radius: 0 0 12px 12px;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* General Modal Styles */
+.modal-dialog {
+    max-width: 90%;
+    margin: 1.75rem auto;
+}
+
+.modal-lg {
+    max-width: 80%;
+}
+
+.modal-sm {
+    max-width: 40%;
+}
