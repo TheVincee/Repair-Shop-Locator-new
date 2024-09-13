@@ -7,104 +7,154 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
-        body {
+body {
             font-family: 'Roboto', sans-serif;
-            background: #f0f2f5;
-            margin: 0;
-            padding: 20px;
-        }
-        .card {
-            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-        }
-        .card-title {
-            font-size: 28px;
+            background-color: #f8f9fa;
             color: #333;
-            margin-bottom: 20px;
-        }
-        .back-btn {
-            display: inline-block;
-            background-color: #007bff;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 16px;
-            margin-bottom: 20px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-        .back-btn:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-            font-weight: 500;
-        }
-        tr:nth-child(even) {
-            background-color: #fafafa;
-        }
-        tr:hover {
-            background-color: #f1f5ff;
+            padding: 20px;
+            
         }
         .hide-col {
-            display: none;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        .action-btn {
+    display: none;
+}
+
+
+        .back-btn {
             display: inline-block;
+            margin-bottom: 20px;
             padding: 10px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 14px;
+            background-color: #007bff;
             color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .card {
+            background-color: #fff;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 20px;
             text-align: center;
+        }
+
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .table thead th {
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .table tbody tr {
+            transition: transform 0.3s ease;
+        }
+
+        .table tbody tr:hover {
+            transform: scale(1.02);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .table tbody td {
+            background-color: #fff;
+            border: none;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .table tbody td:first-child {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        .table tbody td:last-child {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .btn-view {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
             transition: background-color 0.3s ease, transform 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        .action-btn.view {
-            background-color: #17a2b8;
+
+        .btn-view:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
         }
-        .action-btn:hover {
-            opacity: 0.85;
-            transform: translateY(-2px);
+
+        .modal-header {
+            background-color: #007bff;
+            color: #fff;
+            border-bottom: none;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
         }
-        .status-icon {
-            display: inline-block;
-            margin-right: 8px;
-            vertical-align: middle;
+
+        .modal-footer {
+            border-top: none;
         }
-        .status-in-processing {
-            color: #007bff;
-            font-weight: bold;
+
+        .btn-close {
+            color: #fff;
+            font-size: 1.5rem;
         }
-    </style>
+
+        .status-approved {
+            background-color: #28a745;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 30px;
+            font-weight: 500;
+        }
+
+        /* Animations */
+        .modal-content {
+            opacity: 0;
+            transform: translateY(-50px);
+            animation: fadeIn 0.4s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }    
+        @media (max-width: 768px) {
+    .hide-col {
+        display: none;
+    }
+}
+
+        </style>
 </head>
 <body>
     <a href="Dashboard.php" class="back-btn">Back</a>
@@ -135,6 +185,7 @@
         </div>
     </div>
 
+    <!-- View Modal -->
    <!-- View Modal -->
 <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md">
@@ -165,33 +216,33 @@
     </div>
 </div>
 
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-     $(document).ready(function () {
+      $(document).ready(function () {
     function fetchAppointments() {
         $.ajax({
-            url: 'InProcessingFetch.php', // URL to the PHP backend script
+            url: 'InProcessingFetch.php',
             type: 'GET',
-            dataType: 'json', // Expect JSON response
+            dataType: 'json',
             success: function (data) {
                 let rows = '';
 
-                // Loop through each appointment and create rows for the table
                 $.each(data, function (index, appointment) {
                     rows += '<tr>';
-                    rows += '<td>' + appointment.customer_id + '</td>';  // Customer ID
-                    rows += '<td>' + appointment.firstname + '</td>';   // First Name
-                    rows += '<td class="hide-col">' + appointment.lastname + '</td>';  // Last Name (hidden)
-                    rows += '<td>' + appointment.phoneNumber + '</td>';  // Phone Number
-                    rows += '<td class="hide-col">' + appointment.emailAddress + '</td>';  // Email Address (hidden)
-                    rows += '<td class="hide-col">' + appointment.carmake + '</td>';  // Car Make (hidden)
-                    rows += '<td class="hide-col">' + appointment.carmodel + '</td>';  // Car Model (hidden)
-                    rows += '<td>' + appointment.repairdetails + '</td>';  // Repair Details
-                    rows += '<td>' + appointment.appointment_time + '</td>';  // Appointment Time
-                    rows += '<td>' + appointment.appointment_date + '</td>';  // Appointment Date
-                    rows += '<td><span class="status-approved">' + appointment.Status + '</span></td>';  // Status
-                    rows += '<td><button type="button" class="btn btn-view" data-bs-toggle="modal" data-bs-target="#viewModal" data-id="' + appointment.customer_id + '">View</button></td>';  // View button
+                    rows += '<td>' + appointment.customer_id + '</td>';
+                    rows += '<td>' + appointment.firstname + '</td>';
+                    rows += '<td class="hide-col">' + appointment.lastname + '</td>';
+                    rows += '<td>' + appointment.phoneNumber + '</td>';
+                    rows += '<td class="hide-col">' + appointment.emailAddress + '</td>';
+                    rows += '<td class="hide-col">' + appointment.carmake + '</td>';
+                    rows += '<td class="hide-col">' + appointment.carmodel + '</td>';
+                    rows += '<td>' + appointment.repairdetails + '</td>';
+                    rows += '<td>' + appointment.appointment_time + '</td>';
+                    rows += '<td>' + appointment.appointment_date + '</td>';
+                    rows += '<td><span class="status-approved">' + appointment.Status + '</span></td>';
+                    rows += '<td><button type="button" class="btn btn-view" data-bs-toggle="modal" data-bs-target="#viewModal" data-id="' + appointment.customer_id + '">View</button></td>';
                     rows += '</tr>';
                 });
                 $('#appointmentsTableBody').html(rows);
@@ -203,25 +254,23 @@
         });
     }
 
-    // Call fetchAppointments when the page is ready
     fetchAppointments();
 
+    $(document).ready(function () {
     $(document).on('click', '.btn-view', function () {
-        const appointmentId = $(this).data('id'); // Fetch the customer_id from the button's data-id attribute
+        const appointmentId = $(this).data('id');
 
         $.ajax({
-            url: 'InprocessviewAppointment.php',  // Path to your PHP script
+            url: 'InprocessviewAppointment.php',
             type: 'GET',
-            dataType: 'json',  // Expect JSON response
-            data: { id: appointmentId },  // Send the customer_id as GET parameter
+            dataType: 'json',
+            data: { id: appointmentId },
             success: function (response) {
-                // Check for errors in the response
                 if (response.error) {
                     alert(response.error);
                     return;
                 }
 
-                // Fill modal fields with the fetched data
                 $('#modalCustomerId').text(response.customer_id || 'N/A');
                 $('#modalFirstName').text(response.firstname || 'N/A');
                 $('#modalLastName').text(response.lastname || 'N/A');
@@ -234,7 +283,6 @@
                 $('#modalAppointmentDate').text(response.appointment_date || 'N/A');
                 $('#modalStatus').text(response.Status || 'N/A');
 
-                // Show the modal
                 const viewModal = new bootstrap.Modal(document.getElementById('viewModal'));
                 viewModal.show();
             },
@@ -244,6 +292,23 @@
             }
         });
     });
+
+    // Reset modal content when it is closed
+    $('#viewModal').on('hidden.bs.modal', function () {
+        $('#modalCustomerId').text('');
+        $('#modalFirstName').text('');
+        $('#modalLastName').text('');
+        $('#modalPhoneNumber').text('');
+        $('#modalEmailAddress').text('');
+        $('#modalCarMake').text('');
+        $('#modalCarModel').text('');
+        $('#modalRepairDetails').text('');
+        $('#modalAppointmentTime').text('');
+        $('#modalAppointmentDate').text('');
+        $('#modalStatus').text('');
+    });
+});
+
 });
 
     </script>
