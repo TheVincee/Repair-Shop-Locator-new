@@ -1,24 +1,26 @@
 <!DOCTYPE html>
-<!-- Coding by CodingNepal | www.codingnepalweb.com -->
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8">
-    <title> Drop Down Sidebar Menu | CodingLab </title>
     <link rel="stylesheet" href="Map.css">
-    <!-- Boxiocns CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
    </head>
 <body>
+  
   <div class="sidebar close">
     <div class="logo-details">
       <i class='bx bxl-c-plus-plus'></i>
-      <span class="logo_name">CodingLab</span>
+      <span class="logo_name">Locator</span>
     </div>
-    <div class="search-box">
-      <input type="text" placeholder="Search...">
-      <i class='bx bx-search'></i>
-    </div>
+
+   <!-- Search Box -->
+<<form class="search-box" onsubmit="event.preventDefault(); searchAutoRepairShops();">
+  <input id="location" type="text" placeholder="Enter a location">
+  <i class="fa fa-search"></i> <!-- Assuming you're using Font Awesome for the icon -->
+</form>
+
+
     <ul class="nav-links">
       <li>
         <a href="UserDashboard.php">
@@ -46,7 +48,7 @@
       </li>
       <li>
         <div class="iocn-link">
-          <a href="#">
+          <a href="">
             <i class='bx bx-book-alt' ></i>
             <span class="link_name">Posts</span>
           </a>
@@ -136,9 +138,11 @@
   <section class="home-section">
     <div class="home-content">
       <i class='bx bx-menu' ></i>
-      <span class="text">Drop Down Sidebar</span>
     </div>
+      <div id="map" class="custom-container"></div>
+
   </section>
+
   <script>
   let arrow = document.querySelectorAll(".arrow");
   for (var i = 0; i < arrow.length; i++) {
@@ -154,5 +158,90 @@
     sidebar.classList.toggle("close");
   });
   </script>
+  <script>
+   let map;
+let service;
+let infowindow;
+let markers = [];
+
+function initMap() {
+    const mapCenter = { lat: 11.0382, lng: 124.0097 }; // Bogo City, Cebu
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: mapCenter,
+        zoom: 12
+    });
+    infowindow = new google.maps.InfoWindow();
+
+    // Get the location input field
+    const locationInput = document.getElementById("location");
+
+    // Add an event listener for the 'keypress' event
+    locationInput.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            // If Enter key is pressed, trigger the search function
+            searchAutoRepairShops();
+        }
+    });
+}
+
+function searchAutoRepairShops() {
+    const location = document.getElementById("location").value;
+    const request = {
+        location: map.getCenter(),
+        radius: 6000, // Search radius in meters
+        query: `Auto Repair Shop near ${location}`
+    };
+
+    service = new google.maps.places.PlacesService(map);
+    service.textSearch(request, displayAutoRepairShops);
+}
+
+function displayAutoRepairShops(results, status) {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+        // Clear existing markers
+        clearMarkers();
+        
+        // Set new zoom level
+        map.setZoom(15);
+
+        // Update map center to the location of the first result (if any)
+        if (results.length > 0) {
+            map.setCenter(results[0].geometry.location);
+        }
+
+        for (let i = 0; i < results.length; i++) {
+            createMarker(results[i]);
+        }
+    }
+}
+
+function createMarker(place) {
+    const marker = new google.maps.Marker({
+        map: map,
+        position: place.geometry.location
+    });
+
+    markers.push(marker);
+
+    google.maps.event.addListener(marker, "click", function() {
+        infowindow.setContent(place.name);
+        infowindow.open(map, this);
+        document.getElementById("selectedShop").innerText = "Selected Auto Repair Shop: " + place.name;
+    });
+}
+
+function clearMarkers() {
+    for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+    markers = [];
+}
+
+  </script>
+  <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBskJAbt6y3jJ-cb4IuRumlwCh-NafTn5A&libraries=places&callback=initMap"
+        async defer></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
 </body>
 </html>
