@@ -1,40 +1,30 @@
 <?php
-// Database connection
-$servername = "localhost"; // Your database server name
-$username = "root"; // Your database username
-$password = ""; // Your database password
-$dbname = "repair-shop-locator"; // Your database name
+header('Content-Type: application/json');
 
-// Create connection
+// Database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "repair-shop-locator";
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo json_encode(['error' => 'Database connection failed']);
+    exit();
 }
 
-// Prepare the SQL statement to fetch all "In Processing" appointments
-$sql = "SELECT customer_id, firstname, lastname, phoneNumber, emailAddress, carmake, carmodel, repairdetails, appointment_time, appointment_date, Status FROM customer_details WHERE Status = 'In Processing'";
-
-// Execute the query
+$sql = "SELECT * FROM customer_details WHERE Status = 'In Processing'";
 $result = $conn->query($sql);
 
-$data = [];
-
+$appointments = [];
 if ($result->num_rows > 0) {
-    // Fetch all rows as associative arrays
     while ($row = $result->fetch_assoc()) {
-        $data[] = $row;
+        $appointments[] = $row;
     }
-} else {
-    // No records found
-    $data = [];
 }
 
-// Return the data as JSON
-header('Content-Type: application/json');
-echo json_encode($data);
+echo json_encode($appointments);
 
-// Close the connection
 $conn->close();
 ?>
