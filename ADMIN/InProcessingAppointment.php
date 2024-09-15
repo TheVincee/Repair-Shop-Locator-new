@@ -293,8 +293,18 @@ body {
         });
     });
 
-    // Reset modal content when it is closed
+    // When the modal close button is clicked, reset modal content
+    $(document).on('click', '.btn-close, .btn-primary', function () {
+        resetModalContent();
+    });
+
+    // Reset modal content when it is hidden
     $('#viewModal').on('hidden.bs.modal', function () {
+        resetModalContent();
+    });
+
+    // Function to reset modal content
+    function resetModalContent() {
         $('#modalCustomerId').text('');
         $('#modalFirstName').text('');
         $('#modalLastName').text('');
@@ -306,8 +316,9 @@ body {
         $('#modalAppointmentTime').text('');
         $('#modalAppointmentDate').text('');
         $('#modalStatus').text('');
-    });
+    }
 });
+
 
 });
 
