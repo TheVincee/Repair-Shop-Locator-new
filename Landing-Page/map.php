@@ -95,12 +95,12 @@
         </ul>
       </li>
       <li>
-        <a href="#">
+        <a href="NotificationStatus.php">
           <i class='bx bx-compass' ></i>
           <span class="link_name">Explore</span>
         </a>
         <ul class="sub-menu blank">
-          <li><a class="link_name" href="#">Explore</a></li>
+          <li><a class="link_name" href="NotificationStatus.php">Explore</a></li>
         </ul>
       </li>
       <li>

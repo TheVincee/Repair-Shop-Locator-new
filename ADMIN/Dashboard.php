@@ -646,7 +646,44 @@
         });
     }); 
 </script>
-    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const customerId = 123; // Replace with the actual customer ID
+    const notificationContainer = document.getElementById('notification-container');
+
+    // Function to fetch notifications
+    function fetchNotifications() {
+        fetch('fetch_notifications.php?customer_id=' + customerId)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.notifications.length > 0) {
+                    data.notifications.forEach(notification => {
+                        displayNotification(notification.message);
+                    });
+                }
+            })
+            .catch(error => console.error('Error fetching notifications:', error));
+    }
+
+    // Function to display notification
+    function displayNotification(message) {
+        const notificationElement = document.createElement('div');
+        notificationElement.className = 'notification';
+        notificationElement.textContent = message;
+
+        notificationContainer.appendChild(notificationElement);
+
+        // Auto-remove notification after 5 seconds
+        setTimeout(() => {
+            notificationContainer.removeChild(notificationElement);
+        }, 5000);
+    }
+
+    // Polling for new notifications every 5 seconds
+    setInterval(fetchNotifications, 5000);
+});
+
+    </script>
 
 </body>
 </html>
