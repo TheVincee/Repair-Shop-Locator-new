@@ -1,6 +1,4 @@
-<?php
-session_start();
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -49,7 +47,7 @@ session_start();
         
       </nav>
       <form class="d-flex">
-      <a href="/Repair-Shop-Locator-new-Shop/LOGIN/Sign-in.php" class="btn btn-outline-danger">Logout</a>
+      <a href="/Repair-Shop-Locator-new/LOGIN/Sign-in.php" class="btn btn-outline-danger">Logout</a>
       </form>
     </div>
   </header>

@@ -226,7 +226,7 @@
         <div class="job">Web Designer</div>
     </div>
     <!-- Wrap the logout icon with a link to the logout page -->
-    <a href="/Repair-Shop-Locator-new-Shop/LOGIN/Sign-in.php" class="logout-link">
+    <a href="../LOGIN/Sign-in.php" class="logout-link">
         <i class='bx bx-log-out'></i>
     </a>
 </div>

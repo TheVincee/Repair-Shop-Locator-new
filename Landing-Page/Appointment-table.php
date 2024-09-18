@@ -282,113 +282,135 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Handle form submission for adding a customer
-            $("#customerForm").on("submit", function(e) {
-                e.preventDefault();
-                $.ajax({
-                    type: "POST",
-                    url: "insert.php",
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        $("#exampleModal").modal("hide");
-                        alert("Customer added successfully!");
-                        location.reload();
-                    },
-                    error: function() {
-                        alert("An error occurred while adding the customer.");
-                    }
-                });
-            });
+      $(document).ready(function() {
+    // Handle form submission for adding a customer
+    $("#customerForm").on("submit", function(e) {
+        e.preventDefault();
+        const $submitButton = $(this).find("button[type='submit']");
+        $submitButton.prop("disabled", true).text("Submitting...");
 
-            // Handle form submission for updating a customer
-            $("#updateForm").on("submit", function(e) {
-                e.preventDefault();
-                $.ajax({
-                    type: "POST",
-                    url: "Update.php",
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        $("#UpdateModal").modal("hide");
-                        alert("Customer updated successfully!");
-                        location.reload();
-                    },
-                    error: function() {
-                        alert("An error occurred while updating the customer.");
-                    }
-                });
-            });
-
-            $('#UpdateModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget); // Button that triggered the modal
-    var customerId = button.data('customer_id'); // Extract info from data-* attributes
-
-    // Fetch customer details for the given customer_id
-    $.ajax({
-        type: "POST",
-        url: "Fetch.php",
-        data: { customer_id: customerId },
-        dataType: "json",
-        success: function(response) {
-            if (response.error) {
-                alert(response.error);
-            } else {
-                // Populate the modal fields with the fetched data
-                $('#updateCustomerId').val(response.customer_id);
-                $('#updateFirstName').val(response.firstname);
-                $('#updateLastName').val(response.lastname);
-                $('#updatePhoneNumber').val(response.phoneNumber);
-                $('#updateEmailAddress').val(response.emailAddress);
-                $('#updateCarMake').val(response.carmake);
-                $('#updateCarModel').val(response.carmodel);
-                $('#updateRepairDetails').val(response.repairdetails);
-                $('#updateAppointmentDate').val(response.appointment_date);
-                $('#updateAppointmentTime').val(response.appointment_time);
-            }
-        },
-        error: function() {
-            alert("An error occurred while fetching the customer data.");
-        }
-    });
-});
-
-
-            // Handle customer deletion
-            window.deleteCustomer = function(customerId) {
-                if (confirm("Are you sure you want to delete this customer?")) {
-                    $.ajax({
-                        type: "POST",
-                        url: "delete.php",
-                        data: { customer_id: customerId },
-                        success: function(response) {
-                            alert("Customer deleted successfully!");
-                            location.reload();
-                        },
-                        error: function() {
-                            alert("An error occurred while deleting the customer.");
-                        }
-                    });
+        $.ajax({
+            type: "POST",
+            url: "insert.php", // URL of the server-side script
+            data: $(this).serialize(), // Serialize the form data
+            dataType: "json", // Expect JSON response from the server
+            success: function(response) {
+                if (response.status === 'success') {
+                    $("#exampleModal").modal("hide");
+                    alert(response.message || "Customer added successfully!");
+                    $("#customerForm")[0].reset();
+                    location.reload();
+                } else {
+                    alert(response.message || "Failed to add the customer. Please try again.");
                 }
-            };
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error);
+                alert("An unexpected error occurred while adding the customer. Please try again later.");
+            },
+            complete: function() {
+                $submitButton.prop("disabled", false).text("Submit");
+            }
         });
+    });
 
-        $(document).ready(function() {
-    // Handle the "View" button click event
-    $('#viewCustomerModal').on('show.bs.modal', function (event) {
+    // Fetch and populate data when opening the update modal
+    $('#UpdateModal').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
         var customerId = button.data('customer_id'); // Extract customer_id from data-* attributes
 
         // Fetch customer details for the given customer_id
         $.ajax({
             type: "POST",
-            url: "fetch_customer.php",
+            url: "Fetch.php", // URL for fetching customer details
             data: { customer_id: customerId },
             dataType: "json",
             success: function(response) {
                 if (response.error) {
                     alert(response.error); // Display an error message if there's an issue
                 } else {
-                    // Populate the modal fields with the fetched data
+                    // Populate modal fields with fetched data
+                    $('#updateCustomerId').val(response.customer_id);
+                    $('#updateFirstName').val(response.firstname);
+                    $('#updateLastName').val(response.lastname);
+                    $('#updatePhoneNumber').val(response.phoneNumber);
+                    $('#updateEmailAddress').val(response.emailAddress);
+                    $('#updateCarMake').val(response.carmake);
+                    $('#updateCarModel').val(response.carmodel);
+                    $('#updateRepairDetails').val(response.repairdetails);
+                    $('#updateAppointmentDate').val(response.appointment_date);
+                    $('#updateAppointmentTime').val(response.appointment_time);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("An error occurred: " + error);
+                alert("An error occurred while fetching the customer data.");
+            }
+        });
+    });
+
+    // Handle form submission for updating a customer
+    $("#updateForm").on("submit", function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "Update.php", // Ensure this is the correct path to your PHP script
+            data: $(this).serialize(),
+            dataType: "json",
+            success: function(response) {
+                if (response.status === 'success') {
+                    $("#UpdateModal").modal("hide");
+                    alert("Customer updated successfully!");
+                    location.reload();
+                } else {
+                    alert(response.message || "Failed to update the customer. Please try again.");
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("An error occurred: " + error); // Log the error
+                alert("An error occurred while updating the customer.");
+            }
+        });
+    });
+
+    // Handle customer deletion
+    window.deleteCustomer = function(customerId) {
+        if (confirm("Are you sure you want to delete this customer?")) {
+            $.ajax({
+                type: "POST",
+                url: "Delete.php", // URL for deleting customer
+                data: { customer_id: customerId },
+                dataType: "json",
+                success: function(response) {
+                    if (response.status === 'success') {
+                        alert(response.message);
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        alert(response.message || "Failed to delete the customer. Please try again.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", error);
+                    alert("An error occurred while deleting the customer. Please try again later.");
+                }
+            });
+        }
+    };
+
+    // Handle the "View" button click event for viewing customer details
+    $('#viewCustomerModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var customerId = button.data('customer_id');
+
+        $.ajax({
+            type: "POST",
+            url: "fetch_customer.php", // URL for fetching customer details
+            data: { customer_id: customerId },
+            dataType: "json",
+            success: function(response) {
+                if (response.error) {
+                    alert(response.error);
+                } else {
                     $('#viewCustomerId').text(response.customer_id);
                     $('#viewFirstName').text(response.firstname);
                     $('#viewLastName').text(response.lastname);
@@ -403,11 +425,14 @@
                 }
             },
             error: function(xhr, status, error) {
-                console.error("An error occurred: " + error); // Log the error
+                console.error("An error occurred: " + error);
+                alert("An unexpected error occurred while fetching the customer details.");
             }
         });
     });
 });
+
+
     </script>
     <script>
         let arrow = document.querySelectorAll(".arrow");
