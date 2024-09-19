@@ -142,6 +142,7 @@
 
     <h1>All Items</h1>
 
+    
     <!-- All Items Table -->
     <div class="table-container">
         <table id="allItemsTable">
@@ -365,6 +366,31 @@
                 if ($(event.target).is('#editModal')) {
                     $('#editModal').hide();
                 }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // When search button is clicked
+            $('#customSearchButton').on('click', function() {
+                var searchQuery = $('#customSearchInput').val();
+                var categoryFilter = $('#categoryFilter').val();
+
+                // Perform AJAX request to fetch filtered items
+                $.ajax({
+                    url: 'FilterSearch.php',
+                    type: 'GET',
+                    data: { 
+                        search: searchQuery, 
+                        category: categoryFilter 
+                    },
+                    success: function(response) {
+                        $('#itemsTable tbody').html(response); // Populate table body with the response
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("AJAX Error: " + status + error);
+                    }
+                });
             });
         });
     </script>

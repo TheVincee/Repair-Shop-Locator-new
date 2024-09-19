@@ -16,7 +16,7 @@
         </div>
         <ul class="nav-links">
             <li>
-                <a href="InventoryTable.php">
+                <a href="DashboardInventory.php">
                     <i class='bx bx-grid-alt'></i>
                     <span class="link_name">Dashboard</span>
                 </a>
@@ -26,50 +26,49 @@
             </li>
             <li>
                 <div class="iocn-link">
-                    <a href="categoryInventory.php">
+                    <a href="all_items.php">
                         <i class='bx bx-collection'></i>
                         <span class="link_name">Category</span>
                     </a>
                     <i class='bx bxs-chevron-down arrow'></i>
                 </div>
                 <ul class="sub-menu">
-                    <li><a class="link_name" href="categoryInventory.php">Category</a></li>
-                    <li><a href="#">HTML & CSS</a></li>
-                    <li><a href="#">JavaScript</a></li>
-                    <li><a href="#">PHP & MySQL</a></li>
+                    <li><a class="link_name" href="all_items.php">Category</a></li>
+                    <li><a href="InventoryTable.php">HTML & CSS</a></li>
+                    <li><a href="categoryInventory.php">JavaScript</a></li>
+                    <li><a href="delivered_new_products.php">PHP & MySQL</a></li>
                 </ul>
             </li>
             <li>
                 <div class="iocn-link">
-                    <a href="#">
+                    <a href="ListoFReturnedProduct.php">
                         <i class='bx bx-book-alt'></i>
                         <span class="link_name">Posts</span>
                     </a>
                     <i class='bx bxs-chevron-down arrow'></i>
                 </div>
                 <ul class="sub-menu">
-                    <li><a class="link_name" href="#">Posts</a></li>
-                    <li><a href="#">Web Design</a></li>
-                    <li><a href="#">Login Form</a></li>
-                    <li><a href="#">Card Design</a></li>
+                    <li><a class="link_name" href="ListoFReturnedProduct.php">Posts</a></li>
+                    <li><a href="DeletedReturned.php">Web Design</a></li>
+                    <li><a href="ReturnedProduct.php">Login Form</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#">
+                <a href="NotifyLowStocks.php">
                     <i class='bx bx-pie-chart-alt-2'></i>
                     <span class="link_name">Analytics</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Analytics</a></li>
+                    <li><a class="link_name" href="NotifyLowStocks.php">Analytics</a></li>
                 </ul>
             </li>
             <li>
-                <a href="Home.php">
+                <a href="#">
                     <i class='bx bx-line-chart'></i>
                     <span class="link_name">Chart</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="Home.php">Chart</a></li>
+                    <li><a class="link_name" href="#">Chart</a></li>
                 </ul>
             </li>
             <li>

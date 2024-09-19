@@ -153,7 +153,7 @@
 </head>
 <body>
     <h1>Inventory Management</h1>
-    <a href="dashboard.html" class="back-button">Back to Dashboard</a>
+    <a href="DashboardInventory.php" class="back-button">Back to Dashboard</a>
 
     <!-- Motorcycle Table -->
     <h2>Motorcycle Parts</h2>
