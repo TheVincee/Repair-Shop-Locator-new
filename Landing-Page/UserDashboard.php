@@ -68,7 +68,7 @@
                     <span class="link_name">Chart</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="Home.php">Chart</a></li>
+                    <li><a class="link_name" href="#">Chart</a></li>
                 </ul>
             </li>
             <li>
@@ -122,8 +122,9 @@
                         <div class="profile_name">Prem Shahi</div>
                         <div class="job">Web Designer</div>
                     </div>
-                    <i class='bx bx-log-out'></i>
-                </div>
+<a href="/Repair-Shop-Locator-new/LOGIN/Sign-in.php" class="logout-link">
+    <i class='bx bx-log-out'></i> 
+</a>                </div>
             </li>
         </ul>
     </div>

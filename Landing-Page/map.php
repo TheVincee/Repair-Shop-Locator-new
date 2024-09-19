@@ -130,8 +130,9 @@
         <div class="profile_name">Prem Shahi</div>
         <div class="job">Web Desginer</div>
       </div>
-      <i class='bx bx-log-out' ></i>
-    </div>
+      <a href="/Repair-Shop-Locator-new/LOGIN/Sign-in.php" class="logout-link">
+    <i class='bx bx-log-out'></i> 
+</a>    </div>
   </li>
 </ul>
   </div>
