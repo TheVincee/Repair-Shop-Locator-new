@@ -32,8 +32,7 @@
             font-size: 28px;
             font-weight: bold;
         }
-        .close:hover,
-        .close:focus {
+        .close:hover, .close:focus {
             color: black;
             text-decoration: none;
             cursor: pointer;
@@ -76,7 +75,7 @@
         </tbody>
     </table>
 
-    <!-- Add Modal -->
+    <!-- Modals -->
     <div id="addModal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeAdd">&times;</span>
@@ -92,7 +91,30 @@
         </div>
     </div>
 
-    <!-- Status Update Modal -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeView">&times;</span>
+            <h2>View Part Details</h2>
+            <div id="viewModalBody"></div>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeEdit">&times;</span>
+            <h2>Edit Part</h2>
+            <form id="editForm">
+                <input type="hidden" id="editPartID">
+                <input type="text" id="editPartName" placeholder="Part Name" required>
+                <input type="text" id="editCategory" placeholder="Category" required>
+                <input type="number" id="editQuantity" placeholder="Quantity" required>
+                <input type="number" id="editPrice" placeholder="Price" step="0.01" required>
+                <input type="text" id="editSupplier" placeholder="Supplier" required>
+                <button type="submit" class="submit-btn">Update Part</button>
+            </form>
+        </div>
+    </div>
+
     <div id="statusModal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeStatus">&times;</span>
@@ -108,7 +130,7 @@
                 
                 <div id="issueDetailsSection" style="display:none;">
                     <label for="issueDetails">Issue Details:</label>
-                    <textarea id="issueDetails" placeholder="Describe the issue" rows="4"></textarea> <!-- Keep it without required -->
+                    <textarea id="issueDetails" placeholder="Describe the issue" rows="4"></textarea>
                 </div>
 
                 <button type="submit" class="submit-btn">Update Status</button>
@@ -116,7 +138,6 @@
         </div>
     </div>
 
-    <!-- Returned Status Modal -->
     <div id="returnedModal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeReturned">&times;</span>
@@ -132,149 +153,265 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    $(document).ready(function() {
-        fetchTableData();
+$(document).ready(function() {
+    fetchTableData();
 
-        function fetchTableData() {
+    function fetchTableData() {
+        $.ajax({
+            url: 'fetch.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                var tableBody = $('#deliveredNewProductsTableBody');
+                tableBody.empty();
+                $.each(data, function(index, item) {
+                    var row = '<tr>' +
+                        '<td>' + item.partID + '</td>' +
+                        '<td>' + item.partName + '</td>' +
+                        '<td>' + item.category + '</td>' +
+                        '<td>' + item.quantity + '</td>' +
+                        '<td>' + item.price + '</td>' +
+                        '<td>' + item.supplier + '</td>' +
+                        '<td>' + item.status + '</td>' +
+                        '<td>' +
+                        '<button class="edit-btn" data-id="' + item.partID + '">Edit</button>' +
+                        '<button class="view-btn" data-id="' + item.partID + '">View</button>' +
+                        '<button class="delete-btn" data-id="' + item.partID + '">Delete</button>' +
+                        '<button class="status-btn" data-id="' + item.partID + '">Update Status</button>' +
+                        '</td>' +
+                        '</tr>';
+                    tableBody.append(row);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+            }
+        });
+    }
+
+    // Show Status Modal
+    $(document).on('click', '.status-btn', function() {
+        var id = $(this).data('id');
+        $('#statusPartID').val(id);
+        $('#statusModal').show();
+    });
+
+    // Toggle issue details based on selected status
+    $('#statusOptions').change(function() {
+        $('#issueDetailsSection').toggle($(this).val() === 'Returned');
+    });
+
+    // Handle status form submission
+    $('#statusForm').submit(function(e) {
+        e.preventDefault();
+        var status = $('#statusOptions').val();
+        var issueDetails = status === 'Returned' ? $('#issueDetails').val() : null;
+
+        $.ajax({
+            url: 'UpdateStatus.php',
+            type: 'POST',
+            data: {
+                id: $('#statusPartID').val(),
+                status: status,
+                issue_details: issueDetails
+            },
+            success: function(response) {
+                alert(response);
+                $('#statusModal').hide();
+                fetchTableData();
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+            }
+        });
+    });
+
+    // Show Add Modal
+    $('#addNewPartBtn').click(function() {
+        $('#addModal').show();
+    });
+
+    // Close Add Modal
+    $('#closeAdd').click(function() {
+        $('#addModal').hide();
+    });
+
+    // Handle Add Form Submission
+    $('#addForm').submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: 'add.php',
+            type: 'POST',
+            data: {
+                partName: $('#addPartName').val(),
+                category: $('#addCategory').val(),
+                quantity: $('#addQuantity').val(),
+                price: $('#addPrice').val(),
+                supplier: $('#addSupplier').val()
+            },
+            success: function(response) {
+                alert(response);
+                $('#addModal').hide();
+                fetchTableData();
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+            }
+        });
+    });
+
+    // Close View Modal
+    $('#closeView').click(function() {
+        $('#viewModal').hide();
+    });
+
+    // Close Edit Modal
+    $('#closeEdit').click(function() {
+        $('#editModal').hide();
+    });
+
+    // Show View Modal
+    // Show View Modal
+// Show View Modal
+$(document).on('click', '.view-btn', function() {
+    var id = $(this).data('id');
+    $.ajax({
+        url: 'view.php',
+        type: 'POST', // Use POST method
+        data: { id: id },
+        dataType: 'json', // Expect JSON response
+        success: function(response) {
+            if (response.error) {
+                // Handle error
+                $('#viewModalBody').html('<p>' + response.error + '</p>');
+            } else {
+                // Populate modal with part details
+                $('#viewModalBody').html(`
+                    <p>Part Name: ${response.partName}</p>
+                    <p>Category: ${response.category}</p>
+                    <p>Quantity: ${response.quantity}</p>
+                    <p>Price: ${response.price}</p>
+                    <p>Supplier: ${response.supplier}</p>
+                    <p>Status: ${response.status}</p>
+                `);
+            }
+            $('#viewModal').show(); // Ensure the modal is displayed
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', status, error);
+        }
+    });
+});
+
+
+
+    // Show Edit Modal
+    $(document).on('click', '.edit-btn', function() {
+        var id = $(this).data('id');
+        $.ajax({
+            url: 'fetch_single.php',
+            type: 'GET',
+            data: { id: id },
+            dataType: 'json',
+            success: function(item) {
+                $('#editPartID').val(item.partID);
+                $('#editPartName').val(item.partName);
+                $('#editCategory').val(item.category);
+                $('#editQuantity').val(item.quantity);
+                $('#editPrice').val(item.price);
+                $('#editSupplier').val(item.supplier);
+                $('#editModal').show();
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+            }
+        });
+    });
+
+    // Handle Edit Form Submission
+    $('#editForm').submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: 'edit.php',
+            type: 'POST',
+            data: {
+                id: $('#editPartID').val(),
+                partName: $('#editPartName').val(),
+                category: $('#editCategory').val(),
+                quantity: $('#editQuantity').val(),
+                price: $('#editPrice').val(),
+                supplier: $('#editSupplier').val()
+            },
+            success: function(response) {
+                alert(response);
+                $('#editModal').hide();
+                fetchTableData();
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+            }
+        });
+    });
+
+    // Handle Delete
+    $(document).on('click', '.delete-btn', function() {
+        var id = $(this).data('id');
+        if (confirm('Are you sure you want to delete this part?')) {
             $.ajax({
-                url: 'fetch.php', // Ensure this path is correct
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    var tableBody = $('#deliveredNewProductsTableBody');
-                    tableBody.empty();
-                    $.each(data, function(index, item) {
-                        var row = '<tr>' +
-                            '<td>' + item.partID + '</td>' +
-                            '<td>' + item.partName + '</td>' +
-                            '<td>' + item.category + '</td>' +
-                            '<td>' + item.quantity + '</td>' +
-                            '<td>' + item.price + '</td>' +
-                            '<td>' + item.supplier + '</td>' +
-                            '<td>' + item.status + '</td>' +
-                            '<td>' +
-                            '<button class="edit-btn" data-id="' + item.partID + '">Edit</button>' +
-                            '<button class="view-btn" data-id="' + item.partID + '">View</button>' +
-                            '<button class="delete-btn" data-id="' + item.partID + '">Delete</button>' +
-                            '<button class="status-btn" data-id="' + item.partID + '">Update Status</button>' +
-                            '</td>' +
-                            '</tr>';
-                        tableBody.append(row);
-                    });
+                url: 'delete.php',
+                type: 'POST',
+                data: { id: id },
+                success: function(response) {
+                    alert(response);
+                    fetchTableData();
                 },
                 error: function(xhr, status, error) {
                     console.error('AJAX Error:', status, error);
                 }
             });
         }
+    });
 
-        // Show Status Modal
-        $(document).on('click', '.status-btn', function() {
-            var id = $(this).data('id');
-            $('#statusPartID').val(id); // Set part ID for status update
-            $('#statusModal').show();
-        });
+    // Close Returned Modal
+    $('#closeReturned').click(function() {
+        $('#returnedModal').hide();
+    });
 
-        // Toggle issue details based on selected status
-        $('#statusOptions').change(function() {
-            if ($(this).val() === 'Issue') {
-                $('#issueDetailsSection').show();
-                $('#issueDetails').attr('required', true); // Add required attribute
-            } else {
-                $('#issueDetailsSection').hide();
-                $('#issueDetails').removeAttr('required'); // Remove required attribute
+    // Show Returned Modal
+    $(document).on('click', '.returned-btn', function() {
+        var id = $(this).data('id');
+        $('#returnedPartID').val(id);
+        $('#returnedModal').show();
+    });
+
+    // Handle Returned Form Submission
+    $('#returnedForm').submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: 'update_returned.php',
+            type: 'POST',
+            data: {
+                id: $('#returnedPartID').val(),
+                issueDetails: $('#returnedIssueDetails').val()
+            },
+            success: function(response) {
+                alert(response);
+                $('#returnedModal').hide();
+                fetchTableData();
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
             }
         });
-
-        // Handle status form submission
-        $('#statusForm').submit(function(e) {
-            e.preventDefault();
-            var status = $('#statusOptions').val();
-            var issueDetails = $('#issueDetails').val();
-
-            $.ajax({
-                url: 'UpdateStatus.php', // Ensure this path is correct
-                type: 'POST',
-                data: {
-                    id: $('#statusPartID').val(),
-                    status: status,
-                    issue_details: (status === 'Issue') ? issueDetails : null
-                },
-                success: function(response) {
-                    if (status === 'Returned') {
-                        $('#statusModal').hide();
-                        $('#returnedPartID').val($('#statusPartID').val()); // Set part ID for returned form
-                        $('#returnedModal').show(); // Show the Returned status modal
-                    } else {
-                        alert(response);
-                        $('#statusModal').hide();
-                        fetchTableData(); // Refresh table data after status update
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', status, error);
-                }
-            });
-        });
-
-        // Handle returned form submission
-        $('#returnedForm').submit(function(e) {
-            e.preventDefault();
-            var partID = $('#returnedPartID').val();
-            var issueDetails = $('#returnedIssueDetails').val();
-
-            $.ajax({
-                url: 'update_returned.php', // Ensure this path is correct
-                type: 'POST',
-                data: {
-                    id: partID,
-                    issue_details: issueDetails
-                },
-                success: function(response) {
-                    alert(response);
-                    $('#returnedModal').hide();
-                    fetchTableData(); // Refresh table data after issue details update
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', status, error);
-                }
-            });
-        });
-
-        // Close modals on clicking the close button
-        $(document).on('click', '.close', function() {
-            $(this).closest('.modal').hide();
-        });
-
-        // Show Add Modal
-        $('#addNewPartBtn').click(function() {
-            $('#addModal').show();
-        });
-
-        // Handle add form submission
-        $('#addForm').submit(function(e) {
-            e.preventDefault();
-            $.ajax({
-                url: 'add.php', // Ensure this path is correct
-                type: 'POST',
-                data: {
-                    part_name: $('#addPartName').val(),
-                    category: $('#addCategory').val(),
-                    quantity: $('#addQuantity').val(),
-                    price: $('#addPrice').val(),
-                    supplier: $('#addSupplier').val()
-                },
-                success: function(response) {
-                    alert(response);
-                    $('#addModal').hide();
-                    fetchTableData(); // Refresh table data after adding new part
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', status, error);
-                }
-            });
-        });
     });
+
+    // Close all modals when clicking outside of them
+    $(window).click(function(event) {
+        if ($(event.target).hasClass('modal')) {
+            $('.modal').hide();
+        }
+    });
+});
     </script>
 </body>
 </html>
