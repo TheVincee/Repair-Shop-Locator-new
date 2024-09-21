@@ -4,10 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Returned Damage Items</title>
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #backButton {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        #backButton:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal p {
+            margin: 10px 0;
+        }
+
+        /* Button Styles */
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
     <h1>Returned Damage Items</h1>
+
+    <a id="backButton" href="dashboard.php">Back to Dashboard</a>
 
     <!-- Returned Damage Items Table -->
     <table id="returnedDamageTable">
@@ -38,101 +162,72 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load returned damage items
-            function loadReturnedDamageItems() {
-                const xhr = new XMLHttpRequest();
-                xhr.open('GET', 'status_operations.php?action=listByStatus&status=Returned', true);
-                xhr.onload = function() {
-                    if (this.status == 200) {
-                        const data = JSON.parse(this.responseText);
-                        if (!data.error) {
-                            let html = '';
-                            data.forEach(part => {
-                                html += `<tr>
-                                    <td>${part.partID}</td>
-                                    <td>${part.partName}</td>
-                                    <td>${part.quantity}</td>
-                                    <td>${part.price}</td>
-                                    <td>${part.supplier}</td>
-                                    <td>${part.status}</td>
+        $(document).ready(function() {
+            // Fetch returned damage items on page load
+            fetchReturnedDamageItems();
+
+            function fetchReturnedDamageItems() {
+                $.ajax({
+                    url: 'fetchReturnedDamageItems.php',
+                    type: 'GET',
+                    success: function(response) {
+                        const items = JSON.parse(response);
+                        const tableBody = $('#returnedDamageTableBody');
+                        tableBody.empty(); // Clear existing rows
+
+                        items.forEach(item => {
+                            const row = `
+                                <tr>
+                                    <td>${item.partID}</td>
+                                    <td>${item.partName}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${item.price}</td>
+                                    <td>${item.supplier}</td>
+                                    <td>${item.status}</td>
                                     <td>
-                                        <button class='view-btn' data-id='${part.partID}'>View</button>
-                                        <button class='edit-btn' data-id='${part.partID}'>Edit</button>
-                                        <button class='delete-btn' data-id='${part.partID}'>Delete</button>
+                                        <button onclick="viewPart(${item.partID})">View</button>
                                     </td>
-                                </tr>`;
-                            });
-                            document.getElementById('returnedDamageTableBody').innerHTML = html;
-                        } else {
-                            alert(data.error);
-                        }
+                                </tr>
+                            `;
+                            tableBody.append(row);
+                        });
+                    },
+                    error: function() {
+                        alert('Failed to load items.');
                     }
-                }
-                xhr.send();
+                });
             }
 
-            // Load returned damage items initially
-            loadReturnedDamageItems();
-
-            // View Part
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('view-btn')) {
-                    const partID = e.target.getAttribute('data-id');
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('GET', `inventory_operations.php?action=view&id=${partID}`, true);
-                    xhr.onload = function() {
-                        if (this.status == 200) {
-                            const data = JSON.parse(this.responseText);
-                            if (!data.error) {
-                                document.getElementById('viewDetails').innerHTML = `
-                                    <p><strong>Part ID:</strong> ${data.partID}</p>
-                                    <p><strong>Part Name:</strong> ${data.partName}</p>
-                                    <p><strong>Category:</strong> ${data.category}</p>
-                                    <p><strong>Quantity:</strong> ${data.quantity}</p>
-                                    <p><strong>Price:</strong> $${data.price.toFixed(2)}</p>
-                                    <p><strong>Supplier:</strong> ${data.supplier}</p>
-                                    <p><strong>Status:</strong> ${data.status}</p>
-                                `;
-                                document.getElementById('viewModal').style.display = 'block';
-                            } else {
-                                alert(data.error);
-                            }
+            window.viewPart = function(partID) {
+                $.ajax({
+                    url: 'fetchPartDetails.php',
+                    type: 'GET',
+                    data: { partID: partID },
+                    success: function(response) {
+                        try {
+                            const partDetails = JSON.parse(response);
+                            $('#viewDetails').html(`
+                                <p><strong>Part ID:</strong> ${partDetails.partID}</p>
+                                <p><strong>Part Name:</strong> ${partDetails.partName}</p>
+                                <p><strong>Status:</strong> ${partDetails.status}</p>
+                                <p><strong>Issue Details:</strong> ${partDetails.issue_details}</p>
+                            `);
+                            $('#viewModal').show(); // Show the modal
+                        } catch (e) {
+                            console.error('Error parsing JSON:', e);
+                            alert('Failed to load part details. Please try again.');
                         }
+                    },
+                    error: function() {
+                        alert('Failed to fetch part details.');
                     }
-                    xhr.send();
-                }
+                });
+            };
 
-                if (e.target.classList.contains('edit-btn')) {
-                    // Handle edit functionality here
-                }
-
-                if (e.target.classList.contains('delete-btn')) {
-                    const partID = e.target.getAttribute('data-id');
-                    if (confirm('Are you sure you want to delete this part?')) {
-                        const xhr = new XMLHttpRequest();
-                        xhr.open('GET', `inventory_operations.php?action=delete&id=${partID}`, true);
-                        xhr.onload = function() {
-                            if (this.status == 200) {
-                                loadReturnedDamageItems();
-                            }
-                        }
-                        xhr.send();
-                    }
-                }
+            $('#closeView').click(function() {
+                $('#viewModal').hide(); // Hide the modal when close button is clicked
             });
-
-            document.getElementById('closeView').onclick = function() {
-                document.getElementById('viewModal').style.display = 'none';
-            }
-
-            window.onclick = function(event) {
-                if (event.target === document.getElementById('viewModal')) {
-                    document.getElementById('viewModal').style.display = 'none';
-                }
-            }
         });
     </script>
 </body>

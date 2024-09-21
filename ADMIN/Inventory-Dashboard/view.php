@@ -15,7 +15,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if 'id' is provided
+// Check if 'id' is provided via POST
 if (isset($_POST['id'])) {
     $partID = $conn->real_escape_string($_POST['id']);
 

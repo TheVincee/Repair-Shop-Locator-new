@@ -41,16 +41,16 @@
             </li>
             <li>
                 <div class="iocn-link">
-                    <a href="ListoFReturnedProduct.php">
+                    <a href="#">
                         <i class='bx bx-book-alt'></i>
                         <span class="link_name">Posts</span>
                     </a>
                     <i class='bx bxs-chevron-down arrow'></i>
                 </div>
                 <ul class="sub-menu">
-                    <li><a class="link_name" href="ListoFReturnedProduct.php">Posts</a></li>
-                    <li><a href="DeletedReturned.php">Web Design</a></li>
-                    <li><a href="ReturnedProduct.php">Login Form</a></li>
+                    <li><a class="link_name" href="#">Posts</a></li>
+                    <li><a href="Received Delivered Product.php">Web Design</a></li>
+                    <li><a href="returned_damage_items.php">Login Form</a></li>
                 </ul>
             </li>
             <li>
