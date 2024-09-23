@@ -51,7 +51,6 @@
                     <li><a class="link_name" href="ListOfUpdatedStats.php">Posts</a></li>
                     <li><a href="Received Delivered Product.php">Web Design</a></li>
                     <li><a href="returned_damage_items.php">Login Form</a></li>
-                    <li><a href="DamageDelivery.php">Login Form</a></li>
                 </ul>
             </li>
             <li>

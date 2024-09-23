@@ -412,7 +412,7 @@
                 var status = $('#statusOptions').val();
                 var issueDetails = status === 'Returned' ? $('#issueDetails').val() : '';
                 $.ajax({
-                    url: 'update_status.php',
+                    url: 'UpdateStatus.php',
                     type: 'POST',
                     data: {
                         id: $('#statusPartID').val(),
