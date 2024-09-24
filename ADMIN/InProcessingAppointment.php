@@ -259,7 +259,7 @@
                 const customerId = $(this).data('id');
 
                 $.ajax({
-                    url: 'GetAppointmentDetails.php',
+                    url: 'getAppointmentDetails.php',
                     type: 'GET',
                     data: { customer_id: customerId },
                     dataType: 'json',

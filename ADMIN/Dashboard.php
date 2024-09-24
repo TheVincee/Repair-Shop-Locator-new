@@ -123,22 +123,22 @@
                     <span class="link_name">Dashboard</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Dashboard</a></li>
+                    <li><a class="link_name" href="Dashboard.php">Dashboard</a></li>
                 </ul>
             </li>
             <li>
                 <div class="iocn-link">
-                    <a href="#">
+                    <a href="http://localhost/Repair-Shop-Locator-new/ADMIN/Inventory-Dashboard/DashboardInventory.php">
                         <i class='bx bx-collection'></i>
-                        <span class="link_name">Category</span>
+                        <span class="link_name">Inventory</span>
                     </a>
                     <i class='bx bxs-chevron-down arrow'></i>
                 </div>
                 <ul class="sub-menu">
-                    <li><a class="link_name" href="">Category</a></li>
-                    <li><a href="#">HTML & CSS</a></li>
-                    <li><a href="#">JavaScript</a></li>
-                    <li><a href="#">PHP & MySQL</a></li>
+                    <li><a class="link_name" href="http://localhost/Repair-Shop-Locator-new/ADMIN/Inventory-Dashboard/DashboardInventory.php">Inventory</a></li>
+                    <li><a href="http://localhost/Repair-Shop-Locator-new/ADMIN/Inventory-Dashboard/all_items.php">HTML & CSS</a></li>
+                    <li><a href="http://localhost/Repair-Shop-Locator-new/ADMIN/Inventory-Dashboard/InventoryTable.php">JavaScript</a></li>
+                    <li><a href="http://localhost/Repair-Shop-Locator-new/ADMIN/Inventory-Dashboard/delivered_new_products.php">PHP & MySQL</a></li>
                 </ul>
             </li>
             <li>

@@ -21,7 +21,7 @@
                     <span class="link_name">Dashboard</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Category</a></li>
+                    <li><a class="link_name" href="all_items.php">Category</a></li>
                 </ul>
             </li>
             <li>
@@ -54,21 +54,21 @@
                 </ul>
             </li>
             <li>
-                <a href="NotifyLowStocks.php">
+                <a href="http://localhost/Repair-Shop-Locator-new/ADMIN/Dashboard.php">
                     <i class='bx bx-pie-chart-alt-2'></i>
                     <span class="link_name">Analytics</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="NotifyLowStocks.php">Analytics</a></li>
+                    <li><a class="link_name" href="http://localhost/Repair-Shop-Locator-new/ADMIN/Dashboard.php">Analytics</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#">
+                <a href="http://localhost/Repair-Shop-Locator-new/ADMIN/Dashboard.php">
                     <i class='bx bx-line-chart'></i>
                     <span class="link_name">Chart</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Chart</a></li>
+                    <li><a class="link_name" href="http://localhost/Repair-Shop-Locator-new/ADMIN/Dashboard.php">Chart</a></li>
                 </ul>
             </li>
             <li>
