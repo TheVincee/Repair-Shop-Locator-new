@@ -650,8 +650,8 @@
 });
 
     </script>
-    <script>
-        $(document).ready(function() {
+     <script>
+$(document).ready(function() {
     function fetchCounts() {
         // Optionally show a loading indicator
         $('#loadingIndicator').show();
@@ -665,6 +665,8 @@
                 // Hide loading indicator
                 $('#loadingIndicator').hide();
 
+                console.log('Counts Response:', response); // Log the entire response for debugging
+
                 if (response.status !== 'error') {
                     // Update dashboard metrics with the counts
                     $('#approvedCount').text(response.approved);
@@ -673,7 +675,7 @@
                     $('#walkinCount').text(response.total_walkins);
 
                     // Optional: Handle zero counts with messages
-                    if (response.rejected === '0') {
+                    if (parseInt(response.rejected, 10) === 0) {
                         $('#rejectedCount').text('No rejected appointments found.');
                     }
                 } else {
@@ -692,9 +694,8 @@
     // Fetch counts on page load
     fetchCounts();
 });
+</script>
 
-
-    </script>
 
 </body>
 </html>

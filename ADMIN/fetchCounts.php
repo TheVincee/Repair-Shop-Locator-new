@@ -21,14 +21,8 @@ function getCounts($conn) {
     $counts['approved'] = $result->fetch_assoc()['count'];
 
     // Count for Rejected
-    $result = $conn->query("SELECT COUNT(*) as count FROM customer_details WHERE Status = 'Rejected'");
+    $result = $conn->query("SELECT COUNT(*) as count FROM customer_details WHERE Status = 'Reject'");
     $counts['rejected'] = $result->fetch_assoc()['count'];
-
-    // Check if rejected count is zero
-    if ($counts['rejected'] === '0') {
-        // Optionally set a specific message if desired
-        $counts['rejected_message'] = "No rejected appointments found.";
-    }
 
     // Count for In Processing
     $result = $conn->query("SELECT COUNT(*) as count FROM customer_details WHERE Status = 'In Processing'");
@@ -37,6 +31,9 @@ function getCounts($conn) {
     // Count for Total Walk-in Appointments
     $result = $conn->query("SELECT COUNT(*) as count FROM walkin_appointments");
     $counts['total_walkins'] = $result->fetch_assoc()['count'];
+
+    // Debugging output
+    error_log('Counts: ' . json_encode($counts)); // Logs to server error log
 
     return $counts;
 }
