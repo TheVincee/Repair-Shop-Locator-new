@@ -29,7 +29,6 @@ function fetchCombinedData($conn) {
         cd.Status,
         'customer_details' AS source
     FROM customer_details cd
-    LEFT JOIN walkin_appointments wa ON cd.customer_id = wa.customer_id
     UNION ALL
     SELECT 
         wa.customer_id, 
@@ -99,45 +98,52 @@ function fetchAppointmentById($conn, $id) {
     return $result->fetch_assoc();
 }
 
-// Function to update an appointment from both customer_details and walkin_appointments using UNION logic
-function updateAppointment($conn, $data) {
-    // Check if customer exists in customer_details
-    $checkSql = "SELECT customer_id FROM customer_details WHERE customer_id = ?";
-    $stmtCheck = $conn->prepare($checkSql);
-    $stmtCheck->bind_param("i", $data['customer_id']);
-    $stmtCheck->execute();
-    $resultCheck = $stmtCheck->get_result();
-
-    if ($resultCheck->num_rows > 0) {
-        // If the customer exists in customer_details, update customer_details table
-        $sql = "UPDATE customer_details 
-                SET phoneNumber = ?, emailAddress = ?, 
-                    repairdetails = ?, appointment_time = ?, 
-                    appointment_date = ?, Status = ? 
-                WHERE customer_id = ?";
-    } else {
-        // If not, update walkin_appointments table
-        $sql = "UPDATE walkin_appointments 
-                SET phoneNumber = ?, emailAddress = ?, 
-                    repairdetails = ?, appointment_time = ?, 
-                    appointment_date = ?, Status = ? 
-                WHERE customer_id = ?";
-    }
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssi", 
-                      $data['phoneNumber'], 
-                      $data['emailAddress'], 
-                      $data['repairdetails'], 
-                      $data['appointment_time'], 
-                      $data['appointment_date'], 
-                      $data['Status'], 
-                      $data['customer_id']);
+// Updated function to handle the update of the Status field only
+function updateStatus($conn, $data) {
+    // Start transaction
+    $conn->begin_transaction();
     
-    if (!$stmt->execute()) {
+    try {
+        // Check if customer exists in customer_details
+        $checkSql = "SELECT customer_id FROM customer_details WHERE customer_id = ?";
+        $stmtCheck = $conn->prepare($checkSql);
+        if (!$stmtCheck) {
+            throw new Exception("Failed to prepare statement: " . $conn->error);
+        }
+        $stmtCheck->bind_param("i", $data['customer_id']);
+        $stmtCheck->execute();
+        $resultCheck = $stmtCheck->get_result();
+
+        if ($resultCheck->num_rows > 0) {
+            // If the customer exists in customer_details, update only the Status in customer_details
+            $sql = "UPDATE customer_details SET Status = ? WHERE customer_id = ?";
+            $stmt = $conn->prepare($sql);
+        } else {
+            // If not, update the Status in walkin_appointments
+            $sql = "UPDATE walkin_appointments SET Status = ? WHERE customer_id = ?";
+            $stmt = $conn->prepare($sql);
+        }
+
+        if (!$stmt) {
+            throw new Exception("Failed to prepare update statement: " . $conn->error);
+        }
+
+        // Bind parameters and execute update statement
+        $stmt->bind_param("si", $data['Status'], $data['customer_id']);
+        
+        if (!$stmt->execute()) {
+            throw new Exception("Update failed: " . $stmt->error);
+        }
+
+        // Commit transaction
+        $conn->commit();
+        return true;
+    } catch (Exception $e) {
+        // Rollback if there is an error
+        $conn->rollback();
+        error_log("Error updating Status: " . $e->getMessage()); // Log the error
         return false;
     }
-    return true;
 }
 
 // Function to delete an appointment from both tables using UNION logic
@@ -164,6 +170,7 @@ function deleteAppointment($conn, $id) {
     } catch (Exception $e) {
         // Rollback if there is an error
         $conn->rollback();
+        error_log("Deletion failed: " . $e->getMessage()); // Log the error
         return false;
     }
 }
@@ -171,11 +178,11 @@ function deleteAppointment($conn, $id) {
 // Handle AJAX requests
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['action'])) {
-        if ($_POST['action'] == 'updateAppointment') {
-            if (updateAppointment($conn, $_POST)) {
-                echo json_encode(['status' => 'success', 'message' => 'Appointment updated successfully!']);
+        if ($_POST['action'] == 'updateStatus') { // Handle Status update action
+            if (updateStatus($conn, $_POST)) {
+                echo json_encode(['status' => 'success', 'message' => 'Status updated successfully!']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Failed to update appointment.']);
+                echo json_encode(['status' => 'error', 'message' => 'Failed to update Status.']);
             }
         } elseif ($_POST['action'] == 'deleteAppointment') {
             if (deleteAppointment($conn, $_POST['id'])) {

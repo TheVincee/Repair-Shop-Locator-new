@@ -225,49 +225,29 @@
             <i class='bx bx-menu' id="hamburgerMenu"></i>
             <div class="metrics-boxes">
                 <div class="metric-box">
-                    <div class="metric-details">
-                        <div class="box-topic">Total Order</div>
-                        <div class="number">40,876</div>
-                        <div class="indicator">
-                            <i class='bx bx-up-arrow-alt'></i>
-                            <span class="text">Up from yesterday</span>
-                        </div>
-                    </div>
-                    <i class='bx bx-cart-alt cart'></i>
+                <div class="metric-details">
+                    <div class="box-topic">Approved</div>
+                <div class="number" id="approvedCount">0</div>
+                </div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-details">
-                        <div class="box-topic">Total Sales</div>
-                        <div class="number">38,876</div>
-                        <div class="indicator">
-                            <i class='bx bx-up-arrow-alt'></i>
-                            <span class="text">Up from yesterday</span>
-                        </div>
+                <div class="metric-details">
+                     <div class="box-topic">Rejected</div>
+                    <div class="number" id="rejectedCount">0</div>
                     </div>
-                    <i class='bx bxs-cart-add cart two'></i>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-details">
-                        <div class="box-topic">Total Profit</div>
-                        <div class="number">$12,876</div>
-                        <div class="indicator">
-                            <i class='bx bx-up-arrow-alt'></i>
-                            <span class="text">Up from yesterday</span>
-                        </div>
-                    </div>
-                    <i class='bx bx-dollar cart three'></i>
+                <div class="metric-details">
+        <div class="box-topic">In Processing</div>
+        <div class="number" id="inProcessingCount">0</div>
+    </div>
                 </div>
                 <div class="metric-box">
-                    <div class="metric-details">
-                        <div class="box-topic">Total Reviews</div>
-                        <div class="number">4,876</div>
-                        <div class="indicator">
-                            <i class='bx bx-down-arrow-alt down'></i>
-                            <span class="text">Down from yesterday</span>
-                        </div>
+                <div class="metric-details">
+        <div class="box-topic">Total Walk-in Appointments</div>
+        <div class="number" id="walkinCount">0</div>
+    </div>
                     </div>
-                    <i class='bx bx-message-detail cart four'></i>
-                </div>
             </div>
         </div>
 
@@ -668,6 +648,51 @@
     // Polling for new notifications every 5 seconds
     setInterval(fetchNotifications, 5000);
 });
+
+    </script>
+    <script>
+        $(document).ready(function() {
+    function fetchCounts() {
+        // Optionally show a loading indicator
+        $('#loadingIndicator').show();
+
+        $.ajax({
+            url: 'fetchCounts.php', // URL to the PHP file
+            type: 'GET',
+            data: { action: 'getCounts' },
+            dataType: 'json',
+            success: function(response) {
+                // Hide loading indicator
+                $('#loadingIndicator').hide();
+
+                if (response.status !== 'error') {
+                    // Update dashboard metrics with the counts
+                    $('#approvedCount').text(response.approved);
+                    $('#rejectedCount').text(response.rejected);
+                    $('#inProcessingCount').text(response.in_processing);
+                    $('#walkinCount').text(response.total_walkins);
+
+                    // Optional: Handle zero counts with messages
+                    if (response.rejected === '0') {
+                        $('#rejectedCount').text('No rejected appointments found.');
+                    }
+                } else {
+                    console.error(response.message);
+                    alert("Error fetching counts: " + response.message); // User-friendly alert
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#loadingIndicator').hide();
+                console.error("AJAX Error: " + error);
+                alert("An error occurred while fetching counts. Please try again later."); // User-friendly alert
+            }
+        });
+    }
+
+    // Fetch counts on page load
+    fetchCounts();
+});
+
 
     </script>
 

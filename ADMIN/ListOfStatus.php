@@ -178,36 +178,32 @@
     <div id="editModal" class="modal">
     <div class="modal-content">
         <span id="closeEdit" class="close">&times;</span>
-        <h2>Edit Appointment</h2>
+        <h2>Edit Appointment Status</h2>
         <form id="editForm">
-            <input type="hidden" id="editCustomerID">
-            <label for="editFirstname">First Name:</label>
-            <input type="text" id="editFirstname" required>
-            <label for="editPhoneNumber">Phone Number:</label>
-            <input type="text" id="editPhoneNumber" required>
-            <label for="editEmailAddress">Email Address:</label>
-            <input type="email" id="editEmailAddress" required>
-            <label for="editRepairDetails">Repair Details:</label>
-            <textarea id="editRepairDetails" required></textarea>
-            <label for="editAppointmentTime">Appointment Time:</label>
-            <input type="time" id="editAppointmentTime" required>
-            <label for="editAppointmentDate">Appointment Date:</label>
-            <input type="date" id="editAppointmentDate" required>
+            <!-- Visible Customer ID field -->
+            <label for="editCustomerID">Customer ID:</label>
+            <input type="text" id="editCustomerID" readonly> <!-- Read-only to prevent modification -->
+
+            <!-- Dropdown for Status -->
             <label for="editStatus">Status:</label>
-            <select id="editStatus">
+            <select id="editStatus" required>
                 <option value="Pending">Pending</option>
                 <option value="Approved">Approved</option>
                 <option value="Rejected">Rejected</option>
                 <option value="In Processing">In Processing</option>
             </select>
+            
             <button type="submit">Save Changes</button>
         </form>
     </div>
 </div>
 
 
+
+
+
     <script>
-      $(document).ready(function() {
+    $(document).ready(function() {
     loadAppointments();
 
     function loadAppointments() {
@@ -246,6 +242,7 @@
         });
     }
 
+    // View appointment details
     $(document).on('click', '.view-btn', function() {
         var id = $(this).data('id');
         $.ajax({
@@ -275,6 +272,7 @@
         });
     });
 
+    // Edit appointment
     $(document).on('click', '.edit-btn', function() {
         var id = $(this).data('id');
         $.ajax({
@@ -286,39 +284,52 @@
                 console.log('Edit appointment details:', data);
                 if (data) {
                     $('#editCustomerID').val(data.customer_id || '');
-                    $('#editFirstname').val(data.firstname || '');
-                    $('#editPhoneNumber').val(data.phoneNumber || '');
-                    $('#editEmailAddress').val(data.emailAddress || '');
-                    $('#editRepairDetails').val(data.repairdetails || '');
-                    $('#editAppointmentTime').val(data.appointment_time || '');
-                    $('#editAppointmentDate').val(data.appointment_date || '');
                     $('#editStatus').val(data.Status || '');
-                    $('#editModal').fadeIn();
+                    $('#editModal').fadeIn(); 
+                } else {
+                    alert("No data found for the selected appointment.");
                 }
             },
             error: function(xhr, status, error) {
                 console.error("Error loading appointment for editing: " + error);
+                alert("Failed to load appointment details. Please try again.");
             }
         });
     });
 
+    // Submit the edit form
     $(document).on('submit', '#editForm', function(event) {
         event.preventDefault();
+        
+        var formData = {
+            customer_id: $('#editCustomerID').val(),
+            Status: $('#editStatus').val(),
+            action: 'updateStatus' // Updated action to match your PHP
+        };
+
         $.ajax({
             url: 'walkin_operations.php',
             type: 'POST',
-            data: $(this).serialize() + '&action=updateAppointment',
+            data: formData,
+            dataType: 'json',
             success: function(response) {
-                alert(response);
-                $('#editModal').fadeOut();
-                loadAppointments();
+                console.log(response);
+                if (response.status === 'success') {
+                    alert(response.message);
+                    $('#editModal').fadeOut();
+                    loadAppointments(); 
+                } else {
+                    alert("Update failed: " + response.message);
+                }
             },
             error: function(xhr, status, error) {
                 console.error("Error updating appointment: " + error);
+                alert("Failed to update appointment. Please try again.");
             }
         });
     });
 
+    // Delete appointment
     $(document).on('click', '.delete-btn', function() {
         var id = $(this).data('id');
         if (confirm('Are you sure you want to delete this appointment?')) {
@@ -356,6 +367,7 @@
     // Future date validation for the appointment date field
     $('#editAppointmentDate').attr('min', new Date().toISOString().split('T')[0]);
 });
+
 
     </script>
 </body>
