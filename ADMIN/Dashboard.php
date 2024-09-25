@@ -118,7 +118,7 @@
         </div>
         <ul class="nav-links">
             <li>
-                <a href="#">
+                <a href="Dashboard.php">
                     <i class='bx bx-grid-alt'></i>
                     <span class="link_name">Dashboard</span>
                 </a>
@@ -141,28 +141,14 @@
                     <li><a href="http://localhost/Repair-Shop-Locator-new/ADMIN/Inventory-Dashboard/delivered_new_products.php">PHP & MySQL</a></li>
                 </ul>
             </li>
+        
             <li>
-                <div class="iocn-link">
-                    <a href="#">
-                        <i class='bx bx-book-alt'></i>
-                        <span class="link_name">Posts</span>
-                    </a>
-                    <i class='bx bxs-chevron-down arrow'></i>
-                </div>
-                <ul class="sub-menu">
-                    <li><a class="link_name" href="#">Posts</a></li>
-                    <li><a href="#">Web Design</a></li>
-                    <li><a href="#">Login Form</a></li>
-                    <li><a href="#">Card Design</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#">
+                <a href="walkin_appointments.php">
                     <i class='bx bx-pie-chart-alt-2'></i>
-                    <span class="link_name">Analytics</span>
+                    <span class="link_name">Walk-in</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Analytics</a></li>
+                    <li><a class="link_name" href="walkin_appointments.php">Walk-in</a></li>
                 </ul>
             </li>
             <li>
@@ -176,14 +162,14 @@
             </li>
             <li>
                 <div class="iocn-link">
-                    <a href="walkin_appointments.php">
+                    <a href="ListOfStatus.php">
                         <i class='bx bx-plug'></i>
                         <span class="link_name">Appointments</span>
                     </a>
                     <i class='bx bxs-chevron-down arrow'></i>
                 </div>
                 <ul class="sub-menu">
-                    <li><a class="link_name" href="walkin_appointments.php">walk-in</a></li>
+                    <li><a class="link_name" href="ListOfStatus.php">ListOfStatus</a></li>
                     <li><a href="InProcessingAppointment.php">In Processing</a></li>
                     <li><a href="ApprovedAppoitnments.php">Approve</a></li>
                     <li><a href="RejectedAppointments.php">Reject</a></li>
