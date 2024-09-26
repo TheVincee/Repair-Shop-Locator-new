@@ -23,25 +23,25 @@
 
     <ul class="nav-links">
       <li>
-        <a href="UserDashboard.php">
+        <a href="Home.php">
           <i class='bx bx-grid-alt' ></i>
           <span class="link_name">Dashboard</span>
         </a>
         <ul class="sub-menu blank">
-          <li><a class="link_name" href="UserDashboard.php"></a></li>
+          <li><a class="link_name" href="Home.php"></a></li>
         </ul>
       </li>
       <li>
         <div class="iocn-link">
-          <a href="Appointment-table.php">
+          <a href="NotificationStatus.php">
             <i class='bx bx-collection' ></i>
             <span class="link_name">Category</span>
           </a>
           <i class='bx bxs-chevron-down arrow' ></i>
         </div>
         <ul class="sub-menu">
-          <li><a class="link_name" href="Appointment-table.php">Category</a></li>
-          <li><a href="#">HTML & CSS</a></li>
+          <li><a class="link_name" href="NotificationStatus.php">Category</a></li>
+          <li><a href="Appointment-History.php">HTML & CSS</a></li>
           <li><a href="#">JavaScript</a></li>
           <li><a href="#">PHP & MySQL</a></li>
         </ul>

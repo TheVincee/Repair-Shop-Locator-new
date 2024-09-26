@@ -3,124 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Task Management</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Customer Appointment History</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
-        /* Custom CSS for Enhanced Design */
         .table {
-            margin-top: 20px; /* Space above the table */
-            border-radius: 0.75rem; /* More rounded corners */
-            overflow: hidden; /* Ensure rounded corners apply to content */
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15); /* Deeper shadow for modern look */
-        }
-        
-        .table thead th {
-            text-align: center; /* Center align text */
-            padding: 1rem; /* Padding for header */
-            font-weight: bold; /* Bold text */
-        }
-        .table tbody tr {
-            transition: background-color 0.3s, transform 0.3s; /* Smooth transitions */
-        }
-        .table tbody tr:hover {
-            background-color: #f1f1f1; /* Light grey for hover effect */
-            transform: scale(1.02); /* Slight zoom on hover */
-        }
-        .table tbody tr.success {
-            background-color: #28a745; /* Success color */
-        }
-        .table tbody tr.danger {
-            background-color: #f8d7da; /* Danger color */
-        }
-        .table tbody tr.warning {
-            background-color: #fff3cd; /* Warning color */
-        }
-        .table td, .table th {
-            vertical-align: middle; /* Center align text vertically */
-            padding: 1rem; /* Padding for better spacing */
-            text-align: center; /* Center align text */
-        }
-        .status-icon {
-            font-size: 1.25rem; /* Larger icons for better visibility */
-            vertical-align: middle; /* Align icons with text */
-        }
-        .status-text {
-            font-weight: 500; /* Semi-bold text */
-            font-size: 1rem; /* Standard text size */
-            vertical-align: middle; /* Align text with icons */
-            margin-left: 0.5rem; /* Space between icon and text */
-        }
-        .success .status-icon {
-            color: #28a745; /* Green color for success */
-        }
-        .danger .status-icon {
-            color: #dc3545; /* Red color for danger */
-        }
-        .warning .status-icon {
-            color: #ffc107; /* Yellow color for warning */
-        }
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .table td, .table th {
-                padding: 0.75rem; /* Smaller padding on smaller screens */
-            }
-            .status-icon {
-                font-size: 1.1rem; /* Slightly smaller icons on small screens */
-            }
+            margin-top: 20px;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
     </style>
 </head>
 <body>
     <div class="container mt-4">
-        <!-- Back Button -->
         <div class="mb-4">
-            <a href="Dashboard.php" class="btn btn-primary">
-                <i class=""></i> Back to Dashboard
-            </a>
+            <a href="Dashboard.php" class="btn btn-primary">Back to Dashboard</a>
         </div>
 
-        <h1 class="mb-4">History</h1>
+        <h1 class="mb-4">Customer Appointment History</h1>
 
-        <!-- Table with Custom Header and Enhanced Rows -->
-        <table class="table table-striped">
+        <table class="table table-striped" id="appointmentHistoryTable">
             <thead class="bg-success text-light">
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">Customer ID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Phone Number</th>
+                    <th scope="col">Email Address</th>
+                    <th scope="col">Car Make</th>
+                    <th scope="col">Car Model</th>
+                    <th scope="col">Repair Details</th>
+                    <th scope="col">Appointment Time</th>
+                    <th scope="col">Appointment Date</th>
                     <th scope="col">Status</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="success">
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td><i class="bi bi-check-circle status-icon"></i><span class="status-text">Approved</span></td>
-                </tr>
-                <tr class="danger">
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td><i class="bi bi-x-circle status-icon"></i><span class="status-text">Rejected</span></td>
-                </tr>
-                <tr class="warning">
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                    <td><i class="bi bi-exclamation-circle status-icon"></i><span class="status-text">In Progress</span></td>
-                </tr>
+                <!-- Rows will be injected here by AJAX -->
             </tbody>
         </table>
     </div>
 
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function() {
+    $.ajax({
+        url: 'fetch_combined_appointments.php', // Update to your PHP script path
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            console.log(data); // Check the data received
+            if (data.error) {
+                console.error(data.error); // Log any SQL errors
+            } else if (data.rowCount && data.rowCount > 0) {
+                // Populate your table with data
+                $.each(data.data, function(index, appointment) {
+                    $('#appointmentHistoryTable tbody').append(
+                        `<tr>
+                            <td>${index + 1}</td>
+                            <td>${appointment.firstname}</td>
+                            <td>${appointment.lastname}</td>
+                            <td>${appointment.phoneNumber}</td>
+                            <td>${appointment.emailAddress}</td>
+                            <td>${appointment.carmake}</td>
+                            <td>${appointment.carmodel}</td>
+                            <td>${appointment.repairdetails}</td>
+                            <td>${appointment.appointment_time}</td>
+                            <td>${appointment.appointment_date}</td>
+                            <td>${appointment.Status}</td>
+                        </tr>`
+                    );
+                });
+            } else {
+                $('#appointmentHistoryTable tbody').append('<tr><td colspan="11" class="text-center">No appointments found.</td></tr>');
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('AJAX Error:', textStatus, errorThrown);
+        }
+    });
+});
+his closing bracket matches with the opening one
+
+
+    </script>
 </body>
 </html>
