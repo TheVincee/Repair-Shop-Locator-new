@@ -152,12 +152,12 @@
                 </ul>
             </li>
             <li>
-                <a href="#">
+                <a href="AppointmentNotifications.php">
                     <i class='bx bx-line-chart'></i>
-                    <span class="link_name">Chart</span>
+                    <span class="link_name">Notification</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Chart</a></li>
+                    <li><a class="link_name" href="AppointmentNotifications.php">Notification</a></li>
                 </ul>
             </li>
             <li>
@@ -220,36 +220,36 @@
         </ul>
     </div>
 
-    <section class="dashboard-section">
-        <div class="dashboard-content">
-            <i class='bx bx-menu' id="hamburgerMenu"></i>
-            <div class="metrics-boxes">
-                <div class="metric-box">
-                <div class="metric-details">
-                    <div class="box-topic">Approved</div>
-                <div class="number" id="approvedCount">0</div>
-                </div>
-                </div>
-                <div class="metric-box">
-                <div class="metric-details">
-                     <div class="box-topic">Rejected</div>
-                    <div class="number" id="rejectedCount">0</div>
+        <section class="dashboard-section">
+            <div class="dashboard-content">
+                <i class='bx bx-menu' id="hamburgerMenu"></i>
+                <div class="metrics-boxes">
+                    <div class="metric-box">
+                    <div class="metric-details">
+                        <div class="box-topic">Approved</div>
+                    <div class="number" id="approvedCount">0</div>
                     </div>
-                </div>
-                <div class="metric-box">
-                <div class="metric-details">
-        <div class="box-topic">In Processing</div>
-        <div class="number" id="inProcessingCount">0</div>
-    </div>
-                </div>
-                <div class="metric-box">
-                <div class="metric-details">
-        <div class="box-topic">Total Walk-in Appointments</div>
-        <div class="number" id="walkinCount">0</div>
-    </div>
                     </div>
-            </div>
+                    <div class="metric-box">
+                    <div class="metric-details">
+                        <div class="box-topic">Rejected</div>
+                        <div class="number" id="rejectedCount">0</div>
+                        </div>
+                    </div>
+                    <div class="metric-box">
+                    <div class="metric-details">
+            <div class="box-topic">In Processing</div>
+            <div class="number" id="inProcessingCount">0</div>
         </div>
+                    </div>
+                    <div class="metric-box">
+                    <div class="metric-details">
+            <div class="box-topic">Total Walk-in Appointments</div>
+            <div class="number" id="walkinCount">0</div>
+        </div>
+                        </div>
+                </div>
+            </div>
 
         <div class="pending-appointments">
         <h2>User Pending Appointments</h2>
@@ -495,143 +495,152 @@
     });
    </script>
 <script>
-     document.addEventListener('DOMContentLoaded', function() {
-        const modalContainer = document.getElementById('walkin-modal-container');
-        const modalClose = document.getElementById('walkin-modal-close');
-        const modalForm = document.getElementById('walkin-modal-form');
+   $(document).ready(function() {
+    const modalContainer = $('#walkin-modal-container');
+    const modalForm = $('#walkin-modal-form');
 
-        function showModal(customerId) {
-            fetch(`get_walkin_appointment.php?customer_id=${customerId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.error) {
-                        document.getElementById('walkin-modal-customer-id').value = data.customer_id;
-                        document.getElementById('walkin-modal-status-dropdown').value = data.Status;
-                        modalContainer.style.display = 'flex';
-                        setTimeout(() => {
-                            modalContainer.classList.add('show');
-                        }, 10);
-                    } else {
-                        alert(data.error);
-                    }
-                })
-                .catch(error => console.error('Error fetching customer data:', error));
-        }
-
-        if (modalClose) {
-            modalClose.addEventListener('click', function() {
-                modalContainer.classList.remove('show');
-                setTimeout(() => {
-                    modalContainer.style.display = 'none';
-                }, 300);
-            });
-        }
-
-        if (modalForm) {
-            modalForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-
-                const customerId = document.getElementById('walkin-modal-customer-id').value;
-                const status = document.getElementById('walkin-modal-status-dropdown').value;
-
-                fetch('update_walkin_status.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: new URLSearchParams({
-                        'customer_id': customerId,
-                        'status': status
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Status updated successfully!');
-                        modalContainer.classList.remove('show');
-                        setTimeout(() => {
-                            modalContainer.style.display = 'none';
-                        }, 300);
-                        fetchAppointments(); // Refresh the table to show updated status
-                    } else {
-                        alert('Error updating status: ' + data.error);
-                    }
-                })
-                .catch(error => console.error('Error updating status:', error));
-            });
-        }
-
-        function fetchAppointments() {
-            $.ajax({
-                url: 'fetch_walkin_appointments.php',
-                method: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    $('#walkin-appointments-tbody').empty();
-
-                    if (data.length > 0) {
-                        data.forEach(function(appointment) {
-                            var row = $('<tr>');
-                            row.append($('<td>').text(appointment.customer_id));
-                            row.append($('<td>').text(appointment.firstname));
-                            row.append($('<td class="hide-column">').text(appointment.lastname)); // Hidden column
-                            row.append($('<td>').text(appointment.phoneNumber));
-                            row.append($('<td>').text(appointment.emailAddress));
-                            row.append($('<td class="hide-column">').text(appointment.carmake)); // Hidden column
-                            row.append($('<td class="hide-column">').text(appointment.carmodel)); // Hidden column
-                            row.append($('<td>').text(appointment.repairdetails));
-                            row.append($('<td>').text(appointment.appointment_time));
-                            row.append($('<td>').text(appointment.appointment_date));
-                            row.append($('<td>').text(appointment.Status));
-
-                            var actionCell = $('<td>');
-                            var viewButton = $('<button>')
-                                .addClass('view-btn')
-                                .text('View')
-                                .attr('data-id', appointment.customer_id);
-                            actionCell.append(viewButton);
-                            row.append(actionCell);
-
-                            $('#walkin-appointments-tbody').append(row);
-                        });
-                    } else {
-                        $('#walkin-appointments-tbody').append($('<tr>').append($('<td colspan="12">').text('No pending appointments found.')));
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching data:', error);
+    function showModal(customerId) {
+        $.ajax({
+            url: `get_walkin_appointment.php`,
+            method: 'GET',
+            data: { customer_id: customerId },
+            dataType: 'json',
+            success: function(data) {
+                if (!data.error) {
+                    $('#walkin-modal-customer-id').val(data.customer_id);
+                    $('#walkin-modal-status-dropdown').val(data.Status);
+                    modalContainer.fadeIn();  // Show modal with a fade-in effect
+                } else {
+                    alert(data.error);
                 }
-            });
-        }
-
-        fetchAppointments();
-
-        $('#walkin-appointments-tbody').on('click', '.view-btn', function() {
-            var customerId = $(this).data('id');
-            showModal(customerId);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching customer data:', error);
+            }
         });
-    }); 
-</script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-    const customerId = 123; // Replace with the actual customer ID
-    const notificationContainer = document.getElementById('notification-container');
-
-    // Function to fetch notifications
-    function fetchNotifications() {
-        fetch('fetch_notifications.php?customer_id=' + customerId)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.notifications.length > 0) {
-                    data.notifications.forEach(notification => {
-                        displayNotification(notification.message);
-                    });
-                }
-            })
-            .catch(error => console.error('Error fetching notifications:', error));
     }
 
-    // Function to display notification
+    $('#walkin-modal-close').on('click', function() {
+        modalContainer.fadeOut();  // Fade out to hide modal
+    });
+
+    modalForm.on('submit', function(event) {
+        event.preventDefault();
+
+        const customerId = $('#walkin-modal-customer-id').val();
+        const status = $('#walkin-modal-status-dropdown').val();
+
+        $.ajax({
+            url: 'update_walkin_status.php',
+            method: 'POST',
+            data: {
+                customer_id: customerId,
+                status: status
+            },
+            dataType: 'json',
+            success: function(data) {
+                if (data.success) {
+                    alert('Status updated successfully!');
+                    modalContainer.fadeOut();  // Fade out the modal after a successful update
+                    fetchAppointments();  // Refresh the appointments table
+                } else {
+                    alert('Error updating status: ' + data.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating status:', error);
+            }
+        });
+    });
+
+    function fetchAppointments() {
+        $.ajax({
+            url: 'fetch_walkin_appointments.php',
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $('#walkin-appointments-tbody').empty();
+
+                if (data.length > 0) {
+                    data.forEach(function(appointment) {
+                        var row = $('<tr>');
+                        row.append($('<td>').text(appointment.customer_id));
+                        row.append($('<td>').text(appointment.firstname));
+                        row.append($('<td class="hide-column">').text(appointment.lastname));  // Hidden column
+                        row.append($('<td>').text(appointment.phoneNumber));
+                        row.append($('<td>').text(appointment.emailAddress));
+                        row.append($('<td class="hide-column">').text(appointment.carmake));  // Hidden column
+                        row.append($('<td class="hide-column">').text(appointment.carmodel));  // Hidden column
+                        row.append($('<td>').text(appointment.repairdetails));
+                        row.append($('<td>').text(appointment.appointment_time));
+                        row.append($('<td>').text(appointment.appointment_date));
+                        row.append($('<td>').text(appointment.Status));
+
+                        var actionCell = $('<td>');
+                        var viewButton = $('<button>')
+                            .addClass('view-btn')
+                            .text('View')
+                            .attr('data-id', appointment.customer_id);
+                        actionCell.append(viewButton);
+                        row.append(actionCell);
+
+                        $('#walkin-appointments-tbody').append(row);
+                    });
+                } else {
+                    $('#walkin-appointments-tbody').append(
+                        $('<tr>').append(
+                            $('<td colspan="12">').text('No pending appointments found.')
+                        )
+                    );
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+    }
+
+    // Call fetchAppointments on page load to populate the table
+    fetchAppointments();
+
+    // Handle view button click to show the modal
+    $('#walkin-appointments-tbody').on('click', '.view-btn', function() {
+        var customerId = $(this).data('id');
+        showModal(customerId);
+    });
+});
+
+</script>
+    <script>
+       document.addEventListener('DOMContentLoaded', function () {
+    const customerId = <?php echo json_encode($customerId); ?>; // Dynamic customer ID from PHP
+    const notificationContainer = document.getElementById('notification-container');
+
+    // Function to fetch notifications via AJAX
+    function fetchNotifications() {
+        fetch('fetch_notifications.php?customer_id=' + customerId)
+            .then(response => response.text()) 
+            .then(data => {
+                console.log('Raw response:', data); 
+                try {
+                    const jsonData = JSON.parse(data); 
+                    if (jsonData.success && jsonData.notifications.length > 0) {
+                        jsonData.notifications.forEach(notification => {
+                            displayNotification(notification.message);
+                        });
+                    } else {
+                        console.log('No notifications or success flag is false.');
+                    }
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching notifications:', error);
+            });
+    }
+
+    // Function to display notifications
     function displayNotification(message) {
         const notificationElement = document.createElement('div');
         notificationElement.className = 'notification';
