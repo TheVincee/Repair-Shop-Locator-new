@@ -6,7 +6,9 @@ include('db_connection.php');
 
 // Ensure the connection is successful
 if ($conn->connect_error) {
-    die(json_encode(['error' => 'Connection failed: ' . $conn->connect_error]));
+    // Return connection error as JSON and exit
+    echo json_encode(['error' => 'Connection failed: ' . $conn->connect_error]);
+    exit;
 }
 
 // SQL UNION ALL query to fetch data from both tables
@@ -52,19 +54,22 @@ if (!$result) {
     exit;
 }
 
-// Check number of rows returned
-$rowCount = $result->num_rows;
-echo json_encode(['rowCount' => $rowCount]); // Add this line for debugging
-
+// Prepare the response
 $data = [];
+$rowCount = $result->num_rows;
 
-// Fetch the data
+// Fetch the data if rows exist
 if ($rowCount > 0) {
     while ($row = $result->fetch_assoc()) {
         $data[] = $row;
     }
 }
 
-// Return the data as JSON
-echo json_encode($data);
+// Return rowCount and data as a single JSON response
+$response = [
+    'rowCount' => $rowCount,
+    'data' => $data
+];
+
+echo json_encode($response);
 ?>
