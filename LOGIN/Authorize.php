@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $_SESSION['usertype'] = $row['usertype'];
 
                 // Redirect to admin dashboard
-                header("Location: http://localhost/Repair-Shop-Locator-new/ADMIN/Dashboard.php");
+                header("Location: http://localhost/Repair-Shop-Locator-new/ADMIN/AppointmentNotifications.php");
                 exit();
             } else {
                 echo "Password verification failed. Invalid email or password.";

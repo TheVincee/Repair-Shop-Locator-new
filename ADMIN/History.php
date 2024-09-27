@@ -74,105 +74,113 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Fetch appointment data
+$(document).ready(function() {
+    // Fetch appointment data
+    $.ajax({
+        url: 'fetch_combined_appointments.php',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            if (data.error) {
+                console.error(data.error);
+            } else if (data.rowCount && data.rowCount > 0) {
+                $.each(data.data, function(index, appointment) {
+                    $('#appointmentHistoryTable tbody').append(
+                        `<tr>
+                            <td>${appointment.customer_id}</td>
+                            <td>${appointment.firstname}</td>
+                            <td class="hidden-col">${appointment.lastname}</td>
+                            <td>${appointment.phoneNumber}</td>
+                            <td class="hidden-col">${appointment.emailAddress}</td>
+                            <td class="hidden-col">${appointment.carmake}</td>
+                            <td class="hidden-col">${appointment.carmodel}</td>
+                            <td>${appointment.repairdetails}</td>
+                            <td>${appointment.appointment_time}</td>
+                            <td>${appointment.appointment_date}</td>
+                            <td>${appointment.Status}</td>
+                            <td>
+                                <button class="btn btn-info btn-sm view-btn" data-id="${appointment.customer_id}">View</button>
+                                <button class="btn btn-danger btn-sm delete-btn" data-id="${appointment.customer_id}">Delete</button>
+                            </td>
+                        </tr>`
+                    );
+                });
+            } else {
+                $('#appointmentHistoryTable tbody').append('<tr><td colspan="11" class="text-center">No appointments found.</td></tr>');
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('AJAX Error:', textStatus, errorThrown);
+        }
+    });
+
+    // View button click event
+    $(document).on('click', '.view-btn', function() {
+    var customerId = $(this).data('id'); // Get customer ID
+    $.ajax({
+        url: 'fetchs_appointment_details.php',
+        type: 'GET',
+        data: { customer_id: customerId }, // Send customer_id to server
+        dataType: 'json', // Expect JSON response
+        success: function(data) {
+            if (data.success) {
+                let appointment = data.data; // Access the appointment data
+
+                // Populate the modal with appointment details
+                $('#appointmentDetails').html(`
+                    <strong>First Name:</strong> ${appointment.customer_firstname || appointment.walkin_firstname || 'N/A'}<br>
+                    <strong>Last Name:</strong> ${appointment.lastname || 'N/A'}<br>
+                    <strong>Phone Number:</strong> ${appointment.phoneNumber || appointment.walkin_phoneNumber || 'N/A'}<br>
+                    <strong>Email Address:</strong> ${appointment.emailAddress || appointment.walkin_emailAddress || 'N/A'}<br>
+                    <strong>Car Make:</strong> ${appointment.carmake || 'N/A'}<br>
+                    <strong>Car Model:</strong> ${appointment.carmodel || 'N/A'}<br>
+                    <strong>Repair Details:</strong> ${appointment.customer_repairdetails || appointment.walkin_repairdetails || 'N/A'}<br>
+                    <strong>Appointment Time:</strong> ${appointment.customer_appointment_time || appointment.walkin_appointment_time || 'N/A'}<br>
+                    <strong>Appointment Date:</strong> ${appointment.customer_appointment_date || appointment.walkin_appointment_date || 'N/A'}<br>
+                    <strong>Status:</strong> ${appointment.customer_status || appointment.walkin_status || 'N/A'}
+                `);
+                $('#viewModal').modal('show'); // Show the modal
+            } else {
+                alert('Failed to fetch details: ' + data.error);
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('AJAX Error:', textStatus, errorThrown);
+            alert('Error fetching appointment details.');
+        }
+    });
+});
+
+
+
+    // Delete button click event
+    $(document).on('click', '.delete-btn', function() {
+        var customerId = $(this).data('id');
+        var row = $(this).closest('tr');
+
+        if (confirm('Are you sure you want to delete this appointment?')) {
             $.ajax({
-                url: 'fetch_combined_appointments.php', // Update the correct path to your PHP script
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    if (data.error) {
-                        console.error(data.error);
-                    } else if (data.rowCount && data.rowCount > 0) {
-                        $.each(data.data, function(index, appointment) {
-                            $('#appointmentHistoryTable tbody').append(
-                                `<tr>
-                                    <td>${appointment.customer_id}</td>
-                                    <td>${appointment.firstname}</td>
-                                    <td class="hidden-col">${appointment.lastname}</td>
-                                    <td>${appointment.phoneNumber}</td>
-                                    <td class="hidden-col">${appointment.emailAddress}</td>
-                                    <td class="hidden-col">${appointment.carmake}</td>
-                                    <td class="hidden-col">${appointment.carmodel}</td>
-                                    <td>${appointment.repairdetails}</td>
-                                    <td>${appointment.appointment_time}</td>
-                                    <td>${appointment.appointment_date}</td>
-                                    <td>${appointment.Status}</td>
-                                    <td>
-                                        <button class="btn btn-info btn-sm view-btn" data-id="${appointment.customer_id}">View</button>
-                                        <button class="btn btn-danger btn-sm delete-btn" data-id="${appointment.customer_id}">Delete</button>
-                                    </td>
-                                </tr>`
-                            );
-                        });
+                url: 'deletes_appointment.php', // Ensure this path is correct
+                type: 'POST',
+                data: { customer_id: customerId },
+                success: function(response) {
+                    if (response.success) {
+                        row.remove();
+                        alert('Appointment deleted successfully.');
                     } else {
-                        $('#appointmentHistoryTable tbody').append('<tr><td colspan="11" class="text-center">No appointments found.</td></tr>');
+                        alert('Failed to delete the appointment. ' + (response.error || 'Unknown error.'));
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error('AJAX Error:', textStatus, errorThrown);
+                    alert('Error occurred while deleting the appointment.');
                 }
             });
+        }
+    });
+});
 
-            // View button click event
-            $(document).on('click', '.view-btn', function() {
-                var customerId = $(this).data('id'); // Get customer ID
-                $.ajax({
-                    url: 'fetchs_appointment_details.php', // Ensure this path is correct
-                    type: 'GET',
-                    data: { customer_id: customerId }, // Send customer_id to server
-                    success: function(data) {
-                        if (data.success) {
-                            // Populate the modal with appointment details
-                            $('#appointmentDetails').html(`
-                                <strong>Customer ID:</strong> ${data.details.customer_id}<br>
-                                <strong>First Name:</strong> ${data.details.firstname}<br>
-                                <strong>Last Name:</strong> ${data.details.lastname}<br>
-                                <strong>Phone Number:</strong> ${data.details.phoneNumber}<br>
-                                <strong>Email Address:</strong> ${data.details.emailAddress}<br>
-                                <strong>Repair Details:</strong> ${data.details.repairdetails}<br>
-                                <strong>Appointment Time:</strong> ${data.details.appointment_time}<br>
-                                <strong>Appointment Date:</strong> ${data.details.appointment_date}<br>
-                                <strong>Status:</strong> ${data.details.Status}<br>
-                            `);
-                            $('#viewModal').modal('show');
-                        } else {
-                            alert('Failed to fetch details: ' + data.error);
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.error('AJAX Error:', textStatus, errorThrown);
-                        alert('Error fetching appointment details.');
-                    }
-                });
-            });
+</script>
 
-            // Delete button click event
-            $(document).on('click', '.delete-btn', function() {
-                var customerId = $(this).data('id');
-                var row = $(this).closest('tr');
-
-                if (confirm('Are you sure you want to delete this appointment?')) {
-                    $.ajax({
-                        url: 'deletes_appointment.php', // Ensure this path is correct
-                        type: 'POST',
-                        data: { customer_id: customerId },
-                        success: function(response) {
-                            if (response.success) {
-                                row.remove();
-                                alert('Appointment deleted successfully.');
-                            } else {
-                                alert('Failed to delete the appointment. ' + (response.error || 'Unknown error.'));
-                            }
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            console.error('AJAX Error:', textStatus, errorThrown);
-                            alert('Error occurred while deleting the appointment.');
-                        }
-                    });
-                }
-            });
-        });
-    </script>
 </body>
 </html>

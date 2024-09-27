@@ -1,74 +1,97 @@
 <?php
-// Set headers to handle JSON response and allow cross-origin requests
-header('Content-Type: application/json');
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
+// Database connection
+$host = 'localhost';
+$username = 'root';
+$password = '';
+$dbname = 'repair-shop-locator';
 
-// Check if 'customer_id' is set in the GET request
-if (isset($_GET['customer_id'])) {
-    $customerId = $_GET['customer_id'];
-    
-    // Log the customer_id for debugging purposes
-    error_log("Fetching details for customer_id: " . $customerId);
+$conn = new mysqli($host, $username, $password, $dbname);
 
-    // Connect to the MySQL database
-    $conn = new mysqli('localhost', 'root', '', 'repair-shop-locator');
-
-    // Check if the database connection is successful
-    if ($conn->connect_error) {
-        echo json_encode(['success' => false, 'error' => 'Database connection failed: ' . $conn->connect_error]);
-        exit;
-    }
-
-    // SQL query to fetch customer details and associated walk-in appointment details
-    $sql = "SELECT cd.customer_id, cd.firstname, cd.lastname, cd.phoneNumber, cd.emailAddress,
-                   wa.repairdetails, wa.appointment_time, wa.appointment_date, wa.Status
-            FROM customer_details cd
-            JOIN walkin_appointments wa ON cd.customer_id = wa.customer_id
-            WHERE cd.customer_id = ?";
-    
-    // Log the SQL query for debugging purposes
-    error_log("SQL Query: " . $sql);
-
-    // Prepare the SQL statement
-    $stmt = $conn->prepare($sql);
-
-    // Check if the SQL statement preparation was successful
-    if ($stmt === false) {
-        echo json_encode(['success' => false, 'error' => 'SQL Prepare Error: ' . $conn->error]);
-        exit;
-    }
-
-    // Bind the customer ID to the SQL query
-    $stmt->bind_param("i", $customerId);
-
-    // Execute the SQL query
-    if ($stmt->execute()) {
-        $result = $stmt->get_result();
-        
-        // Log the number of rows returned for debugging purposes
-        error_log("Number of rows returned: " . $result->num_rows);
-
-        // Check if any rows were returned
-        if ($result->num_rows > 0) {
-            // Fetch the details and return them as JSON
-            $details = $result->fetch_assoc();
-            echo json_encode(['success' => true, 'details' => $details]);
-        } else {
-            // Log the error if no details are found
-            error_log("No details found for customer_id: " . $customerId);
-            echo json_encode(['success' => false, 'error' => 'No details found for this customer ID.']);
-        }
-    } else {
-        // Return an error message if the query execution failed
-        echo json_encode(['success' => false, 'error' => 'Query execution failed: ' . $stmt->error]);
-    }
-
-    // Close the SQL statement and database connection
-    $stmt->close();
-    $conn->close();
-} else {
-    // Return an error if 'customer_id' is not set in the GET request
-    echo json_encode(['success' => false, 'error' => 'Customer ID is not set.']);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
+
+// Get customer_id from the request
+$customer_id = isset($_GET['customer_id']) ? intval($_GET['customer_id']) : 0;
+
+if ($customer_id > 0) {
+    // Fetch specific appointment details for the given customer_id
+    $sql = "
+    SELECT 
+        cd.customer_id,
+        cd.firstname AS customer_firstname,
+        cd.lastname,
+        cd.phoneNumber,
+        cd.emailAddress,
+        cd.carmake,
+        cd.carmodel,
+        cd.repairdetails AS customer_repairdetails,
+        cd.appointment_time AS customer_appointment_time,
+        cd.appointment_date AS customer_appointment_date,
+        cd.Status AS customer_status,
+        NULL AS walkin_firstname,
+        NULL AS walkin_phoneNumber,
+        NULL AS walkin_emailAddress,
+        NULL AS walkin_repairdetails,
+        NULL AS walkin_appointment_time,
+        NULL AS walkin_appointment_date,
+        NULL AS walkin_status
+    FROM customer_details cd
+    WHERE cd.customer_id = ?
+    
+    UNION ALL
+    
+    SELECT 
+        wa.customer_id,
+        wa.firstname AS walkin_firstname,
+        NULL AS lastname,
+        wa.phoneNumber,
+        wa.emailAddress,
+        NULL AS carmake,
+        NULL AS carmodel,
+        wa.repairdetails AS walkin_repairdetails,
+        wa.appointment_time AS walkin_appointment_time,
+        wa.appointment_date AS walkin_appointment_date,
+        wa.Status AS walkin_status,
+        wa.firstname AS walkin_firstname,
+        wa.phoneNumber AS walkin_phoneNumber,
+        wa.emailAddress AS walkin_emailAddress,
+        wa.repairdetails AS walkin_repairdetails,
+        wa.appointment_time AS walkin_appointment_time,
+        wa.appointment_date AS walkin_appointment_date,
+        wa.Status AS walkin_status
+    FROM walkin_appointments wa
+    WHERE wa.customer_id = ?";
+
+    // Prepare and bind the statement
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $customer_id, $customer_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        
+        // Debugging: Output the fetched data
+        error_log(print_r($row, true));
+
+        // Return the fetched data as JSON
+        echo json_encode([
+            'success' => true,
+            'data' => $row
+        ]);
+    } else {
+        // No matching record found
+        echo json_encode(['success' => false, 'error' => 'No appointment found.']);
+    }
+
+    $stmt->close();
+} else {
+    // Invalid customer_id
+    echo json_encode(['success' => false, 'error' => 'Invalid customer ID.']);
+}
+
+// Close the database connection
+$conn->close();
+?>
