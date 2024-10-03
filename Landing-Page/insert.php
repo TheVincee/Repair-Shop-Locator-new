@@ -3,37 +3,41 @@
 
 include('dbconfig.php');
 
-// Enable error reporting for debugging
+// Enable error reporting for debugging (ensure this is turned off in production)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Retrieve and sanitize form inputs
-    $firstname = mysqli_real_escape_string($conn, $_POST['firstName']);
-    $lastname = mysqli_real_escape_string($conn, $_POST['lastName']);
-    $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
-    $emailAddress = mysqli_real_escape_string($conn, $_POST['emailAddress']);
-    $carmake = mysqli_real_escape_string($conn, $_POST['carMake']);
-    $carmodel = mysqli_real_escape_string($conn, $_POST['carModel']);
-    $repairdetails = mysqli_real_escape_string($conn, $_POST['repairDetails']);
-    $appointmentDate = mysqli_real_escape_string($conn, $_POST['appointmentDate']);
-    $appointmentTime = mysqli_real_escape_string($conn, $_POST['appointmentTime']);
+    $firstname = mysqli_real_escape_string($conn, trim($_POST['firstName']));
+    $lastname = mysqli_real_escape_string($conn, trim($_POST['lastName']));
+    $phoneNumber = mysqli_real_escape_string($conn, trim($_POST['phoneNumber']));
+    $emailAddress = mysqli_real_escape_string($conn, trim($_POST['emailAddress']));
+    $carmake = mysqli_real_escape_string($conn, trim($_POST['carMake']));
+    $carmodel = mysqli_real_escape_string($conn, trim($_POST['carModel']));
+    $repairdetails = mysqli_real_escape_string($conn, trim($_POST['repairDetails']));
+    $appointmentDate = mysqli_real_escape_string($conn, trim($_POST['appointmentDate']));
+    $appointmentTime = mysqli_real_escape_string($conn, trim($_POST['appointmentTime']));
+    $service_type = mysqli_real_escape_string($conn, trim($_POST['serviceType'])); // New field
+    $total_payment = mysqli_real_escape_string($conn, trim($_POST['totalPayment'])); // New field
+    $payment_type = mysqli_real_escape_string($conn, trim($_POST['paymentType'])); // New field
     $Status = 'Pending'; // Default status is "Pending"
 
-    // Check if all fields are filled before proceeding
+    // Check if all required fields are filled before proceeding
     if (empty($firstname) || empty($lastname) || empty($phoneNumber) || empty($emailAddress) ||
-        empty($carmake) || empty($carmodel) || empty($repairdetails) || empty($appointmentDate) || empty($appointmentTime)) {
+        empty($carmake) || empty($carmodel) || empty($repairdetails) || empty($appointmentDate) || 
+        empty($appointmentTime) || empty($service_type) || empty($total_payment) || empty($payment_type)) {
         echo json_encode(['status' => 'error', 'message' => 'All fields are required.']);
         exit();
     }
 
     // Prepare an SQL statement to insert appointment
-    $query = "INSERT INTO customer_details (firstname, lastname, phoneNumber, emailAddress, carmake, carmodel, repairdetails, appointment_date, appointment_time, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO customer_details (firstname, lastname, phoneNumber, emailAddress, carmake, carmodel, repairdetails, appointment_date, appointment_time, Status, service_type, total_payment, payment_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     if ($stmt = mysqli_prepare($conn, $query)) {
         // Bind parameters to the prepared statement
-        mysqli_stmt_bind_param($stmt, 'ssssssssss', $firstname, $lastname, $phoneNumber, $emailAddress, $carmake, $carmodel, $repairdetails, $appointmentDate, $appointmentTime, $Status);
+        mysqli_stmt_bind_param($stmt, 'sssssssssssss', $firstname, $lastname, $phoneNumber, $emailAddress, $carmake, $carmodel, $repairdetails, $appointmentDate, $appointmentTime, $Status, $service_type, $total_payment, $payment_type);
 
         // Execute the statement
         if (mysqli_stmt_execute($stmt)) {
@@ -56,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         echo json_encode(['status' => 'error', 'message' => 'Error adding notification: ' . mysqli_error($conn)]);
                     }
                 } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Failed to prepare notification statement.']);
+                    echo json_encode(['status' => 'error', 'message' => 'Failed to prepare notification statement: ' . mysqli_error($conn)]);
                 }
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Failed to retrieve customer ID.']);
