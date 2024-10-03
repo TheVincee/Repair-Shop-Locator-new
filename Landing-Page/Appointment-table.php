@@ -108,8 +108,8 @@
 </div>
 
 
-    <!-- Add Customer Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <!-- Add Customer Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -150,16 +150,17 @@
                             <input type="text" class="form-control" id="carModelModal" name="carModel" placeholder="Enter car model" required>
                         </div>
                     </div>
+                    
                     <!-- Dropdown for Service Type -->
                     <div class="row mb-3">
                         <div class="col">
                             <label for="serviceTypeModal" class="form-label">Service Type</label>
                             <select class="form-select" id="serviceTypeModal" name="serviceType" required>
                                 <option value="" disabled selected>Select service type</option>
-                                <option value="Oil Change">Oil Change</option>
-                                <option value="Tire Rotation">Tire Rotation</option>
-                                <option value="Engine Repair">Engine Repair</option>
-                                <option value="Brake Service">Brake Service</option>
+                                <option value="Oil Change" data-cost="500">Oil Change (₱500)</option>
+                                <option value="Tire Rotation" data-cost="700">Tire Rotation (₱700)</option>
+                                <option value="Engine Repair" data-cost="2500">Engine Repair (₱2500)</option>
+                                <option value="Brake Service" data-cost="1500">Brake Service (₱1500)</option>
                             </select>
                         </div>
                     </div>
@@ -183,6 +184,16 @@
                             <input type="time" class="form-control" id="appointmentTimeModal" name="appointmentTime" required>
                         </div>
                     </div>
+
+                    <!-- Mechanic Fee -->
+                   <!-- Mechanic Fee -->
+<div class="row mb-3">
+    <div class="col">
+        <label for="mechanicFeeModal" class="form-label">Mechanic Fee (₱)</label>
+        <input type="number" class="form-control" id="mechanicFeeModal" name="mechanicFee" placeholder="Mechanic fee" readonly>
+    </div>
+</div>
+
 
                     <!-- Total Payment -->
                     <div class="row mb-3">
@@ -211,9 +222,8 @@
             </div>
         </div>
     </div>
-</div>
 
-
+</div><!-- Add Customer Modal -->
 
     <!-- Update Customer Modal -->
     <div class="modal fade" id="UpdateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
@@ -275,7 +285,17 @@
                     <div class="row mb-3">
                         <div class="col">
                             <label for="updateServiceType" class="form-label">Service Type</label>
-                            <input type="text" class="form-control" id="updateServiceType" name="service_type" required>
+                            <select class="form-select" id="updateServiceType" name="service_type" required>
+    <option value="" disabled selected>Select Service Type</option>
+    <option value="Repair">Repair</option>
+    <option value="Maintenance">Maintenance</option>
+    <option value="Inspection">Inspection</option>
+    <option value="Detailing">Detailing</option>
+    <option value="Oil Change">Oil Change</option>
+    <option value="Brake Service">Brake Service</option>
+    <option value="Transmission Service">Transmission Service</option>
+</select>
+
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -284,9 +304,16 @@
                             <input type="number" class="form-control" id="updateTotalPayment" name="total_payment" required>
                         </div>
                         <div class="col">
-                            <label for="updatePaymentType" class="form-label">Payment Type</label>
-                            <input type="text" class="form-control" id="updatePaymentType" name="payment_type" required>
-                        </div>
+    <label for="updatePaymentType" class="form-label">Payment Type</label>
+    <select class="form-select" id="updatePaymentType" name="payment_type" required>
+        <option value="" disabled selected>Select Payment Type</option>
+        <option value="Cash">Over The Counter   </option>
+        <option value="Credit Card">Gcash</option>
+        <option value="PayPal">PayPal</option>
+        
+    </select>
+</div>
+
                     </div>
                     <button type="submit" class="btn btn-primary">Update</button>
                 </form>
@@ -294,6 +321,7 @@
         </div>
     </div>
 </div>
+
 
 
 <!-- View Customer Modal -->
@@ -363,7 +391,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-      $(document).ready(function () {
+     $(document).ready(function () {
     // Handle form submission for adding a customer
     $("#customerForm").on("submit", function (e) {
         e.preventDefault();
@@ -435,24 +463,31 @@
 
     // Handle form submission for updating a customer
     $("#updateForm").on("submit", function (e) {
-        e.preventDefault();
+        e.preventDefault(); // Prevent the form from submitting normally
+        const $submitButton = $(this).find("button[type='submit']"); // Get the submit button
+        $submitButton.prop("disabled", true).text("Updating..."); // Disable the button
+
         $.ajax({
             type: "POST",
             url: "Update.php", // Ensure this is the correct path to your PHP script
-            data: $(this).serialize(),
-            dataType: "json",
+            data: $(this).serialize(), // Serialize form data for submission
+            dataType: "json", // Expect JSON response from the server
             success: function (response) {
                 if (response.status === 'success') {
-                    $("#UpdateModal").modal("hide");
-                    alert("Customer updated successfully!");
-                    location.reload();
+                    $("#UpdateModal").modal("hide"); // Hide the modal
+                    alert(response.message || "Customer updated successfully!"); // Show success message
+                    location.reload(); // Reload the page to reflect changes
                 } else {
+                    // Handle failure response
                     alert(response.message || "Failed to update the customer. Please try again.");
                 }
             },
             error: function (xhr, status, error) {
-                console.error("An error occurred: " + error); // Log the error
-                alert("An error occurred while updating the customer.");
+                console.error("An error occurred: " + error); // Log the error for debugging
+                alert("An error occurred while updating the customer. Please try again.");
+            },
+            complete: function () {
+                $submitButton.prop("disabled", false).text("Update"); // Re-enable the button
             }
         });
     });
@@ -520,6 +555,63 @@
 });
 
 
+
+// Add event listeners
+
+    </script>
+    <script>
+    // Define the costs associated with specific repair keywords
+const repairCosts = {
+    'oil change': 500,
+    'tire rotation': 700,
+    'engine repair': 2500,
+    'brake service': 1500
+};
+
+// Fixed mechanic fee (you can adjust it to the default fee if necessary)
+const mechanicFee = 1500;
+
+document.getElementById('serviceTypeModal').addEventListener('change', function() {
+    const selectedOption = this.options[this.selectedIndex];
+    const cost = parseInt(selectedOption.getAttribute('data-cost')) || 0;
+    
+    // Automatically set the mechanic fee based on the selected service
+    document.getElementById('mechanicFeeModal').value = mechanicFee;
+
+    // Calculate total payment
+    calculateTotalPayment(cost);
+});
+
+// Event listener for the Repair Details input
+document.getElementById('repairDetailsModal').addEventListener('input', function() {
+    const repairDetails = this.value.toLowerCase();
+    let totalRepairCost = 0;
+
+    // Check for each repair keyword and add its cost to totalRepairCost
+    for (const repair in repairCosts) {
+        if (repairDetails.includes(repair)) {
+            totalRepairCost += repairCosts[repair];
+        }
+    }
+
+    // Calculate the total payment including mechanic fee
+    const mechanicFeeValue = parseInt(document.getElementById('mechanicFeeModal').value) || 0;
+    calculateTotalPayment(totalRepairCost + mechanicFeeValue);
+});
+
+// Function to calculate and update the total payment
+function calculateTotalPayment(serviceCost) {
+    const mechanicFeeValue = parseInt(document.getElementById('mechanicFeeModal').value) || 0;
+    const totalPayment = serviceCost + mechanicFeeValue;
+
+    // Update the total payment input
+    document.getElementById('totalPaymentModal').value = totalPayment;
+}
+
+// Set default mechanic fee when the modal is opened
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('mechanicFeeModal').value = mechanicFee; // Set initial mechanic fee
+});
 
     </script>
     

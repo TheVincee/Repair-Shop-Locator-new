@@ -4,7 +4,7 @@ include('dbconfig.php'); // Ensure this file contains your database connection s
 // Check if customer_id is set in the POST request
 if (isset($_POST['customer_id'])) {
     // Sanitize and validate the customer_id
-    $customer_id = intval($_POST['customer_id']); // Use intval to ensure it's an integer
+    $customer_id = intval($_POST['customer_id']); // Ensure it's an integer
 
     // Prepare the SQL statement
     $query = "SELECT * FROM customer_details WHERE customer_id = ?";
