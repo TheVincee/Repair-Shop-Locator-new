@@ -13,19 +13,22 @@
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
     <!-- Custom Styling -->
     <style>
         body {
-            background-color: #f0f2f5;
+            background-color: #e9ecef;
             font-family: 'Poppins', sans-serif;
         }
 
         .container {
             margin-top: 30px;
-            padding: 20px;
+            padding: 30px;
             background-color: #fff;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         }
 
         .back-btn {
@@ -72,39 +75,48 @@
         }
 
         .table tbody tr:hover {
-            background-color: #f1f1f1;
+            background-color: #f8f9fa;
         }
 
         .btn {
-            padding: 6px 12px;
-            border-radius: 25px;
+            padding: 8px 16px;
+            border-radius: 50px;
             font-size: 14px;
             transition: all 0.3s ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn-primary {
             background-color: #007bff;
             border: none;
+            color: #fff;
         }
 
         .btn-danger {
             background-color: #dc3545;
             border: none;
+            color: #fff;
         }
 
         .btn-primary:hover, .btn-danger:hover {
             transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         /* View Modal Custom Styling */
         .modal-content {
             border-radius: 20px;
+            padding: 20px;
         }
 
         .modal-header {
             background-color: #007bff;
             color: white;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
         }
 
         .modal-title {
@@ -122,15 +134,46 @@
             border-radius: 20px;
         }
 
+        /* Button Icon Styling */
+        .btn i {
+            font-size: 16px;
+        }
+
         /* Hidden columns */
         .hidden-column {
             display: none;
+        }
+
+        /* Hover Effects */
+        .btn-primary:hover, .btn-danger:hover, .back-btn:hover {
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .table thead th {
+                font-size: 14px;
+            }
+
+            .table tbody td {
+                font-size: 13px;
+            }
+
+            .btn {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="map.php" class="back-btn"><i class="fas fa-arrow-left"></i>Back to Previous Page</a>
+        <a href="map.php" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Previous Page</a>
         <h2>Customer Appointment History</h2>
 
         <div class="table-responsive">
@@ -144,9 +187,13 @@
                         <th scope="col" class="hidden-column">Email Address</th>
                         <th scope="col" class="hidden-column">Car Make</th>
                         <th scope="col" class="hidden-column">Car Model</th>
-                        <th scope="col">Repair Details</th>
-                        <th scope="col">Appointment Date and Time</th>
+                        <th scope="col"class="hidden-column">Repair Details</th>
+                        <th scope="col">Appointment Date</th>
+                        <th scope="col">Appointment Time</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Service Type</th>
+                        <th scope="col">Total Payment</th>
+                        <th scope="col">Payment Type</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -198,27 +245,26 @@
 
             // Delete function
             $(document).on('click', '.deleteBtn', function() {
-    var customer_id = $(this).data('id'); // Get the customer ID from the button's data attribute
-    if (confirm("Are you sure you want to delete this record?")) {
-        $.ajax({
-            url: 'delete_appointment.php',
-            type: 'POST',
-            data: { customer_id: customer_id },
-            success: function(response) {
-                if (response === "success") {
-                    alert("Record deleted successfully.");
-                    fetchAppointments();  // Reload table after deletion
-                } else {
-                    alert("Failed to delete the record: " + response);
+                var customer_id = $(this).data('id'); // Get the customer ID from the button's data attribute
+                if (confirm("Are you sure you want to delete this record?")) {
+                    $.ajax({
+                        url: 'delete_appointment.php',
+                        type: 'POST',
+                        data: { customer_id: customer_id },
+                        success: function(response) {
+                            if (response === "success") {
+                                alert("Record deleted successfully.");
+                                fetchAppointments();  // Reload table after deletion
+                            } else {
+                                alert("Failed to delete the record: " + response);
+                            }
+                        },
+                        error: function() {
+                            alert("Error deleting the record.");
+                        }
+                    });
                 }
-            },
-            error: function() {
-                alert("Error deleting the record.");
-            }
-        });
-    }
-});
-
+            });
 
             // View function
             $(document).on('click', '.viewBtn', function() {

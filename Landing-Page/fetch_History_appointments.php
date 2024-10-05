@@ -7,8 +7,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch customer appointments
-$sql = "SELECT customer_id, firstname, lastname, phoneNumber, emailAddress, carmake, carmodel, repairdetails, appointment_date, status FROM customer_details";
+// Fetch customer appointments, including all specified fields
+$sql = "SELECT customer_id, firstname, lastname, phoneNumber, emailAddress, carmake, carmodel, repairdetails, appointment_time, appointment_date, status, service_type, total_payment, payment_type FROM customer_details";
 $result = $conn->query($sql);
 
 // Check if the query was successful
@@ -22,15 +22,18 @@ if ($result->num_rows > 0) {
         echo "<tr>
                 <td>{$row['customer_id']}</td>
                 <td>{$row['firstname']}</td>
-                <!-- Hidden columns -->
                 <td class='hidden-column'>{$row['lastname']}</td>
                 <td>{$row['phoneNumber']}</td>
                 <td class='hidden-column'>{$row['emailAddress']}</td>
                 <td class='hidden-column'>{$row['carmake']}</td>
                 <td class='hidden-column'>{$row['carmodel']}</td>
-                <td>{$row['repairdetails']}</td>
+                <td class='hidden-column'>{$row['repairdetails']}</td>
+                <td>{$row['appointment_time']}</td>
                 <td>{$row['appointment_date']}</td>
                 <td>{$row['status']}</td>
+                <td>{$row['service_type']}</td>
+                <td>{$row['total_payment']}</td>
+                <td>{$row['payment_type']}</td>
                 <td>
                     <button class='btn btn-primary viewBtn' data-id='{$row['customer_id']}'>View</button>
                     <button class='btn btn-danger deleteBtn' data-id='{$row['customer_id']}'>Delete</button>
@@ -38,8 +41,9 @@ if ($result->num_rows > 0) {
               </tr>";
     }
 } else {
-    echo "<tr><td colspan='11'>No records found</td></tr>";
+    echo "<tr><td colspan='14'>No records found</td></tr>"; // Adjusted to match the number of columns
 }
 
+// Close the database connection
 $conn->close();
 ?>
