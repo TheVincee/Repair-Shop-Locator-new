@@ -225,7 +225,7 @@
             <li>
                 <div class="iocn-link">
                     <a href="ListOfStatus.php">
-                        <i class='bx bx-plug'></i>
+                        <i class='bx bx-book'></i>
                         <span class="link_name">Appointments</span>
                     </a>
                     <i class='bx bxs-chevron-down arrow'></i>
@@ -321,6 +321,7 @@
                 <th>Customer ID</th>
                 <th>First Name</th>
                 <th class="hide">Last Name</th>
+                <th class=>Address</th>
                 <th>Email Address</th>
                 <th>Phone Number</th>
                 <th class="hide">Address</th>
@@ -330,7 +331,7 @@
                 <th>Appointment Time</th>
                 <th>Appointment Date</th>
                 <th>Status</th>
-                <th class="hide">Service Type</thc> <!-- Corrected the class name from 'hidde' to 'hide' -->
+                <th>Service Type</thc> <!-- Corrected the class name from 'hidde' to 'hide' -->
                 <th>Total Payment</th>
                 <th>Payment Type</th>
                 <th>Payment Status</th>
@@ -560,7 +561,8 @@
                     var row = $('<tr>');
                     row.append($('<td>').text(appointment.customer_id));
                     row.append($('<td>').text(appointment.firstname));
-                    row.append($('<td class="hide">').text(appointment.lastname));
+                    row.append($('<td class="hide">').text(appointment.lastname));  
+                     row.append($('<td clas="hide">').text(appointment.Address));
                     row.append($('<td>').text(appointment.emailAddress));
                     row.append($('<td>').text(appointment.phoneNumber));
                     row.append($('<td class="hide">').text(appointment.carmake));
@@ -572,7 +574,7 @@
                     row.append($('<td>').text(appointment.service_type));
                     row.append($('<td>').text("₱" + appointment.total_payment)); // Displaying the total_payment in Peso
                     row.append($('<td>').text(appointment.payment_type));
-                    row.append($('<td>').text(appointment.Address));
+                    row.append($('<td>').text(appointment.Status_payment));
 
                     // Create action buttons for Edit and View
                     var actionCell = $('<td>');
@@ -735,6 +737,7 @@
 });
 
 </script>
+
     <script>
        document.addEventListener('DOMContentLoaded', function () {
     const customerId = <?php echo json_encode($customerId); ?>; // Dynamic customer ID from PHP
@@ -785,51 +788,8 @@
     </script>
      <script>
 $(document).ready(function() {
-    function fetchCounts() {
-        // Optionally show a loading indicator
-        $('#loadingIndicator').show();
-
-        $.ajax({
-            url: 'fetchCounts.php', // URL to the PHP file
-            type: 'GET',
-            data: { action: 'getCounts' },
-            dataType: 'json',
-            success: function(response) {
-                // Hide loading indicator
-                $('#loadingIndicator').hide();
-
-                console.log('Counts Response:', response); // Log the entire response for debugging
-
-                if (response.status !== 'error') {
-                    // Update dashboard metrics with the counts
-                    $('#approvedCount').text(response.approved);
-                    $('#rejectedCount').text(response.rejected);
-                    $('#inProcessingCount').text(response.in_processing);
-                    $('#walkinCount').text(response.total_walkins);
-
-                    // Optional: Handle zero counts with messages
-                    if (parseInt(response.rejected, 10) === 0) {
-                        $('#rejectedCount').text('No rejected appointments found.');
-                    }
-                } else {
-                    console.error(response.message);
-                    alert("Error fetching counts: " + response.message); // User-friendly alert
-                }
-            },
-            error: function(xhr, status, error) {
-                $('#loadingIndicator').hide();
-                console.error("AJAX Error: " + error);
-                alert("An error occurred while fetching counts. Please try again later."); // User-friendly alert
-            }
-        });
-    }
-
-    // Fetch counts on page load
-    fetchCounts();
-});
-$(document).ready(function() {
-    // Function to fetch appointment details
-    function fetchAppointmentDetails(customerId) {
+    // Function to fetch appointment details for editing
+    function fetchEditAppointmentDetails(customerId) {
         $.ajax({
             url: 'view_and_edit_payment.php',
             method: 'GET',
@@ -838,56 +798,53 @@ $(document).ready(function() {
             success: function(data) {
                 if (!data.error) {
                     // Populate the modal fields with the fetched data
-                    $('#viewCustomerId').text(data.customer_id);
-                    $('#viewFirstName').text(data.firstname);
-                    $('#viewLastName').text(data.lastname);
-                    $('#viewAddress').text(data.address);
-                    $('#viewPhoneNumber').text(data.phoneNumber);
-                    $('#viewEmailAddress').text(data.emailAddress);
-                    $('#viewCarMake').text(data.carmake);
-                    $('#viewCarModel').text(data.carmodel);
-                    $('#viewRepairDetails').text(data.repairdetails);
-                    $('#viewAppointmentTime').text(data.appointment_time);
-                    $('#viewAppointmentDate').text(data.appointment_date);
-                    $('#viewStatus').text(data.Status);
-                    $('#viewServiceType').text(data.service_type);
-                    $('#viewTotalPayment').text(data.total_payment);
-                    $('#viewPaymentType').text(data.payment_type);
+                    $('#editCustomerId').text(data.customer_id);
+                    $('#editFirstName').text(data.firstname);
+                    $('#editLastName').text(data.lastname);
+                    $('#editAddress').text(data.address);
+                    $('#editPhoneNumber').text(data.phoneNumber);
+                    $('#editEmailAddress').text(data.emailAddress);
+                    $('#editCarMake').text(data.carmake);
+                    $('#editCarModel').text(data.carmodel);
+                    $('#editRepairDetails').text(data.repairdetails);
+                    $('#editAppointmentTime').text(data.appointment_time);
+                    $('#editAppointmentDate').text(data.appointment_date);
+                    $('#editStatus').text(data.Status);
+                    $('#editServiceType').text(data.service_type);
+                    $('#editTotalPayment').text(data.total_payment);
+                    $('#editPaymentType').text(data.payment_type);
+                    
+                    // Set the hidden input for customer ID
+                    $('#editCustomerIdInput').val(data.customer_id);
 
-                    // Show the view modal
-                    $('#viewModal').show();
+                    // Show the edit modal
+                    $('#editModal').show();
                 } else {
-                    alert(data.error);
+                    alert('Error: ' + data.error);
                 }
             },
             error: function(xhr, status, error) {
                 console.error('Error fetching details:', error);
+                console.log('Response:', xhr.responseText);
             }
         });
     }
 
-    // Event handler for the view button
-    $(document).on('click', '.view-btn', function() {
-        const customerId = $(this).data('id');
-        fetchAppointmentDetails(customerId);
+    // Event handler for the "Edit" button click
+    $(document).on('click', '.edit-btn', function() {
+        const customerId = $(this).data('id'); // Get customer ID from the clicked button's data attribute
+        fetchEditAppointmentDetails(customerId); // Fetch details and show the modal
     });
 
-    // Event handler for opening the edit payment modal
-    $(document).on('click', '#openEditPaymentModal', function() {
-        const customerId = $('#viewCustomerId').text();
-        $('#editCustomerId').val(customerId);
-        $('#editModal').show();
-    });
-
-    // Event handler for submitting the payment form
+    // Event handler for submitting the updated payment type
     $('#editPaymentForm').submit(function(e) {
-        e.preventDefault(); // Prevent the form from submitting normally
-        
-        const customerId = $('#editCustomerId').val(); // Get the customer ID
-        const paymentType = $('#editPaymentType').val(); // Get the selected payment type
+        e.preventDefault(); // Prevent normal form submission
+
+        const customerId = $('#editCustomerIdInput').val(); // Get the customer ID from the hidden input
+        const paymentType = $('#editPaymentTypeInput').val(); // Get the selected payment type
 
         $.ajax({
-            url: 'view_and_edit_payment.php',
+            url: 'view_and_edit_payment.php', // Backend file for handling the payment update
             method: 'POST',
             dataType: 'json',
             data: {
@@ -904,20 +861,21 @@ $(document).ready(function() {
                 }
             },
             error: function(xhr, status, error) {
-                console.error('Error submitting form:', error);
+                console.error('Error updating payment type:', error);
+                console.log('Response:', xhr.responseText);
             }
         });
     });
 
-    // Event handler for closing modals
-    $('.close').click(function() {
-        $(this).closest('.modal').hide();
+    // Event handler for closing the modal via the "X" button
+    $(document).on('click', '.close', function() {
+        $('#editModal').hide(); // Ensure the modal is hidden when clicking the close button
     });
 
-    // Close the modal when clicking outside of it
-    $(window).click(function(event) {
+    // Event handler for closing the modal by clicking outside the modal content
+    $(window).on('click', function(event) {
         if ($(event.target).hasClass('modal')) {
-            $(event.target).hide();
+            $('.modal').hide(); // Hide all modals if the user clicks outside the content area
         }
     });
 });

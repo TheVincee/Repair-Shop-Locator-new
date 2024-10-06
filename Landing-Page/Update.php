@@ -2,12 +2,13 @@
 include('dbconfig.php'); // Ensure this file contains your database connection settings
 
 // Check if required data is set in the POST request
-if (isset($_POST['customer_id'], $_POST['firstname'], $_POST['lastname'], $_POST['phoneNumber'], $_POST['emailAddress'], $_POST['carmake'], $_POST['carmodel'], $_POST['repairdetails'], $_POST['appointment_date'], $_POST['appointment_time'], $_POST['service_type'], $_POST['total_payment'], $_POST['payment_type'])) {
+if (isset($_POST['customer_id'], $_POST['firstname'], $_POST['lastname'], $_POST['address'], $_POST['phoneNumber'], $_POST['emailAddress'], $_POST['carmake'], $_POST['carmodel'], $_POST['repairdetails'], $_POST['appointment_date'], $_POST['appointment_time'], $_POST['service_type'], $_POST['total_payment'], $_POST['payment_type'])) {
 
     // Sanitize and validate input data
     $customer_id = intval($_POST['customer_id']);
     $firstname = $conn->real_escape_string($_POST['firstname']);
     $lastname = $conn->real_escape_string($_POST['lastname']);
+    $address = $conn->real_escape_string($_POST['address']); // Added address
     $phoneNumber = $conn->real_escape_string($_POST['phoneNumber']);
     $emailAddress = $conn->real_escape_string($_POST['emailAddress']);
     $carmake = $conn->real_escape_string($_POST['carmake']);
@@ -20,11 +21,11 @@ if (isset($_POST['customer_id'], $_POST['firstname'], $_POST['lastname'], $_POST
     $payment_type = $conn->real_escape_string($_POST['payment_type']);
 
     // Prepare the SQL update statement
-    $query = "UPDATE customer_details SET firstname=?, lastname=?, phoneNumber=?, emailAddress=?, carmake=?, carmodel=?, repairdetails=?, appointment_date=?, appointment_time=?, service_type=?, total_payment=?, payment_type=? WHERE customer_id=?";
+    $query = "UPDATE customer_details SET firstname=?, lastname=?, address=?, phoneNumber=?, emailAddress=?, carmake=?, carmodel=?, repairdetails=?, appointment_date=?, appointment_time=?, service_type=?, total_payment=?, payment_type=? WHERE customer_id=?";
 
     if ($stmt = $conn->prepare($query)) {
         // Bind parameters
-        $stmt->bind_param("ssssssssssssi", $firstname, $lastname, $phoneNumber, $emailAddress, $carmake, $carmodel, $repairdetails, $appointment_date, $appointment_time, $service_type, $total_payment, $payment_type, $customer_id);
+        $stmt->bind_param("sssssssssssssi", $firstname, $lastname, $address, $phoneNumber, $emailAddress, $carmake, $carmodel, $repairdetails, $appointment_date, $appointment_time, $service_type, $total_payment, $payment_type, $customer_id);
 
         // Execute the statement
         if ($stmt->execute()) {

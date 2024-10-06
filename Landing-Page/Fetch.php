@@ -1,5 +1,5 @@
 <?php
-include('dbconfig.php'); // Ensure this file contains your database connection settings
+include('dbconfig.php'); // Include your database configuration
 
 // Check if customer_id is set in the POST request
 if (isset($_POST['customer_id'])) {
@@ -8,7 +8,7 @@ if (isset($_POST['customer_id'])) {
 
     // Prepare the SQL statement
     $query = "SELECT * FROM customer_details WHERE customer_id = ?";
-    
+
     if ($stmt = $conn->prepare($query)) {
         // Bind parameters
         $stmt->bind_param("i", $customer_id);
