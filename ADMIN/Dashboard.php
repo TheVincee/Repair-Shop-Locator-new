@@ -62,6 +62,7 @@
         }
         /* The Modal (background) */
 /* The Modal (background) */
+/* Modal background */
 .editModal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -74,45 +75,45 @@
     background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
 }
 
-/* Modal Content */
+/* Modal content */
 .editModal-content {
-    background-color: #fefefe;
-    margin: 10% auto; /* Centered with 10% margin from top */
-    padding: 20px; /* Padding inside the modal */
+    background-color: #fff;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
     border: 1px solid #888;
-    width: 300px; /* Fixed width for the modal */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for the card effect */
-    border-radius: 8px; /* Rounded corners */
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 500px;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
 }
 
-/* Close Button */
-.editModal .close {
+/* Close button */
+.close {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
-.editModal .close:hover,
-.editModal .close:focus {
+.close:hover,
+.close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
 }
 
-/* Button Styles */
-.editModal .btn {
-    background-color: #4CAF50; /* Green background */
-    color: white; /* White text */
-    padding: 10px 15px; /* Padding for button */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners for button */
-    cursor: pointer; /* Pointer cursor on hover */
+.btn {
+    background-color: #007bff; /* Bootstrap button color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
-.editModal .btn:hover {
-    background-color: #45a049; /* Darker green on hover */
+.btn:hover {
+    background-color: #0056b3;
 }
+
 
     </style>
     <style>
@@ -327,11 +328,11 @@
                 <th class="hide">Address</th>
                 <th class="hide">Car Make</th>
                 <th class="hide">Car Model</th>
-                <th>Repair Details</th>
+                <th class>Repair Details</th>
                 <th>Appointment Time</th>
                 <th>Appointment Date</th>
                 <th>Status</th>
-                <th>Service Type</thc> <!-- Corrected the class name from 'hidde' to 'hide' -->
+                <th>Service Type</th> <!-- Corrected the class name from 'hidde' to 'hide' -->
                 <th>Total Payment</th>
                 <th>Payment Type</th>
                 <th>Payment Status</th>
@@ -401,10 +402,12 @@
         </form>
     </div>
 </div>
-<div id="editModal" class="editModal">
-    <div class="editModal-content">
-        <span class="close">&times;</span>
+<!-- Edit Modal Structure -->
+<div id="editModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" id="editCloseBtn">&times;</span>
         <h2>Edit Appointment Details</h2>
+        
         <p><strong>Customer ID:</strong> <span id="editCustomerId"></span></p>
         <p><strong>First Name:</strong> <span id="editFirstName"></span></p>
         <p><strong>Last Name:</strong> <span id="editLastName"></span></p>
@@ -426,7 +429,6 @@
             <input type="hidden" id="editCustomerIdInput" />
             <label for="editPaymentTypeInput">Payment Type:</label>
             <select id="editPaymentTypeInput" required>
-                <option value="Downpayment">Downpayment</option>
                 <option value="Fully paid">Fully paid</option>
                 <option value="Not yet Paid">Not yet Paid</option>
             </select>
@@ -434,6 +436,7 @@
         </form>
     </div>
 </div>
+
 
 <div id="walkin-modal-container" class="modal-overlay">
     <div id="walkin-modal-content" class="modal">
@@ -466,159 +469,240 @@
 
    <script>
    document.addEventListener('DOMContentLoaded', function() {
-        // Sidebar toggle
-        let arrow = document.querySelectorAll(".arrow");
-        arrow.forEach(function(item) {
-            item.addEventListener("click", (e) => {
-                let arrowParent = e.target.parentElement.parentElement; // Selecting the main parent of the arrow
-                arrowParent.classList.toggle("showMenu");
+    // Sidebar toggle
+    let arrow = document.querySelectorAll(".arrow");
+    arrow.forEach(function(item) {
+        item.addEventListener("click", (e) => {
+            let arrowParent = e.target.closest(".arrow-parent"); // Adjusted selector for clarity
+            arrowParent.classList.toggle("showMenu");
+        });
+    });
+
+    let sidebar = document.querySelector(".sidebar");
+    let sidebarBtn = document.querySelector(".bx-menu");
+    sidebarBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("close");
+    });
+
+    // Modal visibility for view modal
+    const modalOverlay = document.getElementById('modal-overlay');
+    const closeBtn = document.getElementById('close-btn');
+    const form = document.getElementById('appointment-form');
+
+    // Function to show modal with customer details
+    function showModal(customerId) {
+        fetch(`fetch_customer.php?customer_id=${customerId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.error) {
+                    document.getElementById('customer-id').value = data.customer_id;
+                    document.getElementById('status-dropdown').value = data.Status;
+                    modalOverlay.style.display = 'flex';
+                    setTimeout(() => {
+                        modalOverlay.classList.add('show');
+                    }, 10);
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch(error => console.error('Error fetching customer data:', error));
+    }
+
+    // Close the modal when clicking the close button
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            modalOverlay.classList.remove('show');
+            setTimeout(() => {
+                modalOverlay.style.display = 'none';
+            }, 300);
+        });
+    }
+
+    // Handle form submission for updating appointment status
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const customerId = document.getElementById('customer-id').value;
+            const status = document.getElementById('status-dropdown').value;
+
+            fetch('update_status.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'customer_id': customerId,
+                    'status': status
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Status updated successfully!');
+                    modalOverlay.classList.remove('show');
+                    setTimeout(() => {
+                        modalOverlay.style.display = 'none';
+                    }, 300);
+                    fetchAppointments(); // Refresh appointments
+                } else {
+                    alert('Error updating status: ' + data.error);
+                }
             });
         });
+    }
 
-        let sidebar = document.querySelector(".sidebar");
-        let sidebarBtn = document.querySelector(".bx-menu");
-        sidebarBtn.addEventListener("click", () => {
-            sidebar.classList.toggle("close");
-        });
+    // Fetch appointments and handle view/edit button clicks
+    function fetchAppointments() {
+        $.ajax({
+            url: 'fetch_appointment_details.php',
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $('#appointments-tbody').empty();
 
-        // Modal visibility
-        const modalOverlay = document.getElementById('modal-overlay');
-        const closeBtn = document.getElementById('close-btn');
-        const form = document.getElementById('appointment-form');
+                if (data.length > 0) {
+                    data.forEach(function(appointment) {
+                        var row = $('<tr>');
+                        row.append($('<td>').text(appointment.customer_id));
+                        row.append($('<td>').text(appointment.firstname));
+                        row.append($('<td class="hide">').text(appointment.lastname));
+                        row.append($('<td>').text(appointment.Address));
+                        row.append($('<td>').text(appointment.emailAddress));
+                        row.append($('<td>').text(appointment.phoneNumber));
+                        row.append($('<td class="hide">').text(appointment.carmake));
+                        row.append($('<td class="hide">').text(appointment.carmodel));
+                        row.append($('<td>').text(appointment.repairdetails));
+                        row.append($('<td>').text(appointment.appointment_time));
+                        row.append($('<td>').text(appointment.appointment_date));
+                        row.append($('<td>').text(appointment.Status));
+                        row.append($('<td>').text(appointment.service_type));
+                        row.append($('<td>').text("₱" + appointment.total_payment));
+                        row.append($('<td>').text(appointment.payment_type));
+                        row.append($('<td>').text(appointment.status_payment || 'Not yet Paid'));
 
-        function showModal(customerId) {
-            fetch(`fetch_customer.php?customer_id=${customerId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.error) {
-                        document.getElementById('customer-id').value = data.customer_id;
-                        document.getElementById('status-dropdown').value = data.Status;
-                        modalOverlay.style.display = 'flex'; // Display modal overlay
-                        setTimeout(() => {
-                            modalOverlay.classList.add('show'); // Add class to show modal
-                        }, 10); // Short delay to ensure the modal starts with 'display: flex'
-                    } else {
-                        alert(data.error);
-                    }
-                })
-                .catch(error => console.error('Error fetching customer data:', error));
-        }
+                        // Create action buttons
+                        var actionCell = $('<td>');
+                        var editButton = $('<button>')
+                            .addClass('edit-btn')
+                            .text('Edit')
+                            .attr('data-id', appointment.customer_id)
+                            .on('click', function() {
+                                showEditModal(appointment.customer_id);
+                            });
+                        actionCell.append(editButton);
 
-        if (closeBtn) {
-            closeBtn.addEventListener('click', function() {
-                modalOverlay.classList.remove('show'); // Remove class to hide modal
-                setTimeout(() => {
-                    modalOverlay.style.display = 'none'; // Hide modal overlay after animation
-                }, 300); // Match this with the CSS transition duration
-            });
-        }
+                        var viewButton = $('<button>')
+                            .addClass('view-btn')
+                            .text('View')
+                            .attr('data-id', appointment.customer_id)
+                            .on('click', function() {
+                                showModal(appointment.customer_id);
+                            });
+                        actionCell.append(viewButton);
 
-        if (form) {
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-
-                const customerId = document.getElementById('customer-id').value;
-                const status = document.getElementById('status-dropdown').value;
-
-                fetch('update_status.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: new URLSearchParams({
-                        'customer_id': customerId,
-                        'status': status
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Status updated successfully!');
-                        modalOverlay.classList.remove('show'); // Remove class to hide modal
-                        setTimeout(() => {
-                            modalOverlay.style.display = 'none'; // Hide modal overlay after animation
-                        }, 300); // Match this with the CSS transition duration
-                    } else {
-                        alert('Error updating status: ' + data.error);
-                    }
-                });
-            });
-        }
-
-        // Fetch appointments and handle view button clicks
-        function fetchAppointments() {
-    $.ajax({
-        url: 'fetch_appointment_details.php',
-        method: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            // Clear the existing rows in the table body
-            $('#appointments-tbody').empty();
-
-            if (data.length > 0) {
-                // Loop through each appointment and create table rows
-                data.forEach(function(appointment) {
-                    var row = $('<tr>');
-                    row.append($('<td>').text(appointment.customer_id));
-                    row.append($('<td>').text(appointment.firstname));
-                    row.append($('<td class="hide">').text(appointment.lastname));  
-                     row.append($('<td clas="hide">').text(appointment.Address));
-                    row.append($('<td>').text(appointment.emailAddress));
-                    row.append($('<td>').text(appointment.phoneNumber));
-                    row.append($('<td class="hide">').text(appointment.carmake));
-                    row.append($('<td class="hide">').text(appointment.carmodel));
-                    row.append($('<td>').text(appointment.repairdetails));
-                    row.append($('<td>').text(appointment.appointment_time));
-                    row.append($('<td>').text(appointment.appointment_date));
-                    row.append($('<td>').text(appointment.Status));
-                    row.append($('<td>').text(appointment.service_type));
-                    row.append($('<td>').text("₱" + appointment.total_payment)); // Displaying the total_payment in Peso
-                    row.append($('<td>').text(appointment.payment_type));
-                    row.append($('<td>').text(appointment.Status_payment));
-
-                    // Create action buttons for Edit and View
-                    var actionCell = $('<td>');
-                    
-                    // Edit Button
-                    var editButton = $('<button>')
-                        .addClass('edit-btn')
-                        .text('Edit')
-                        .attr('data-id', appointment.customer_id);
-                    actionCell.append(editButton);
-
-                    // View Button
-                    var viewButton = $('<button>')
-                        .addClass('view-btn')
-                        .text('View')
-                        .attr('data-id', appointment.customer_id);
-                    actionCell.append(viewButton);
-
-                    row.append(actionCell);
-
-                    // Append the row to the table body
-                    $('#appointments-tbody').append(row);
-                });
-            } else {
-                // Display a message if no appointments are found
-                $('#appointments-tbody').append($('<tr>').append($('<td colspan="16">').text('No pending appointments found.')));
+                        row.append(actionCell);
+                        $('#appointments-tbody').append(row);
+                    });
+                } else {
+                    $('#appointments-tbody').append($('<tr>').append($('<td colspan="16">').text('No pending appointments found.')));
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching data:', error);
+                console.log(xhr.responseText);
             }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error fetching data:', error);
+        });
+    }
+
+    fetchAppointments(); // Initial fetch of appointments
+
+    // Show edit modal with customer data
+    function showEditModal(customerId) {
+        fetch(`view_and_edit_payment.php?customer_id=${customerId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.error) {
+                    // Populate edit modal fields
+                    document.getElementById('editCustomerId').textContent = data.customer_id || 'N/A';
+                    document.getElementById('editFirstName').textContent = data.firstname || 'N/A';
+                    document.getElementById('editLastName').textContent = data.lastname || 'N/A';
+                    document.getElementById('editAddress').textContent = data.address || 'N/A';
+                    document.getElementById('editPhoneNumber').textContent = data.phone_number || 'N/A';
+                    document.getElementById('editEmailAddress').textContent = data.email_address || 'N/A';
+                    document.getElementById('editCarMake').textContent = data.car_make || 'N/A';
+                    document.getElementById('editCarModel').textContent = data.car_model || 'N/A';
+                    document.getElementById('editRepairDetails').textContent = data.repair_details || 'N/A';
+                    document.getElementById('editAppointmentTime').textContent = data.appointment_time || 'N/A';
+                    document.getElementById('editAppointmentDate').textContent = data.appointment_date || 'N/A';
+                    document.getElementById('editStatus').textContent = data.status || 'N/A';
+                    document.getElementById('editServiceType').textContent = data.service_type || 'N/A';
+                    document.getElementById('editTotalPayment').textContent = data.total_payment || 'N/A';
+                    document.getElementById('editPaymentType').textContent = data.payment_type || 'N/A';
+
+                    // Set hidden input value for updating payment type
+                    document.getElementById('editCustomerIdInput').value = data.customer_id;
+
+                    // Set the dropdown value for payment type based on the fetched data
+                    const paymentTypeInput = document.getElementById('editPaymentTypeInput');
+                    paymentTypeInput.value = data.payment_type;
+
+                    // Display edit modal
+                    const editModal = document.getElementById('editModal');
+                    editModal.style.display = 'block';
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch(error => console.error('Error fetching customer data for edit:', error));
+    }
+
+    // Close the edit modal when clicking the close button
+    document.getElementById('editCloseBtn').addEventListener('click', function() {
+        document.getElementById('editModal').style.display = 'none';
+    });
+
+    // Close the edit modal when clicking outside of modal content
+    window.addEventListener('click', function(event) {
+        const editModal = document.getElementById('editModal');
+        if (event.target === editModal) {
+            editModal.style.display = 'none';
         }
     });
 
-}
+    // Handle form submission for updating the payment type
+    document.getElementById('editPaymentForm').addEventListener('submit', function(event) {
+        event.preventDefault();
 
+        const customerId = document.getElementById('editCustomerIdInput').value;
+        const paymentType = document.getElementById('editPaymentTypeInput').value;
 
-        fetchAppointments();
-
-        $('#appointments-tbody').on('click', '.view-btn', function() {
-            var customerId = $(this).data('id');
-            showModal(customerId);
+        fetch('edit_update_status.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'customer_id': customerId,
+                'payment_type': paymentType
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Payment type updated successfully!');
+                fetchAppointments(); // Refresh the appointments table
+                document.getElementById('editModal').style.display = 'none'; // Close the modal
+            } else {
+                alert('Error updating payment: ' + data.error);
+            }
         });
-        
     });
+
+});
+
+
+
    </script>
 <script>
    $(document).ready(function() {
@@ -786,102 +870,7 @@
 });
 
     </script>
-     <script>
-$(document).ready(function() {
-    // Function to fetch appointment details for editing
-    function fetchEditAppointmentDetails(customerId) {
-        $.ajax({
-            url: 'view_and_edit_payment.php',
-            method: 'GET',
-            dataType: 'json',
-            data: { customer_id: customerId },
-            success: function(data) {
-                if (!data.error) {
-                    // Populate the modal fields with the fetched data
-                    $('#editCustomerId').text(data.customer_id);
-                    $('#editFirstName').text(data.firstname);
-                    $('#editLastName').text(data.lastname);
-                    $('#editAddress').text(data.address);
-                    $('#editPhoneNumber').text(data.phoneNumber);
-                    $('#editEmailAddress').text(data.emailAddress);
-                    $('#editCarMake').text(data.carmake);
-                    $('#editCarModel').text(data.carmodel);
-                    $('#editRepairDetails').text(data.repairdetails);
-                    $('#editAppointmentTime').text(data.appointment_time);
-                    $('#editAppointmentDate').text(data.appointment_date);
-                    $('#editStatus').text(data.Status);
-                    $('#editServiceType').text(data.service_type);
-                    $('#editTotalPayment').text(data.total_payment);
-                    $('#editPaymentType').text(data.payment_type);
-                    
-                    // Set the hidden input for customer ID
-                    $('#editCustomerIdInput').val(data.customer_id);
-
-                    // Show the edit modal
-                    $('#editModal').show();
-                } else {
-                    alert('Error: ' + data.error);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching details:', error);
-                console.log('Response:', xhr.responseText);
-            }
-        });
-    }
-
-    // Event handler for the "Edit" button click
-    $(document).on('click', '.edit-btn', function() {
-        const customerId = $(this).data('id'); // Get customer ID from the clicked button's data attribute
-        fetchEditAppointmentDetails(customerId); // Fetch details and show the modal
-    });
-
-    // Event handler for submitting the updated payment type
-    $('#editPaymentForm').submit(function(e) {
-        e.preventDefault(); // Prevent normal form submission
-
-        const customerId = $('#editCustomerIdInput').val(); // Get the customer ID from the hidden input
-        const paymentType = $('#editPaymentTypeInput').val(); // Get the selected payment type
-
-        $.ajax({
-            url: 'view_and_edit_payment.php', // Backend file for handling the payment update
-            method: 'POST',
-            dataType: 'json',
-            data: {
-                customer_id: customerId,
-                payment_type: paymentType
-            },
-            success: function(response) {
-                if (response.success) {
-                    alert('Payment type updated successfully!');
-                    $('#editModal').hide(); // Close the modal after update
-                    fetchAppointments(); // Optionally refresh the appointments list
-                } else {
-                    alert('Error: ' + response.message);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error updating payment type:', error);
-                console.log('Response:', xhr.responseText);
-            }
-        });
-    });
-
-    // Event handler for closing the modal via the "X" button
-    $(document).on('click', '.close', function() {
-        $('#editModal').hide(); // Ensure the modal is hidden when clicking the close button
-    });
-
-    // Event handler for closing the modal by clicking outside the modal content
-    $(window).on('click', function(event) {
-        if ($(event.target).hasClass('modal')) {
-            $('.modal').hide(); // Hide all modals if the user clicks outside the content area
-        }
-    });
-});
-
-</script>
-
+     
 
 </body>
 </html>

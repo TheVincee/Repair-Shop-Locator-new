@@ -2,36 +2,24 @@
 header('Content-Type: application/json');
 
 // Database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "repair-shop-locator";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli('localhost', 'root', '', 'repair-shop-locator');
 
 if ($conn->connect_error) {
-    die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
+    echo json_encode(['error' => 'Database connection failed: ' . $conn->connect_error]);
+    exit;
 }
 
-// SQL query to fetch pending appointments
-$sql = "SELECT * FROM customer_details WHERE Status='Pending'";
+$sql = "SELECT * FROM customer_details";
 $result = $conn->query($sql);
 
-$appointments = array();
-
-// Check if the query was successful
-if (!$result) {
-    die(json_encode(["error" => "Query failed: " . $conn->error]));
-}
-
 if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+    $appointments = [];
+    while ($row = $result->fetch_assoc()) {
         $appointments[] = $row;
     }
+    echo json_encode($appointments);
+} else {
+    echo json_encode([]);
 }
 
-// Output the JSON encoded appointments
-echo json_encode($appointments);
-
 $conn->close();
-?>

@@ -430,99 +430,90 @@ if (mysqli_num_rows($result) > 0) {
                     $("#customerForm")[0].reset(); // Reset the form
                     location.reload(); // Reload the page to show updated data
                 } else {
-                    // Show an error message if the response indicates failure
                     alert(response.message || "Failed to add the customer. Please check the input data and try again.");
                 }
             },
             error: function (xhr, status, error) {
-                // Log error details to the console for debugging
                 console.error("AJAX Error:", error);
                 console.log("Response text:", xhr.responseText); // Log the response text for debugging
-
-                // Alert the user about the error
                 alert("An unexpected error occurred while adding the customer. Please try again later.");
             },
             complete: function () {
-                // Re-enable the submit button after AJAX call completes
                 $submitButton.prop("disabled", false).text("Submit");
             }
         });
     });
 
+    $(document).ready(function () {
+    // Fetch and populate data when opening the update modal
+    $('#UpdateModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var customerId = button.data('customer_id'); // Extract customer_id from data-* attributes
 
-
-
-   // Fetch and populate data when opening the update modal
-   $('#UpdateModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget); // Button that triggered the modal
-    var customerId = button.data('customer_id'); // Extract customer_id from data-* attributes
-
-    // Fetch customer details for the given customer_id
-    $.ajax({
-        type: "POST",
-        url: "fetch_customer.php", // URL for fetching customer details
-        data: { customer_id: customerId },
-        dataType: "json",
-        success: function (response) {
-            if (response.error) {
-                alert(response.error); // Display an error message if there's an issue
-            } else {
-                // Populate modal fields with fetched data
-                $('#updateCustomerId').val(response.customer_id);
-                $('#updateFirstName').val(response.firstname);
-                $('#updateLastName').val(response.lastname);
-                $('#updatePhoneNumber').val(response.phoneNumber);
-                $('#updateEmailAddress').val(response.emailAddress);
-                $('#updateCarMake').val(response.carmake);
-                $('#updateCarModel').val(response.carmodel);
-                $('#updateRepairDetails').val(response.repairdetails);
-                $('#updateAppointmentDate').val(response.appointment_date);
-                $('#updateAppointmentTime').val(response.appointment_time);
-                $('#updateServiceType').val(response.service_type); // New field
-                $('#updateTotalPayment').val(response.total_payment); // New field
-                $('#updatePaymentType').val(response.payment_type); // New field
-                $('#updateAddress').val(response.address); // Populate Address field
+        // Fetch customer details for the given customer_id
+        $.ajax({
+            type: "POST",
+            url: "Fetch.php", // URL for fetching customer details
+            data: { customer_id: customerId },
+            dataType: "json",
+            success: function (response) {
+                console.log(response); // Log the response to verify data
+                if (response.error) {
+                    alert(response.error); // Display an error message if there's an issue
+                } else {
+                    // Populate modal fields with fetched data
+                    $('#updateCustomerId').val(response.customer_id);
+                    $('#updateFirstName').val(response.firstname);
+                    $('#updateLastName').val(response.lastname);
+                    $('#updatePhoneNumber').val(response.phoneNumber);
+                    $('#updateEmailAddress').val(response.emailAddress);
+                    $('#updateAddress').val(response.Address); // Use 'Address' with correct case
+                    $('#updateCarMake').val(response.carmake);
+                    $('#updateCarModel').val(response.carmodel);
+                    $('#updateRepairDetails').val(response.repairdetails);
+                    $('#updateAppointmentDate').val(response.appointment_date);
+                    $('#updateAppointmentTime').val(response.appointment_time);
+                    $('#updateServiceType').val(response.service_type); // New field
+                    $('#updateTotalPayment').val(response.total_payment); // New field
+                    $('#updatePaymentType').val(response.payment_type); // New field
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("An error occurred: " + error);
+                alert("An error occurred while fetching the customer data.");
             }
-        },
-        error: function (xhr, status, error) {
-            console.error("An error occurred: " + error);
-            alert("An error occurred while fetching the customer data.");
-        }
+        });
     });
-});
 
+    // Handle form submission for updating a customer
+    $("#updateForm").on("submit", function (e) {
+        e.preventDefault(); // Prevent the default form submission
+        const $submitButton = $(this).find("button[type='submit']");
+        $submitButton.prop("disabled", true).text("Updating..."); // Disable the button
 
-
-
-
-  // Handle form submission for updating a customer
-$("#updateForm").on("submit", function (e) {
-    e.preventDefault(); // Prevent the form from submitting normally
-    const $submitButton = $(this).find("button[type='submit']"); // Get the submit button
-    $submitButton.prop("disabled", true).text("Updating..."); // Disable the button
-
-    $.ajax({
-        type: "POST",
-        url: "Update.php", // Ensure this is the correct path to your PHP script
-        data: $(this).serialize(), // Serialize form data for submission
-        dataType: "json", // Expect JSON response from the server
-        success: function (response) {
-            if (response.status === 'success') {
-                $("#UpdateModal").modal("hide"); // Hide the modal
-                alert(response.message || "Customer updated successfully!"); // Show success message
-                location.reload(); // Reload the page to reflect changes
-            } else {
-                // Handle failure response
-                alert(response.message || "Failed to update the customer. Please try again.");
+        $.ajax({
+            type: "POST",
+            url: "Update.php", // URL of the PHP script
+            data: $(this).serialize(), // Serialize the form data
+            dataType: "json", // Expect JSON response from the server
+            success: function (response) {
+                if (response.status === 'success') {
+                    $("#UpdateModal").modal("hide"); // Hide modal on success
+                    alert(response.message || "Customer updated successfully!");
+                    location.reload(); // Reload the page to show updated data
+                } else {
+                    alert(response.message || "Failed to update the customer. Please try again.");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("An error occurred: " + error); // Log the error details
+                alert("An error occurred while updating the customer. Please try again.");
+            },
+            complete: function () {
+                // Re-enable the submit button after AJAX call completes
+                $submitButton.prop("disabled", false).text("Update");
             }
-        },
-        error: function (xhr, status, error) {
-            console.error("An error occurred: " + error); // Log the error for debugging
-            alert("An error occurred while updating the customer. Please try again.");
-        },
-        complete: function () {
-            $submitButton.prop("disabled", false).text("Update"); // Re-enable the button
-        }
+        });
     });
 });
 
@@ -545,18 +536,22 @@ $("#updateForm").on("submit", function (e) {
                 },
                 error: function (xhr, status, error) {
                     console.error("AJAX Error:", error);
+                    console.log("Response text:", xhr.responseText); // Log the error response for debugging
                     alert("An error occurred while deleting the customer. Please try again later.");
                 }
             });
         }
     };
 
-    $(document).ready(function() {
-    // Other code here
-
+    // View customer details
     $('#viewCustomerModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var customerId = button.data('customer_id');
+
+        if (!customerId) {
+            console.error("No customer ID provided for view.");
+            return;
+        }
 
         $.ajax({
             type: "POST",
@@ -587,12 +582,11 @@ $("#updateForm").on("submit", function (e) {
             },
             error: function (xhr, status, error) {
                 console.error("An error occurred: " + error);
+                console.log("Response text:", xhr.responseText); // Log the error response for debugging
                 alert("An unexpected error occurred while fetching the customer details.");
             }
         });
-    }); // Ensure this closing brace matches the opening one
-}); // Ensure this closing brace matches the opening one
-
+    });
 });
 
 

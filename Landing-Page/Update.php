@@ -1,14 +1,15 @@
 <?php
+// Include database configuration file
 include('dbconfig.php'); // Ensure this file contains your database connection settings
 
-// Check if required data is set in the POST request
+// Check if the required data is set in the POST request
 if (isset($_POST['customer_id'], $_POST['firstname'], $_POST['lastname'], $_POST['address'], $_POST['phoneNumber'], $_POST['emailAddress'], $_POST['carmake'], $_POST['carmodel'], $_POST['repairdetails'], $_POST['appointment_date'], $_POST['appointment_time'], $_POST['service_type'], $_POST['total_payment'], $_POST['payment_type'])) {
 
     // Sanitize and validate input data
-    $customer_id = intval($_POST['customer_id']);
+    $customer_id = intval($_POST['customer_id']); // Ensure customer_id is an integer
     $firstname = $conn->real_escape_string($_POST['firstname']);
     $lastname = $conn->real_escape_string($_POST['lastname']);
-    $address = $conn->real_escape_string($_POST['address']); // Added address
+    $address = $conn->real_escape_string($_POST['address']); // Use lowercase 'address'
     $phoneNumber = $conn->real_escape_string($_POST['phoneNumber']);
     $emailAddress = $conn->real_escape_string($_POST['emailAddress']);
     $carmake = $conn->real_escape_string($_POST['carmake']);
@@ -24,7 +25,7 @@ if (isset($_POST['customer_id'], $_POST['firstname'], $_POST['lastname'], $_POST
     $query = "UPDATE customer_details SET firstname=?, lastname=?, address=?, phoneNumber=?, emailAddress=?, carmake=?, carmodel=?, repairdetails=?, appointment_date=?, appointment_time=?, service_type=?, total_payment=?, payment_type=? WHERE customer_id=?";
 
     if ($stmt = $conn->prepare($query)) {
-        // Bind parameters
+        // Bind parameters to the prepared statement
         $stmt->bind_param("sssssssssssssi", $firstname, $lastname, $address, $phoneNumber, $emailAddress, $carmake, $carmodel, $repairdetails, $appointment_date, $appointment_time, $service_type, $total_payment, $payment_type, $customer_id);
 
         // Execute the statement
@@ -37,12 +38,14 @@ if (isset($_POST['customer_id'], $_POST['firstname'], $_POST['lastname'], $_POST
         // Close the statement
         $stmt->close();
     } else {
+        // Handle SQL preparation error
         echo json_encode(['status' => 'error', 'message' => 'Failed to prepare SQL statement: ' . $conn->error]);
     }
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'Invalid request']);
+    // Handle missing data in POST request
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request. Required fields are missing.']);
 }
 
-// Close the connection
+// Close the database connection
 $conn->close();
 ?>
