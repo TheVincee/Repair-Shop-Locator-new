@@ -239,12 +239,12 @@
                 </ul>
             </li>
             <li>
-                <a href="#">
-                    <i class='bx bx-compass'></i>
+                <a href="view_paid_appointments.php">
+                    <i class='bx bx-dollar'></i>
                     <span class="link_name">Explore</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Explore</a></li>
+                    <li><a class="link_name" href="view_paid_appointments.php">Explore</a></li>
                 </ul>
             </li>
             <li>
@@ -408,34 +408,35 @@
         <span class="close" id="editCloseBtn">&times;</span>
         <h2>Edit Appointment Details</h2>
         
-        <p><strong>Customer ID:</strong> <span id="editCustomerId"></span></p>
-        <p><strong>First Name:</strong> <span id="editFirstName"></span></p>
-        <p><strong>Last Name:</strong> <span id="editLastName"></span></p>
-        <p><strong>Address:</strong> <span id="editAddress"></span></p>
-        <p><strong>Phone Number:</strong> <span id="editPhoneNumber"></span></p>
-        <p><strong>Email Address:</strong> <span id="editEmailAddress"></span></p>
-        <p><strong>Car Make:</strong> <span id="editCarMake"></span></p>
-        <p><strong>Car Model:</strong> <span id="editCarModel"></span></p>
-        <p><strong>Repair Details:</strong> <span id="editRepairDetails"></span></p>
-        <p><strong>Appointment Time:</strong> <span id="editAppointmentTime"></span></p>
-        <p><strong>Appointment Date:</strong> <span id="editAppointmentDate"></span></p>
-        <p><strong>Status:</strong> <span id="editStatus"></span></p>
-        <p><strong>Service Type:</strong> <span id="editServiceType"></span></p>
-        <p><strong>Total Payment:</strong> ₱<span id="editTotalPayment"></span></p>
-        <p><strong>Payment Type:</strong> <span id="editPaymentType"></span></p>
+        <p><strong>Customer ID:</strong> <span id="editCustomerId">N/A</span></p>
+        <p><strong>First Name:</strong> <span id="editFirstName">N/A</span></p>
+        <p><strong>Last Name:</strong> <span id="editLastName">N/A</span></p>
+        <p><strong>Address:</strong> <span id="editAddress">N/A</span></p>
+        <p><strong>Phone Number:</strong> <span id="editPhoneNumber">N/A</span></p>
+        <p><strong>Email Address:</strong> <span id="editEmailAddress">N/A</span></p>
+        <p><strong>Car Make:</strong> <span id="editCarMake">N/A</span></p>
+        <p><strong>Car Model:</strong> <span id="editCarModel">N/A</span></p>
+        <p><strong>Repair Details:</strong> <span id="editRepairDetails">N/A</span></p>
+        <p><strong>Appointment Time:</strong> <span id="editAppointmentTime">N/A</span></p>
+        <p><strong>Appointment Date:</strong> <span id="editAppointmentDate">N/A</span></p>
+        <p><strong>Status:</strong> <span id="editStatus">N/A</span></p>
+        <p><strong>Service Type:</strong> <span id="editServiceType">N/A</span></p>
+        <p><strong>Total Payment:</strong> ₱<span id="editTotalPayment">0.00</span></p>
+        <p><strong>Payment Type:</strong> <span id="editPaymentType">N/A</span></p>
 
-        <h3>Update Payment Type</h3>
-        <form id="editPaymentForm">
+        <form id="editPaymentForm" action="#" method="POST">
             <input type="hidden" id="editCustomerIdInput" />
-            <label for="editPaymentTypeInput">Payment Type:</label>
-            <select id="editPaymentTypeInput" required>
-                <option value="Fully paid">Fully paid</option>
-                <option value="Not yet Paid">Not yet Paid</option>
+            <label for="editPaymentStatusInput">Payment Status:</label>
+            <select id="editPaymentStatusInput" required>
+                <option value="">Select Payment Status</option>
+                <option value="Paid">Paid</option>
+                <option value="Not Paid">Not Paid</option>
             </select>
             <button type="submit" class="btn">Update Payment</button>
         </form>
     </div>
 </div>
+
 
 
 <div id="walkin-modal-container" class="modal-overlay">
@@ -468,18 +469,18 @@
 
 
    <script>
-   document.addEventListener('DOMContentLoaded', function() {
+ document.addEventListener('DOMContentLoaded', function() {
     // Sidebar toggle
-    let arrow = document.querySelectorAll(".arrow");
-    arrow.forEach(function(item) {
+    const arrow = document.querySelectorAll(".arrow");
+    arrow.forEach(item => {
         item.addEventListener("click", (e) => {
-            let arrowParent = e.target.closest(".arrow-parent"); // Adjusted selector for clarity
+            const arrowParent = e.target.closest(".arrow-parent");
             arrowParent.classList.toggle("showMenu");
         });
     });
 
-    let sidebar = document.querySelector(".sidebar");
-    let sidebarBtn = document.querySelector(".bx-menu");
+    const sidebar = document.querySelector(".sidebar");
+    const sidebarBtn = document.querySelector(".bx-menu");
     sidebarBtn.addEventListener("click", () => {
         sidebar.classList.toggle("close");
     });
@@ -510,7 +511,7 @@
 
     // Close the modal when clicking the close button
     if (closeBtn) {
-        closeBtn.addEventListener('click', function() {
+        closeBtn.addEventListener('click', () => {
             modalOverlay.classList.remove('show');
             setTimeout(() => {
                 modalOverlay.style.display = 'none';
@@ -528,9 +529,7 @@
 
             fetch('update_status.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({
                     'customer_id': customerId,
                     'status': status
@@ -544,11 +543,12 @@
                     setTimeout(() => {
                         modalOverlay.style.display = 'none';
                     }, 300);
-                    fetchAppointments(); // Refresh appointments
+                    fetchAppointments();
                 } else {
                     alert('Error updating status: ' + data.error);
                 }
-            });
+            })
+            .catch(error => console.error('Error updating status:', error));
         });
     }
 
@@ -563,7 +563,7 @@
 
                 if (data.length > 0) {
                     data.forEach(function(appointment) {
-                        var row = $('<tr>');
+                        const row = $('<tr>');
                         row.append($('<td>').text(appointment.customer_id));
                         row.append($('<td>').text(appointment.firstname));
                         row.append($('<td class="hide">').text(appointment.lastname));
@@ -581,24 +581,19 @@
                         row.append($('<td>').text(appointment.payment_type));
                         row.append($('<td>').text(appointment.status_payment || 'Not yet Paid'));
 
-                        // Create action buttons
-                        var actionCell = $('<td>');
-                        var editButton = $('<button>')
+                        const actionCell = $('<td>');
+                        const editButton = $('<button>')
                             .addClass('edit-btn')
                             .text('Edit')
                             .attr('data-id', appointment.customer_id)
-                            .on('click', function() {
-                                showEditModal(appointment.customer_id);
-                            });
+                            .on('click', () => showEditModal(appointment.customer_id));
                         actionCell.append(editButton);
 
-                        var viewButton = $('<button>')
+                        const viewButton = $('<button>')
                             .addClass('view-btn')
                             .text('View')
                             .attr('data-id', appointment.customer_id)
-                            .on('click', function() {
-                                showModal(appointment.customer_id);
-                            });
+                            .on('click', () => showModal(appointment.customer_id));
                         actionCell.append(viewButton);
 
                         row.append(actionCell);
@@ -610,7 +605,6 @@
             },
             error: function(xhr, status, error) {
                 console.error('Error fetching data:', error);
-                console.log(xhr.responseText);
             }
         });
     }
@@ -619,85 +613,82 @@
 
     // Show edit modal with customer data
     function showEditModal(customerId) {
-        fetch(`view_and_edit_payment.php?customer_id=${customerId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (!data.error) {
-                    // Populate edit modal fields
-                    document.getElementById('editCustomerId').textContent = data.customer_id || 'N/A';
-                    document.getElementById('editFirstName').textContent = data.firstname || 'N/A';
-                    document.getElementById('editLastName').textContent = data.lastname || 'N/A';
-                    document.getElementById('editAddress').textContent = data.address || 'N/A';
-                    document.getElementById('editPhoneNumber').textContent = data.phone_number || 'N/A';
-                    document.getElementById('editEmailAddress').textContent = data.email_address || 'N/A';
-                    document.getElementById('editCarMake').textContent = data.car_make || 'N/A';
-                    document.getElementById('editCarModel').textContent = data.car_model || 'N/A';
-                    document.getElementById('editRepairDetails').textContent = data.repair_details || 'N/A';
-                    document.getElementById('editAppointmentTime').textContent = data.appointment_time || 'N/A';
-                    document.getElementById('editAppointmentDate').textContent = data.appointment_date || 'N/A';
-                    document.getElementById('editStatus').textContent = data.status || 'N/A';
-                    document.getElementById('editServiceType').textContent = data.service_type || 'N/A';
-                    document.getElementById('editTotalPayment').textContent = data.total_payment || 'N/A';
-                    document.getElementById('editPaymentType').textContent = data.payment_type || 'N/A';
-
-                    // Set hidden input value for updating payment type
-                    document.getElementById('editCustomerIdInput').value = data.customer_id;
-
-                    // Set the dropdown value for payment type based on the fetched data
-                    const paymentTypeInput = document.getElementById('editPaymentTypeInput');
-                    paymentTypeInput.value = data.payment_type;
-
-                    // Display edit modal
-                    const editModal = document.getElementById('editModal');
-                    editModal.style.display = 'block';
-                } else {
-                    alert(data.error);
-                }
-            })
-            .catch(error => console.error('Error fetching customer data for edit:', error));
-    }
-
-    // Close the edit modal when clicking the close button
-    document.getElementById('editCloseBtn').addEventListener('click', function() {
-        document.getElementById('editModal').style.display = 'none';
-    });
-
-    // Close the edit modal when clicking outside of modal content
-    window.addEventListener('click', function(event) {
-        const editModal = document.getElementById('editModal');
-        if (event.target === editModal) {
-            editModal.style.display = 'none';
-        }
-    });
-
-    // Handle form submission for updating the payment type
-    document.getElementById('editPaymentForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const customerId = document.getElementById('editCustomerIdInput').value;
-        const paymentType = document.getElementById('editPaymentTypeInput').value;
-
-        fetch('edit_update_status.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-                'customer_id': customerId,
-                'payment_type': paymentType
-            })
-        })
+    fetch(`view_and_edit_payment.php?customer_id=${customerId}`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Payment type updated successfully!');
-                fetchAppointments(); // Refresh the appointments table
-                document.getElementById('editModal').style.display = 'none'; // Close the modal
+                $('#editCustomerId').text(data.data.customer_id || 'N/A');
+                $('#editFirstName').text(data.data.firstname || 'N/A');
+                $('#editLastName').text(data.data.lastname || 'N/A');
+                $('#editAddress').text(data.data.address || 'N/A');
+                $('#editPhoneNumber').text(data.data.phoneNumber || 'N/A');
+                $('#editEmailAddress').text(data.data.emailAddress || 'N/A');
+                $('#editCarMake').text(data.data.carmake || 'N/A');
+                $('#editCarModel').text(data.data.carmodel || 'N/A');
+                $('#editRepairDetails').text(data.data.repairdetails || 'N/A');
+                $('#editAppointmentTime').text(data.data.appointment_time || 'N/A');
+                $('#editAppointmentDate').text(data.data.appointment_date || 'N/A');
+                $('#editStatus').text(data.data.Status || 'N/A');
+                $('#editServiceType').text(data.data.service_type || 'N/A');
+                $('#editTotalPayment').text(data.data.total_payment || '₱0.00');
+                $('#editPaymentType').text(data.data.payment_type || 'N/A');
+                $('#editCustomerIdInput').val(data.data.customer_id);
+                $('#editPaymentStatusInput').val(data.data.payment_status || 'Paid'); // Ensure payment_status is retrieved correctly
+                $('#editModal').show();
             } else {
-                alert('Error updating payment: ' + data.error);
+                alert(data.error || 'Error fetching customer data.');
             }
-        });
+        })
+        .catch(error => console.error('Error fetching customer data for edit:', error));
+}
+
+// Close the edit modal
+$('#editCloseBtn').on('click', () => $('#editModal').hide());
+$(window).on('click', event => {
+    if ($(event.target).is('#editModal')) {
+        $('#editModal').hide();
+    }
+});
+
+// Handle form submission for updating the payment status
+$('#editPaymentForm').on('submit', function (event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const customerId = $('#editCustomerIdInput').val();
+    const paymentStatus = $('#editPaymentStatusInput').val();
+
+    // Check if customerId is not empty
+    if (!customerId) {
+        alert('Customer ID is required.');
+        return;
+    }
+
+    $.ajax({
+        url: 'view_and_edit_payment.php', // The PHP file to handle the update
+        type: 'POST',
+        data: {
+            customer_id: customerId,
+            payment_status: paymentStatus // Update to payment_status
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.success) {
+                alert('Payment status updated successfully!');
+                fetchAppointments(); // Refresh the appointments table
+                $('#editModal').hide(); // Close the modal
+            } else {
+                alert('Error updating payment: ' + (data.error || 'Unknown error'));
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX error:', error);
+            alert('Error updating payment: ' + error);
+        }
     });
+});
+
+
+
 
 });
 
@@ -870,7 +861,51 @@
 });
 
     </script>
-     
+     <script>
+        $(document).ready(function() {
+    function fetchCounts() {
+        // Optionally show a loading indicator
+        $('#loadingIndicator').show();
+
+        $.ajax({
+            url: 'fetchCounts.php', // URL to the PHP file
+            type: 'GET',
+            data: { action: 'getCounts' },
+            dataType: 'json',
+            success: function(response) {
+                // Hide loading indicator
+                $('#loadingIndicator').hide();
+
+                console.log('Counts Response:', response); // Log the entire response for debugging
+
+                if (response.status !== 'error') {
+                    // Update dashboard metrics with the counts
+                    $('#approvedCount').text(response.approved);
+                    $('#rejectedCount').text(response.rejected);
+                    $('#inProcessingCount').text(response.in_processing);
+                    $('#walkinCount').text(response.total_walkins);
+
+                    // Optional: Handle zero counts with messages
+                    if (parseInt(response.rejected, 10) === 0) {
+                        $('#rejectedCount').text('No rejected appointments found.');
+                    }
+                } else {
+                    console.error(response.message);
+                    alert("Error fetching counts: " + response.message); // User-friendly alert
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#loadingIndicator').hide();
+                console.error("AJAX Error: " + error);
+                alert("An error occurred while fetching counts. Please try again later."); // User-friendly alert
+            }
+        });
+    }
+
+    // Fetch counts on page load
+    fetchCounts();
+});
+     </script>
 
 </body>
 </html>

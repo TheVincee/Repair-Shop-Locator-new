@@ -106,13 +106,15 @@
             </div>
             <div class="modal-body">
                 <form id="addWalkinForm">
-                    <div class="mb-3">
-                        <label for="firstname" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="phoneNumber" class="form-label">Phone Number</label>
-                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" required>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="firstname" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name" required>
+                        </div>
+                        <div class="col">
+                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" required>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="emailAddress" class="form-label">Email Address</label>
@@ -121,6 +123,48 @@
                     <div class="mb-3">
                         <label for="repairdetails" class="form-label">Repair Details</label>
                         <textarea class="form-control" id="repairdetails" name="repairdetails" rows="3" placeholder="Repair Details" required></textarea>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="carmodel" class="form-label">Car Model</label>
+                            <input type="text" class="form-control" id="carmodel" name="carmodel" placeholder="Car Model" required>
+                        </div>
+                        <div class="col">
+                            <label for="service_type" class="form-label">Service Type</label>
+                            <select class="form-select" id="service_type" name="service_type" required>
+                                <option value="" disabled selected>Select Service Type</option>
+                                <option value="Oil Change">Oil Change</option>
+                                <option value="Tire Rotation">Tire Rotation</option>
+                                <option value="Brake Inspection">Brake Inspection</option>
+                                <option value="Battery Replacement">Battery Replacement</option>
+                                <!-- Add more service types as needed -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="total_payable" class="form-label">Total Payable</label>
+                            <input type="number" step="0.01" class="form-control" id="total_payable" name="total_payable" placeholder="Total Payable" required>
+                        </div>
+                        <div class="col">
+                            <label for="payment_type" class="form-label">Payment Type</label>
+                            <select class="form-select" id="payment_type" name="payment_type" required>
+                                <option value="" disabled selected>Select Payment Type</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Credit Card">Credit Card</option>
+                                <option value="Debit Card">Debit Card</option>
+                                <option value="Mobile Payment">Mobile Payment</option>
+                                <!-- Add more payment types as needed -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="payment_status" class="form-label">Payment Status</label>
+                        <select class="form-select" id="payment_status" name="payment_status" required>
+                            <option value="" disabled selected>Select Payment Status</option>
+                            <option value="Paid">Paid</option>
+                            <option value="Not Paid">Not Paid</option>
+                        </select>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
@@ -139,6 +183,9 @@
     </div>
 </div>
 
+
+
+
 <!-- Update Walk-in Appointment Modal -->
 <div class="modal fade" id="updateWalkinModal" tabindex="-1" aria-labelledby="updateWalkinModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -150,22 +197,79 @@
             <div class="modal-body">
                 <form id="updateWalkinForm">
                     <input type="hidden" id="update_customer_id" name="customer_id">
-                    <div class="mb-3">
-                        <label for="update_firstname" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="update_firstname" name="firstname" placeholder="First Name" required>
+                    
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="update_firstname" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="update_firstname" name="firstname" placeholder="First Name" required>
+                        </div>
+                        <div class="col">
+                            <label for="update_lastname" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="update_lastname" name="lastname" placeholder="Last Name" required>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="update_phoneNumber" class="form-label">Phone Number</label>
-                        <input type="text" class="form-control" id="update_phoneNumber" name="phoneNumber" placeholder="Phone Number" required>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="update_phoneNumber" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="update_phoneNumber" name="phoneNumber" placeholder="Phone Number" required>
+                        </div>
+                        <div class="col">
+                            <label for="update_emailAddress" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="update_emailAddress" name="emailAddress" placeholder="Email Address" required>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="update_emailAddress" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="update_emailAddress" name="emailAddress" placeholder="Email Address" required>
-                    </div>
+
                     <div class="mb-3">
                         <label for="update_repairdetails" class="form-label">Repair Details</label>
                         <textarea class="form-control" id="update_repairdetails" name="repairdetails" rows="3" placeholder="Repair Details" required></textarea>
                     </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="update_carmodel" class="form-label">Car Model</label>
+                            <input type="text" class="form-control" id="update_carmodel" name="carmodel" placeholder="Car Model" required>
+                        </div>
+                        <div class="col">
+                            <label for="update_service_type" class="form-label">Service Type</label>
+                            <select class="form-select" id="update_service_type" name="service_type" required>
+                                <option value="" disabled selected>Select Service Type</option>
+                                <option value="Oil Change">Oil Change</option>
+                                <option value="Tire Rotation">Tire Rotation</option>
+                                <option value="Brake Inspection">Brake Inspection</option>
+                                <option value="Battery Replacement">Battery Replacement</option>
+                                <!-- Add more service types as needed -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="update_total_payable" class="form-label">Total Payable</label>
+                            <input type="number" step="0.01" class="form-control" id="update_total_payable" name="total_payable" placeholder="Total Payable" required>
+                        </div>
+                        <div class="col">
+                            <label for="update_payment_type" class="form-label">Payment Type</label>
+                            <select class="form-select" id="update_payment_type" name="payment_type" required>
+                                <option value="" disabled selected>Select Payment Type</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Credit Card">Credit Card</option>
+                                <option value="Debit Card">Debit Card</option>
+                                <option value="Mobile Payment">Mobile Payment</option>
+                                <!-- Add more payment types as needed -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="update_payment_status" class="form-label">Payment Status</label>
+                        <select class="form-select" id="update_payment_status" name="payment_status" required>
+                            <option value="" disabled selected>Select Payment Status</option>
+                            <option value="Paid">Paid</option>
+                            <option value="Not Paid">Not Paid</option>
+                        </select>
+                    </div>
+
                     <div class="row mb-3">
                         <div class="col">
                             <label for="update_appointment_time" class="form-label">Appointment Time</label>
@@ -176,12 +280,96 @@
                             <input type="date" class="form-control" id="update_appointment_date" name="appointment_date" required>
                         </div>
                     </div>
+
                     <button type="submit" class="btn btn-primary">Update</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<!-- View Walk-in Appointment Modal -->
+<div class="modal fade" id="viewWalkinModal" tabindex="-1" aria-labelledby="viewWalkinModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewWalkinModalLabel">View Walk-in Appointment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="viewWalkinForm">
+                    <input type="hidden" id="view_customer_id" name="customer_id">
+
+                    <div class="mb-3">
+                        <label for="view_firstname" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="view_firstname" name="firstname" placeholder="First Name" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="view_lastname" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="view_lastname" name="lastname" placeholder="Last Name" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="view_phoneNumber" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="view_phoneNumber" name="phoneNumber" placeholder="Phone Number" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="view_emailAddress" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="view_emailAddress" name="emailAddress" placeholder="Email Address" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="view_repairdetails" class="form-label">Repair Details</label>
+                        <textarea class="form-control" id="view_repairdetails" name="repairdetails" rows="3" placeholder="Repair Details" readonly></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="view_carmodel" class="form-label">Car Model</label>
+                        <input type="text" class="form-control" id="view_carmodel" name="carmodel" placeholder="Car Model" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="view_service_type" class="form-label">Service Type</label>
+                        <input type="text" class="form-control" id="view_service_type" name="service_type" placeholder="Service Type" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="view_total_payable" class="form-label">Total Payable</label>
+                        <input type="number" step="0.01" class="form-control" id="view_total_payable" name="total_payable" placeholder="Total Payable" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="view_payment_type" class="form-label">Payment Type</label>
+                        <input type="text" class="form-control" id="view_payment_type" name="payment_type" placeholder="Payment Type" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="view_payment_status" class="form-label">Payment Status</label>
+                        <input type="text" class="form-control" id="view_payment_status" name="payment_status" placeholder="Payment Status" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="view_appointment_time" class="form-label">Appointment Time</label>
+                        <input type="time" class="form-control" id="view_appointment_time" name="appointment_time" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="view_appointment_date" class="form-label">Appointment Date</label>
+                        <input type="date" class="form-control" id="view_appointment_date" name="appointment_date" readonly>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteWalkinModal" tabindex="-1" aria-labelledby="deleteWalkinModalLabel" aria-hidden="true">
