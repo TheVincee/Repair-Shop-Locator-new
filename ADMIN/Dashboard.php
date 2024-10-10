@@ -407,7 +407,7 @@
     <div class="modal-content">
         <span class="close" id="editCloseBtn">&times;</span>
         <h2>Edit Appointment Details</h2>
-        
+
         <p><strong>Customer ID:</strong> <span id="editCustomerId">N/A</span></p>
         <p><strong>First Name:</strong> <span id="editFirstName">N/A</span></p>
         <p><strong>Last Name:</strong> <span id="editLastName">N/A</span></p>
@@ -425,9 +425,9 @@
         <p><strong>Payment Type:</strong> <span id="editPaymentType">N/A</span></p>
 
         <form id="editPaymentForm" action="#" method="POST">
-            <input type="hidden" id="editCustomerIdInput" />
+            <input type="hidden" id="editCustomerIdInput" name="customer_id" />
             <label for="editPaymentStatusInput">Payment Status:</label>
-            <select id="editPaymentStatusInput" required>
+            <select id="editPaymentStatusInput" name="payment_status" required>
                 <option value="">Select Payment Status</option>
                 <option value="Paid">Paid</option>
                 <option value="Not Paid">Not Paid</option>
@@ -436,6 +436,7 @@
         </form>
     </div>
 </div>
+
 
 
 
@@ -543,7 +544,7 @@
                     setTimeout(() => {
                         modalOverlay.style.display = 'none';
                     }, 300);
-                    fetchAppointments();
+                    fetchAppointments(); // Refresh the table to reflect changes
                 } else {
                     alert('Error updating status: ' + data.error);
                 }
@@ -552,18 +553,23 @@
         });
     }
 
-    // Fetch appointments and handle view/edit button clicks
-    function fetchAppointments() {
-        $.ajax({
-            url: 'fetch_appointment_details.php',
-            method: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                $('#appointments-tbody').empty();
+   // Fetch appointments and handle view/edit button clicks
+// Fetch appointments and handle view/edit button clicks
+function fetchAppointments() {
+    $.ajax({
+        url: 'fetch_appointment_details.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            $('#appointments-tbody').empty(); // Clear the table body
 
-                if (data.length > 0) {
-                    data.forEach(function(appointment) {
-                        const row = $('<tr>');
+            if (data.length > 0) {
+                data.forEach(function(appointment) {
+                    // Only append to the table if the status is not 'Completed' or any status that should not display
+                    if (appointment.Status !== 'Completed') {
+                        const row = $('<tr>').attr('id', `row-${appointment.customer_id}`); // Set ID for row
+
+                        // Append cells with appointment data
                         row.append($('<td>').text(appointment.customer_id));
                         row.append($('<td>').text(appointment.firstname));
                         row.append($('<td class="hide">').text(appointment.lastname));
@@ -577,46 +583,59 @@
                         row.append($('<td>').text(appointment.appointment_date));
                         row.append($('<td>').text(appointment.Status));
                         row.append($('<td>').text(appointment.service_type));
-                        row.append($('<td>').text("₱" + appointment.total_payment));
-                        row.append($('<td>').text(appointment.payment_type));
-                        row.append($('<td>').text(appointment.status_payment || 'Not yet Paid'));
 
+                        // Convert total_payment to number and format it
+                        const totalPayment = Number(appointment.total_payment); // Convert to number
+                        row.append($('<td>').text("₱" + totalPayment.toFixed(2))); // Format total payment
+
+                        row.append($('<td>').text(appointment.payment_type));
+                        row.append($('<td>').text(appointment.payment_status || 'Not yet Paid')); // Default message if no payment status
+
+                        // Create action buttons
                         const actionCell = $('<td>');
+
                         const editButton = $('<button>')
                             .addClass('edit-btn')
                             .text('Edit')
                             .attr('data-id', appointment.customer_id)
                             .on('click', () => showEditModal(appointment.customer_id));
-                        actionCell.append(editButton);
-
+                            
                         const viewButton = $('<button>')
                             .addClass('view-btn')
                             .text('View')
                             .attr('data-id', appointment.customer_id)
                             .on('click', () => showModal(appointment.customer_id));
-                        actionCell.append(viewButton);
 
+                        // Append buttons to action cell
+                        actionCell.append(editButton).append(viewButton);
                         row.append(actionCell);
+
+                        // Append the completed row to the table body
                         $('#appointments-tbody').append(row);
-                    });
-                } else {
-                    $('#appointments-tbody').append($('<tr>').append($('<td colspan="16">').text('No pending appointments found.')));
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching data:', error);
+                    }
+                });
+            } else {
+                $('#appointments-tbody').append($('<tr>').append($('<td colspan="16">').text('No pending appointments found.')));
             }
-        });
-    }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching data:', error);
+        }
+    });
+}
 
-    fetchAppointments(); // Initial fetch of appointments
 
-    // Show edit modal with customer data
+
+    // Initial fetch of appointments
+    fetchAppointments(); 
+
+    // Function to show edit modal with customer data
     function showEditModal(customerId) {
     fetch(`view_and_edit_payment.php?customer_id=${customerId}`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                // Populate modal fields with fetched data
                 $('#editCustomerId').text(data.data.customer_id || 'N/A');
                 $('#editFirstName').text(data.data.firstname || 'N/A');
                 $('#editLastName').text(data.data.lastname || 'N/A');
@@ -632,9 +651,18 @@
                 $('#editServiceType').text(data.data.service_type || 'N/A');
                 $('#editTotalPayment').text(data.data.total_payment || '₱0.00');
                 $('#editPaymentType').text(data.data.payment_type || 'N/A');
+
+                // Set payment status if it exists in the data
+                if (data.data.payment_status) {
+                    $('#editPaymentStatusInput').val(data.data.payment_status); // Set to existing value
+                    $('#editPaymentStatusDisplay').text(data.data.payment_status); // Display the status
+                } else {
+                    $('#editPaymentStatusInput').val(''); // Clear input if no status
+                    $('#editPaymentStatusDisplay').text(''); // Clear display if no status
+                }
+
                 $('#editCustomerIdInput').val(data.data.customer_id);
-                $('#editPaymentStatusInput').val(data.data.payment_status || 'Paid'); // Ensure payment_status is retrieved correctly
-                $('#editModal').show();
+                $('#editModal').show(); // Show the modal
             } else {
                 alert(data.error || 'Error fetching customer data.');
             }
@@ -643,54 +671,56 @@
 }
 
 // Close the edit modal
-$('#editCloseBtn').on('click', () => $('#editModal').hide());
-$(window).on('click', event => {
-    if ($(event.target).is('#editModal')) {
-        $('#editModal').hide();
-    }
-});
-
-// Handle form submission for updating the payment status
-$('#editPaymentForm').on('submit', function (event) {
-    event.preventDefault(); // Prevent default form submission
+// Update payment status and clear the display after submission
+$('#editPaymentForm').on('submit', function(event) {
+    event.preventDefault();
 
     const customerId = $('#editCustomerIdInput').val();
     const paymentStatus = $('#editPaymentStatusInput').val();
 
-    // Check if customerId is not empty
     if (!customerId) {
         alert('Customer ID is required.');
         return;
     }
 
+    const dataToSend = { customer_id: customerId };
+    if (paymentStatus === 'Paid') {
+        dataToSend.payment_status = paymentStatus;
+    }
+
     $.ajax({
-        url: 'view_and_edit_payment.php', // The PHP file to handle the update
+        url: 'view_and_edit_payment.php',
         type: 'POST',
-        data: {
-            customer_id: customerId,
-            payment_status: paymentStatus // Update to payment_status
-        },
+        data: dataToSend,
         dataType: 'json',
-        success: function (data) {
+        success: function(data) {
             if (data.success) {
                 alert('Payment status updated successfully!');
-                fetchAppointments(); // Refresh the appointments table
-                $('#editModal').hide(); // Close the modal
+                
+                // Clear payment status field if "Paid" was selected
+                if (paymentStatus === 'Paid') {
+                    $('#editPaymentStatusInput').val(''); // Clear input field
+                }
+
+                $('#editPaymentStatusDisplay').text('');
+
+                // Clear the appointment row from the table
+                $(`#row-${customerId}`).remove(); // Assuming your row ID is in the format row-{customerId}
+
+                $('#editModal').fadeOut(200); // Hide the edit modal
             } else {
-                alert('Error updating payment: ' + (data.error || 'Unknown error'));
+                alert('Error updating payment status: ' + data.error);
             }
         },
-        error: function (xhr, status, error) {
-            console.error('AJAX error:', error);
-            alert('Error updating payment: ' + error);
+        error: function(xhr, status, error) {
+            console.error('Error updating payment status:', error);
         }
     });
 });
 
-
-
-
+    // Additional event handlers for other buttons/modal actions can go here
 });
+
 
 
 
