@@ -492,66 +492,75 @@
     const form = document.getElementById('appointment-form');
 
     // Function to show modal with customer details
-    function showModal(customerId) {
-        fetch(`fetch_customer.php?customer_id=${customerId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (!data.error) {
-                    document.getElementById('customer-id').value = data.customer_id;
-                    document.getElementById('status-dropdown').value = data.Status;
-                    modalOverlay.style.display = 'flex';
-                    setTimeout(() => {
-                        modalOverlay.classList.add('show');
-                    }, 10);
-                } else {
-                    alert(data.error);
-                }
+ // Function to show modal with customer details
+function showModal(customerId) {
+    fetch(`fetch_customer.php?customer_id=${customerId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (!data.error) {
+                document.getElementById('customer-id').value = data.customer_id;
+                document.getElementById('status-dropdown').value = data.Status;
+                modalOverlay.style.display = 'flex';
+                setTimeout(() => {
+                    modalOverlay.classList.add('show');
+                }, 10);
+            } else {
+                alert(data.error);
+            }
+        })
+        .catch(error => console.error('Error fetching customer data:', error));
+}
+
+// Function to clear modal fields
+function clearModalFields() {
+    document.getElementById('customer-id').value = '';
+    document.getElementById('status-dropdown').value = '';
+}
+
+// Close the modal when clicking the close button
+if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+        modalOverlay.classList.remove('show');
+        setTimeout(() => {
+            modalOverlay.style.display = 'none';
+            clearModalFields(); // Clear fields when closing
+        }, 300);
+    });
+}
+
+// Handle form submission for updating appointment status
+if (form) {
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const customerId = document.getElementById('customer-id').value;
+        const status = document.getElementById('status-dropdown').value;
+
+        fetch('update_status.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                'customer_id': customerId,
+                'status': status
             })
-            .catch(error => console.error('Error fetching customer data:', error));
-    }
-
-    // Close the modal when clicking the close button
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            modalOverlay.classList.remove('show');
-            setTimeout(() => {
-                modalOverlay.style.display = 'none';
-            }, 300);
-        });
-    }
-
-    // Handle form submission for updating appointment status
-    if (form) {
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const customerId = document.getElementById('customer-id').value;
-            const status = document.getElementById('status-dropdown').value;
-
-            fetch('update_status.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({
-                    'customer_id': customerId,
-                    'status': status
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Status updated successfully!');
-                    modalOverlay.classList.remove('show');
-                    setTimeout(() => {
-                        modalOverlay.style.display = 'none';
-                    }, 300);
-                    fetchAppointments(); // Refresh the table to reflect changes
-                } else {
-                    alert('Error updating status: ' + data.error);
-                }
-            })
-            .catch(error => console.error('Error updating status:', error));
-        });
-    }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Status updated successfully!');
+                modalOverlay.classList.remove('show');
+                setTimeout(() => {
+                    modalOverlay.style.display = 'none';
+                    clearModalFields(); // Clear fields after successful submission
+                }, 300);
+                fetchAppointments(); // Refresh the table to reflect changes
+            } else {
+                alert('Error updating status: ' + data.error);
+            }
+        })
+        .catch(error => console.error('Error updating status:', error));
+    });
+}
 
    // Fetch appointments and handle view/edit button clicks
 // Fetch appointments and handle view/edit button clicks
@@ -565,7 +574,7 @@ function fetchAppointments() {
 
             if (data.length > 0) {
                 data.forEach(function(appointment) {
-                    // Only append to the table if the status is not 'Completed' or any status that should not display
+                    // Only append appointments if the status is not 'Completed'
                     if (appointment.Status !== 'Completed') {
                         const row = $('<tr>').attr('id', `row-${appointment.customer_id}`); // Set ID for row
 
@@ -585,32 +594,27 @@ function fetchAppointments() {
                         row.append($('<td>').text(appointment.service_type));
 
                         // Convert total_payment to number and format it
-                        const totalPayment = Number(appointment.total_payment); // Convert to number
-                        row.append($('<td>').text("₱" + totalPayment.toFixed(2))); // Format total payment
+                        const totalPayment = Number(appointment.total_payment);
+                        row.append($('<td>').text("₱" + totalPayment.toFixed(2)));
 
                         row.append($('<td>').text(appointment.payment_type));
-                        row.append($('<td>').text(appointment.payment_status || 'Not yet Paid')); // Default message if no payment status
+                        row.append($('<td>').text(appointment.payment_status || 'Not yet Paid'));
 
-                        // Create action buttons
+                        // Action buttons for Edit and View
                         const actionCell = $('<td>');
-
                         const editButton = $('<button>')
                             .addClass('edit-btn')
                             .text('Edit')
                             .attr('data-id', appointment.customer_id)
                             .on('click', () => showEditModal(appointment.customer_id));
-                            
                         const viewButton = $('<button>')
                             .addClass('view-btn')
                             .text('View')
                             .attr('data-id', appointment.customer_id)
                             .on('click', () => showModal(appointment.customer_id));
 
-                        // Append buttons to action cell
                         actionCell.append(editButton).append(viewButton);
                         row.append(actionCell);
-
-                        // Append the completed row to the table body
                         $('#appointments-tbody').append(row);
                     }
                 });
@@ -623,6 +627,7 @@ function fetchAppointments() {
         }
     });
 }
+
 
 
 
@@ -670,13 +675,12 @@ function fetchAppointments() {
         .catch(error => console.error('Error fetching customer data for edit:', error));
 }
 
-// Close the edit modal
 // Update payment status and clear the display after submission
 $('#editPaymentForm').on('submit', function(event) {
-    event.preventDefault();
+    event.preventDefault(); // Prevent default form submission
 
-    const customerId = $('#editCustomerIdInput').val();
-    const paymentStatus = $('#editPaymentStatusInput').val();
+    const customerId = $('#editCustomerIdInput').val(); // Get customer ID
+    const paymentStatus = $('#editPaymentStatusInput').val(); // Get selected payment status
 
     if (!customerId) {
         alert('Customer ID is required.');
@@ -685,27 +689,32 @@ $('#editPaymentForm').on('submit', function(event) {
 
     const dataToSend = { customer_id: customerId };
     if (paymentStatus === 'Paid') {
-        dataToSend.payment_status = paymentStatus;
+        dataToSend.payment_status = paymentStatus; // Add payment status to data if 'Paid' is selected
     }
 
     $.ajax({
-        url: 'view_and_edit_payment.php',
+        url: 'view_and_edit_payment.php', // Your PHP endpoint to update the payment status
         type: 'POST',
         data: dataToSend,
         dataType: 'json',
         success: function(data) {
             if (data.success) {
                 alert('Payment status updated successfully!');
-                
+
                 // Clear payment status field if "Paid" was selected
                 if (paymentStatus === 'Paid') {
                     $('#editPaymentStatusInput').val(''); // Clear input field
                 }
 
-                $('#editPaymentStatusDisplay').text('');
+                $('#editPaymentStatusDisplay').text(''); // Clear displayed status
 
-                // Clear the appointment row from the table
-                $(`#row-${customerId}`).remove(); // Assuming your row ID is in the format row-{customerId}
+                // Hide the row corresponding to the updated appointment without deleting it from the database
+                $(`#row-${customerId}`).hide(); // Hide the row visually
+
+                // Check if there are still appointments displayed
+                if ($('#appointments-tbody').children(':visible').length === 0) {
+                    $('#appointments-tbody').append($('<tr>').append($('<td colspan="16">').text('No pending appointments found.')));
+                }
 
                 $('#editModal').fadeOut(200); // Hide the edit modal
             } else {

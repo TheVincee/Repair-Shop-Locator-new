@@ -74,26 +74,34 @@
     </div>
 
     <div class="table-container">
-        <h2 class="mb-4 text-center">Admin Walk-in Appointments (Pending)</h2>
-        <table class="table table-hover">
-            <thead class="table-light">
-                <tr>
-                    <th scope="col">Customer ID</th>
-                    <th scope="col">First Name</th>
-                    <th scope="col">Phone Number</th>
-                    <th scope="col">Email Address</th>
-                    <th scope="col">Repair Details</th>
-                    <th scope="col">Appointment Time</th>
-                    <th scope="col">Appointment Date</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Data will be populated here by AJAX -->
-            </tbody>
-        </table>
-    </div>
+    <h2 class="mb-4 text-center">Admin Walk-in Appointments (Pending)</h2>
+    <table class="table table-hover">
+        <thead class="table-light">
+            <tr>
+            <th scope="col">Customer ID</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Email Address</th>
+                <th scope="col">Repair Details</th>
+                <th scope="col">Appointment Time</th> <!-- Hidden column -->
+                <th scope="col">Appointment Date</th> <!-- Hidden column -->
+                <th scope="col">Car Model</th> <!-- Hidden column -->
+                <th scope="col">Service Type</th> <!-- Hidden column -->
+                <th scope="col">Status</th>
+                <th scope="col">Created At</th>
+                <th scope="col">Repair Details (Detailed)</th>
+                <th scope="col">Total Payable</th>
+                <th scope="col">Payment Type</th>
+                <th scope="col">Payment Status</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be populated here by AJAX -->
+        </tbody>
+    </table>
+</div>
+
 </div>
 
 <!-- Add Walk-in Appointment Modal -->
@@ -203,10 +211,7 @@
                             <label for="update_firstname" class="form-label">First Name</label>
                             <input type="text" class="form-control" id="update_firstname" name="firstname" placeholder="First Name" required>
                         </div>
-                        <div class="col">
-                            <label for="update_lastname" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="update_lastname" name="lastname" placeholder="Last Name" required>
-                        </div>
+                        
                     </div>
 
                     <div class="row mb-3">
@@ -304,12 +309,6 @@
                         <label for="view_firstname" class="form-label">First Name</label>
                         <input type="text" class="form-control" id="view_firstname" name="firstname" placeholder="First Name" readonly>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="view_lastname" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="view_lastname" name="lastname" placeholder="Last Name" readonly>
-                    </div>
-
                     <div class="mb-3">
                         <label for="view_phoneNumber" class="form-label">Phone Number</label>
                         <input type="text" class="form-control" id="view_phoneNumber" name="phoneNumber" placeholder="Phone Number" readonly>
@@ -408,6 +407,7 @@ $(document).ready(function() {
             url: 'add_walkin_appointment.php',
             method: 'POST',
             data: $(this).serialize(),
+            dataType: 'json', // Expecting JSON response
             success: function(response) {
                 if (response.status === 'success') {
                     $('#addWalkinModal').modal('hide');
@@ -418,6 +418,7 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 console.error('AJAX error:', status, error);
+                console.error('Response:', xhr.responseText); // Log the server response for debugging
             }
         });
     });
@@ -429,6 +430,7 @@ $(document).ready(function() {
             url: 'update_walkin_appointment.php',
             method: 'POST',
             data: $(this).serialize(),
+            dataType: 'json', // Expecting JSON response
             success: function(response) {
                 if (response.status === 'success') {
                     $('#updateWalkinModal').modal('hide');
@@ -439,11 +441,11 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 console.error('AJAX error:', status, error);
+                console.error('Response:', xhr.responseText); // Log the server response for debugging
             }
         });
     });
 
-    $(document).ready(function() {
     // Delete appointment button click
     $('#confirmDeleteButton').click(function() {
         const customerId = $('#delete_customer_id').val();
@@ -453,99 +455,117 @@ $(document).ready(function() {
             data: { customer_id: customerId },
             dataType: 'json',
             success: function(response) {
-                console.log('Response:', response); // Log the response to check its structure
-                if (response.success) {
+                if (response.status === 'success') {
                     $('#deleteWalkinModal').modal('hide');
                     fetchAppointments();
                 } else {
-                    console.error('Failed to delete appointment:', response.error || 'Unknown error');
+                    console.error('Failed to delete appointment:', response.message);
                 }
             },
             error: function(xhr, status, error) {
                 console.error('AJAX error:', status, error);
-                console.error('Response:', xhr.responseText); // Log the response text
+                console.error('Response:', xhr.responseText); // Log the server response for debugging
             }
         });
     });
-});
 
-});
+    // Function to fetch appointments
+    function fetchAppointments() {
+        $.ajax({
+            url: 'fetch_walkin_appointments.php',
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                const tbody = $('tbody');
+                tbody.empty(); // Clear the existing table data
 
+                if (Array.isArray(response.data)) {
+                    response.data.forEach(appointment => {
+                        const row = `
+                            <tr>
+                                <td>${appointment.customer_id}</td>
+                                <td>${appointment.firstname}</td>
+                                <td>${appointment.phoneNumber}</td>
+                                <td>${appointment.emailAddress}</td>
+                                <td>${appointment.repairdetails}</td>
+                                <td>${appointment.appointment_time}</td>
+                                <td>${appointment.appointment_date}</td>
+                                <td>${appointment.Status}</td>
+                                <td>${appointment.created_at}</td>
+                                <td>${appointment.repair_details}</td>
+                                <td>${appointment.carmodel}</td>
+                                <td>${appointment.service_type}</td>
+                                <td>${appointment.total_payable}</td>
+                                <td>${appointment.payment_type}</td>
+                                <td>${appointment.payment_status}</td>
+                                <td class="action-buttons">
+                                    <button class="btn btn-update btn-sm" data-id="${appointment.customer_id}" data-bs-toggle="modal" data-bs-target="#updateWalkinModal"><i class="fas fa-edit"></i> Update</button>
+                                    <button class="btn btn-delete btn-sm" data-id="${appointment.customer_id}" data-bs-toggle="modal" data-bs-target="#deleteWalkinModal"><i class="fas fa-trash"></i> Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
 
-function fetchAppointments() {
-    $.ajax({
-        url: 'fetch_walkin_appointments.php',
-        method: 'GET',
-        dataType: 'json',
-        success: function(response) {
-            console.log(response); // Log the response to check its structure
-            const tbody = $('tbody');
-            tbody.empty(); // Clear the existing table data
-
-            if (Array.isArray(response)) {
-                response.forEach(appointment => {
-                    const row = `
-                        <tr>
-                            <td>${appointment.customer_id}</td>
-                            <td>${appointment.firstname}</td>
-                            <td>${appointment.phoneNumber}</td>
-                            <td>${appointment.emailAddress}</td>
-                            <td>${appointment.repairdetails}</td>
-                            <td>${appointment.appointment_time}</td>
-                            <td>${appointment.appointment_date}</td>
-                            <td>${appointment.Status}</td>
-                            <td class="action-buttons">
-                                <button class="btn btn-update btn-sm" data-id="${appointment.customer_id}" data-bs-toggle="modal" data-bs-target="#updateWalkinModal"><i class="fas fa-edit"></i> Update</button>
-                                <button class="btn btn-delete btn-sm" data-id="${appointment.customer_id}" data-bs-toggle="modal" data-bs-target="#deleteWalkinModal"><i class="fas fa-trash"></i> Delete</button>
-                            </td>
-                        </tr>
-                    `;
-                    tbody.append(row);
-                });
-
-                // Bind update and delete button click events
-                $('.btn-update').click(function() {
-    const customerId = $(this).data('id');
-    $.ajax({
-        url: 'get_walkin_appointment.php',
-        method: 'POST',
-        data: { customer_id: customerId },
-        dataType: 'json',
-        success: function(response) {
-            console.log(response); // Log the response to see its structure
-            if (response.status === 'success') {
-                const appointment = response.data;
-                $('#update_customer_id').val(appointment.customer_id);
-                $('#update_firstname').val(appointment.firstname);
-                $('#update_phoneNumber').val(appointment.phoneNumber);
-                $('#update_emailAddress').val(appointment.emailAddress);
-                $('#update_repairdetails').val(appointment.repairdetails);
-                $('#update_appointment_time').val(appointment.appointment_time);
-                $('#update_appointment_date').val(appointment.appointment_date);
-            } else {
-                console.error('Failed to fetch appointment details:', response.message);
+                    // Bind update and delete button click events
+                    bindUpdateAndDeleteButtons();
+                } else {
+                    console.error('Invalid response structure:', response);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX error:', status, error);
+                console.error('Response:', xhr.responseText); // Log the server response for debugging
             }
-        },
-        error: function(xhr, status, error) {
-            console.error('AJAX error:', status, error);
-        }
-    });
+        });
+    }
+
+    // Function to bind update and delete button click events
+    function bindUpdateAndDeleteButtons() {
+        $('.btn-update').click(function() {
+            const customerId = $(this).data('id');
+            $.ajax({
+                url: 'get_walkin_appointment.php',
+                method: 'POST',
+                data: { customer_id: customerId },
+                dataType: 'json',
+                success: function(response) {
+                    console.log("Response from server:", response); // For debugging
+                    if (response.status === 'success') {
+                        const appointment = response.data;
+                        $('#update_customer_id').val(appointment.customer_id);
+                        $('#update_firstname').val(appointment.firstname);
+                        $('#update_phoneNumber').val(appointment.phoneNumber);
+                        $('#update_emailAddress').val(appointment.emailAddress);
+                        $('#update_repairdetails').val(appointment.repairdetails);
+                        $('#update_appointment_time').val(appointment.appointment_time);
+                        $('#update_appointment_date').val(appointment.appointment_date);
+                        $('#update_created_at').val(appointment.created_at); // If you want to display this field
+                        $('#update_repair_details').val(appointment.repair_details); // Include this field
+                        $('#update_carmodel').val(appointment.carmodel); // Include this field
+                        $('#update_service_type').val(appointment.service_type); // Include this field
+                        $('#update_total_payable').val(appointment.total_payable); // Include this field
+                        $('#update_payment_type').val(appointment.payment_type); // Include this field
+                        $('#update_payment_status').val(appointment.payment_status); // Include this field
+                    } else {
+                        console.error('Failed to fetch appointment details:', response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', status, error);
+                    console.error('Response:', xhr.responseText); // Log the server response for debugging
+                }
+            });
+        });
+
+        $('.btn-delete').click(function() {
+            const customerId = $(this).data('id');
+            $('#delete_customer_id').val(customerId);
+        });
+    }
 });
 
 
-                $('.btn-delete').click(function() {
-                    const customerId = $(this).data('id');
-                    $('#delete_customer_id').val(customerId);
-                });
-            } else {
-                console.error('Invalid response structure:', response);
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('AJAX error:', status, error);
-        }
-    });
-}
 </script>
 <script>
     

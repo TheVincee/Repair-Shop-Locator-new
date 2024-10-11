@@ -48,12 +48,12 @@
       <li>
       
       <li>
-        <a href="#">
+        <a href="Ratings.php">
           <i class='bx bx-line-chart' ></i>
           <span class="link_name">Ratings</span>
         </a>
         <ul class="sub-menu blank">
-          <li><a class="link_name" href="#">Ratings</a></li>
+          <li><a class="link_name" href="Ratings.php">Ratings</a></li>
         </ul>
       </li>
       <li>
@@ -85,6 +85,7 @@
           <li><a class="link_name" href="#">Setting</a></li>
         </ul>
       </li>
+      
       <li>
     <div class="profile-details">
       <div class="profile-content">

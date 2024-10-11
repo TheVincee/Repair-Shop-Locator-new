@@ -4,24 +4,33 @@ require 'db_connection.php'; // Include your database connection file
 
 header('Content-Type: application/json'); // Set the content type to JSON
 
-// Prepare and execute the SQL query to fetch all walk-in appointments
-$query = "SELECT * FROM walkin_appointments";
-$result = $conn->query($query);
+try {
+    // Prepare the SQL query to fetch all walk-in appointments
+    $query = "SELECT * FROM walkin_appointments";
+    $stmt = $conn->prepare($query); // Use prepared statements
+    $stmt->execute();
 
-// Check if the query was successful
-if ($result) {
-    $appointments = [];
+    // Get the result set from the prepared statement
+    $result = $stmt->get_result();
 
-    // Fetch all rows as an associative array
-    while ($row = $result->fetch_assoc()) {
-        $appointments[] = $row;
+    // Check if any appointments were found
+    if ($result->num_rows > 0) {
+        $appointments = [];
+
+        // Fetch all rows as an associative array
+        while ($row = $result->fetch_assoc()) {
+            $appointments[] = $row;
+        }
+
+        // Output the results in JSON format
+        echo json_encode(['status' => 'success', 'data' => $appointments]);
+    } else {
+        // If no appointments were found, return an empty array
+        echo json_encode(['status' => 'success', 'data' => []]);
     }
-
-    // Output the results in JSON format
-    echo json_encode($appointments);
-} else {
+} catch (Exception $e) {
     // If there was an error with the query, output an error message
-    echo json_encode(['status' => 'error', 'message' => 'Error fetching data']);
+    echo json_encode(['status' => 'error', 'message' => 'Error fetching data: ' . $e->getMessage()]);
 }
 
 // Close the database connection
