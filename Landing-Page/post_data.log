@@ -1,0 +1,17 @@
+Array
+(
+    [customer_id] => 65
+    [firstname] => asd
+    [lastname] => asd
+    [address] => Sitio Cabaw
+    [phoneNumber] => 78787
+    [emailAddress] => estado10@sakurape.com
+    [carmake] => VEGAS PRO
+    [carmodel] => VEGAS
+    [repairdetails] => asdsad
+    [appointment_date] => 2024-10-24
+    [appointment_time] => 22:45:00
+    [service_type] => Oil Change
+    [total_payment] => 2005.00
+    [payment_type] => Cash
+)

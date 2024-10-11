@@ -201,11 +201,12 @@ if (mysqli_num_rows($result) > 0) {
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col">
-                            <label for="totalPaymentModal" class="form-label">Total Payment (₱)</label>
-                            <input type="text" class="form-control" id="totalPaymentModal" name="totalPayment" placeholder="Enter total payment in Peso" readonly>
-                        </div>
-                    </div>
+    <div class="col">
+        <label for="totalPaymentModal" class="form-label">Total Payment (₱)</label>
+        <input type="text" class="form-control" id="totalPaymentModal" name="total_payment" placeholder="Enter total payment in Peso" readonly>
+    </div>
+</div>
+
                     <div class="row mb-3">
                         <div class="col">
                             <label for="paymentTypeModal" class="form-label">Payment Type</label>
@@ -224,8 +225,9 @@ if (mysqli_num_rows($result) > 0) {
     </div>
 </div><!-- Add Customer Modal -->
 
-    <!-- Update Customer Modal -->
-    <div class="modal fade" id="UpdateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+   <!-- Update Customer Modal -->
+<!-- Update Customer Modal -->
+<div class="modal fade" id="UpdateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -248,11 +250,10 @@ if (mysqli_num_rows($result) > 0) {
                     </div>
 
                     <div class="row mb-3">
-                    <div class="form-group">
-    <label for="updateAddress">Address</label>
-    <input type="text" class="form-control" id="updateAddress" name="address" required>
-</div>
-
+                        <div class="form-group">
+                            <label for="updateAddress">Address</label>
+                            <input type="text" class="form-control" id="updateAddress" name="address" required>
+                        </div>
                         <div class="col">
                             <label for="updatePhoneNumber" class="form-label">Phone Number</label>
                             <input type="tel" class="form-control" id="updatePhoneNumber" name="phoneNumber" required>
@@ -310,12 +311,12 @@ if (mysqli_num_rows($result) > 0) {
                             </select>
                         </div>
                     </div>
+                    <div class="form-group">
+                            <label for="updateTotalPayment">Total Payment (₱)</label>
+                            <input type="text" class="form-control" id="updateTotalPayment" name="total_payment" required>
+                    </div>
 
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label for="updateTotalPayment" class="form-label">Total Payment</label>
-                            <input type="number" class="form-control" id="updateTotalPayment" name="total_payment" disabled required>
-                        </div>
+                    
                         <div class="col">
                             <label for="updatePaymentType" class="form-label">Payment Type</label>
                             <select class="form-select" id="updatePaymentType" name="payment_type" required>
@@ -333,6 +334,8 @@ if (mysqli_num_rows($result) > 0) {
         </div>
     </div>
 </div>
+
+
 
 <!-- View Customer Modal -->
 <div class="modal fade" id="viewCustomerModal" tabindex="-1" aria-labelledby="viewCustomerModalLabel" aria-hidden="true">
@@ -407,35 +410,30 @@ if (mysqli_num_rows($result) > 0) {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
- $(document).ready(function () {
+<script>
+$(document).ready(function () {
     // Handle form submission for adding a customer
     $("#customerForm").on("submit", function (e) {
-        e.preventDefault(); // Prevent the default form submission
-        const $submitButton = $(this).find("button[type='submit']");
+        e.preventDefault();
+        const $submitButton = $(this).closest('.modal').find("button[type='submit']");
         $submitButton.prop("disabled", true).text("Submitting...");
 
         $.ajax({
             type: "POST",
-            url: "insert.php", // URL of the server-side script
-            data: $(this).serialize(), // Serialize the form data
-            dataType: "json", // Expect JSON response from the server
+            url: "insert.php",
+            data: $(this).serialize(),
+            dataType: "json",
             success: function (response) {
-                console.log("Response from server:", response); // Log the response
-
-                // Check if the response contains a valid status
                 if (response && response.status === 'success') {
-                    $("#exampleModal").modal("hide"); // Hide modal on success
+                    $("#exampleModal").modal("hide");
                     alert(response.message || "Customer added successfully!");
-                    $("#customerForm")[0].reset(); // Reset the form
-                    location.reload(); // Reload the page to show updated data
+                    $("#customerForm")[0].reset();
+                    location.reload(); // Reload to refresh the table
                 } else {
                     alert(response.message || "Failed to add the customer. Please check the input data and try again.");
                 }
             },
             error: function (xhr, status, error) {
-                console.error("AJAX Error:", error);
-                console.log("Response text:", xhr.responseText); // Log the response text for debugging
                 alert("An unexpected error occurred while adding the customer. Please try again later.");
             },
             complete: function () {
@@ -444,42 +442,37 @@ if (mysqli_num_rows($result) > 0) {
         });
     });
 
-    $(document).ready(function () {
     // Fetch and populate data when opening the update modal
     $('#UpdateModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var customerId = button.data('customer_id'); // Extract customer_id from data-* attributes
+        var button = $(event.relatedTarget);
+        var customerId = button.data('customer_id');
 
-        // Fetch customer details for the given customer_id
         $.ajax({
             type: "POST",
-            url: "Fetch.php", // URL for fetching customer details
+            url: "fetch.php",
             data: { customer_id: customerId },
             dataType: "json",
             success: function (response) {
-                console.log(response); // Log the response to verify data
                 if (response.error) {
-                    alert(response.error); // Display an error message if there's an issue
+                    alert(response.error);
                 } else {
-                    // Populate modal fields with fetched data
                     $('#updateCustomerId').val(response.customer_id);
                     $('#updateFirstName').val(response.firstname);
                     $('#updateLastName').val(response.lastname);
                     $('#updatePhoneNumber').val(response.phoneNumber);
                     $('#updateEmailAddress').val(response.emailAddress);
-                    $('#updateAddress').val(response.Address); // Use 'Address' with correct case
+                    $('#updateAddress').val(response.address);
                     $('#updateCarMake').val(response.carmake);
                     $('#updateCarModel').val(response.carmodel);
                     $('#updateRepairDetails').val(response.repairdetails);
                     $('#updateAppointmentDate').val(response.appointment_date);
                     $('#updateAppointmentTime').val(response.appointment_time);
-                    $('#updateServiceType').val(response.service_type); // New field
-                    $('#updateTotalPayment').val(response.total_payment); // New field
-                    $('#updatePaymentType').val(response.payment_type); // New field
+                    $('#updateServiceType').val(response.service_type);
+                    $('#updateTotalPayment').val(response.total_payment); // Ensure this is correct
+                    $('#updatePaymentType').val(response.payment_type);
                 }
             },
             error: function (xhr, status, error) {
-                console.error("An error occurred: " + error);
                 alert("An error occurred while fetching the customer data.");
             }
         });
@@ -487,56 +480,50 @@ if (mysqli_num_rows($result) > 0) {
 
     // Handle form submission for updating a customer
     $("#updateForm").on("submit", function (e) {
-        e.preventDefault(); // Prevent the default form submission
-        const $submitButton = $(this).find("button[type='submit']");
-        $submitButton.prop("disabled", true).text("Updating..."); // Disable the button
+        e.preventDefault();
+        const $submitButton = $(this).closest('.modal').find("button[type='submit']");
+        $submitButton.prop("disabled", true).text("Updating...");
 
         $.ajax({
             type: "POST",
-            url: "Update.php", // URL of the PHP script
-            data: $(this).serialize(), // Serialize the form data
-            dataType: "json", // Expect JSON response from the server
+            url: "update.php",
+            data: $(this).serialize(),
+            dataType: "json",
             success: function (response) {
                 if (response.status === 'success') {
-                    $("#UpdateModal").modal("hide"); // Hide modal on success
+                    $("#UpdateModal").modal("hide");
                     alert(response.message || "Customer updated successfully!");
-                    location.reload(); // Reload the page to show updated data
+                    location.reload(); // Refresh the table
                 } else {
                     alert(response.message || "Failed to update the customer. Please try again.");
                 }
             },
             error: function (xhr, status, error) {
-                console.error("An error occurred: " + error); // Log the error details
                 alert("An error occurred while updating the customer. Please try again.");
             },
             complete: function () {
-                // Re-enable the submit button after AJAX call completes
                 $submitButton.prop("disabled", false).text("Update");
             }
         });
     });
-});
-
 
     // Handle customer deletion
     window.deleteCustomer = function (customerId) {
         if (confirm("Are you sure you want to delete this customer?")) {
             $.ajax({
                 type: "POST",
-                url: "Delete.php", // URL for deleting customer
+                url: "delete.php",
                 data: { customer_id: customerId },
                 dataType: "json",
                 success: function (response) {
                     if (response.status === 'success') {
                         alert(response.message);
-                        location.reload(); // Reload the page to reflect changes
+                        location.reload(); // Refresh the table
                     } else {
                         alert(response.message || "Failed to delete the customer. Please try again.");
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.error("AJAX Error:", error);
-                    console.log("Response text:", xhr.responseText); // Log the error response for debugging
                     alert("An error occurred while deleting the customer. Please try again later.");
                 }
             });
@@ -547,11 +534,6 @@ if (mysqli_num_rows($result) > 0) {
     $('#viewCustomerModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var customerId = button.data('customer_id');
-
-        if (!customerId) {
-            console.error("No customer ID provided for view.");
-            return;
-        }
 
         $.ajax({
             type: "POST",
@@ -567,7 +549,7 @@ if (mysqli_num_rows($result) > 0) {
                     $('#viewLastName').text(response.lastname);
                     $('#viewPhone').text(response.phoneNumber);
                     $('#viewEmail').text(response.emailAddress);
-                    $('#viewAddress').text(response.address); // Add Address
+                    $('#viewAddress').text(response.address);
                     $('#viewCarMake').text(response.carmake);
                     $('#viewCarModel').text(response.carmodel);
                     $('#viewRepairDetails').text(response.repairdetails);
@@ -577,18 +559,17 @@ if (mysqli_num_rows($result) > 0) {
                     $('#viewServiceType').text(response.service_type);
                     $('#viewTotalPayment').text(response.total_payment);
                     $('#viewPaymentType').text(response.payment_type);
-                    $('#viewPaymentStatus').text(response.payment_status); // Add Payment Status
+                    $('#viewPaymentStatus').text(response.payment_status);
                 }
             },
             error: function (xhr, status, error) {
-                console.error("An error occurred: " + error);
-                console.log("Response text:", xhr.responseText); // Log the error response for debugging
                 alert("An unexpected error occurred while fetching the customer details.");
             }
         });
     });
 });
 
+</script>
 
 
     </script>
@@ -620,7 +601,7 @@ document.getElementById('serviceTypeModal').addEventListener('change', function(
 // Event listener for the Repair Details input
 document.getElementById('repairDetailsModal').addEventListener('input', function() {
     const repairDetails = this.value.toLowerCase();
-    let totalRepairCost = 5;
+    let totalRepairCost = 50;
 
     // Check for each repair keyword and add its cost to totalRepairCost
     for (const repair in repairCosts) {

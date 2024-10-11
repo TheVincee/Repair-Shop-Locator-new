@@ -2,6 +2,9 @@
 // Include database configuration file
 include('dbconfig.php'); // Ensure this file contains your database connection settings
 
+// Log incoming POST data for debugging
+file_put_contents('post_data.log', print_r($_POST, true)); // Log all incoming POST data
+
 // Check if the required data is set in the POST request
 if (isset($_POST['customer_id'], $_POST['firstname'], $_POST['lastname'], $_POST['address'], $_POST['phoneNumber'], $_POST['emailAddress'], $_POST['carmake'], $_POST['carmodel'], $_POST['repairdetails'], $_POST['appointment_date'], $_POST['appointment_time'], $_POST['service_type'], $_POST['total_payment'], $_POST['payment_type'])) {
 
@@ -43,7 +46,20 @@ if (isset($_POST['customer_id'], $_POST['firstname'], $_POST['lastname'], $_POST
     }
 } else {
     // Handle missing data in POST request
-    echo json_encode(['status' => 'error', 'message' => 'Invalid request. Required fields are missing.']);
+    $missing_fields = [];
+    $required_fields = ['customer_id', 'firstname', 'lastname', 'address', 'phoneNumber', 'emailAddress', 'carmake', 'carmodel', 'repairdetails', 'appointment_date', 'appointment_time', 'service_type', 'total_payment', 'payment_type'];
+
+    foreach ($required_fields as $field) {
+        if (!isset($_POST[$field])) {
+            $missing_fields[] = $field;
+        }
+    }
+
+    if (!empty($missing_fields)) {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid request. Missing fields: ' . implode(', ', $missing_fields)]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid request. Required fields are missing.']);
+    }
 }
 
 // Close the database connection

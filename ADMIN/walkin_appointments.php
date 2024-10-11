@@ -59,6 +59,10 @@
             gap: 0.5rem;
             justify-content: center;
         }
+        .hidden-column {
+    display: none;
+}
+
     </style>
 </head>
 <body>
@@ -78,18 +82,18 @@
     <table class="table table-hover">
         <thead class="table-light">
             <tr>
-            <th scope="col">Customer ID</th>
+                <th scope="col"class="hidden-column">Customer ID</th>
                 <th scope="col">First Name</th>
-                <th scope="col">Phone Number</th>
+                <th scope="col"class="hidden-column">Phone Number</th>
                 <th scope="col">Email Address</th>
-                <th scope="col">Repair Details</th>
-                <th scope="col">Appointment Time</th> <!-- Hidden column -->
+                <th scope="col" >Appointment Time</th> <!-- Hidden column -->
                 <th scope="col">Appointment Date</th> <!-- Hidden column -->
-                <th scope="col">Car Model</th> <!-- Hidden column -->
-                <th scope="col">Service Type</th> <!-- Hidden column -->
-                <th scope="col">Status</th>
-                <th scope="col">Created At</th>
-                <th scope="col">Repair Details (Detailed)</th>
+                <th scope="col" class="hidden-column">Car Model</th> <!-- Hidden column -->
+          
+                 <th scope="col">Status</th>
+            
+                <th scope="col">Repair Details</th>
+                      <th scope="col">Service Type</th>
                 <th scope="col">Total Payable</th>
                 <th scope="col">Payment Type</th>
                 <th scope="col">Payment Status</th>
@@ -102,7 +106,6 @@
     </table>
 </div>
 
-</div>
 
 <!-- Add Walk-in Appointment Modal -->
 <div class="modal fade" id="addWalkinModal" tabindex="-1" aria-labelledby="addWalkinModalLabel" aria-hidden="true">
@@ -370,25 +373,7 @@
 
 
 
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteWalkinModal" tabindex="-1" aria-labelledby="deleteWalkinModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteWalkinModalLabel">Confirm Deletion</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this appointment?</p>
-                <input type="hidden" id="delete_customer_id">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <!-- Bootstrap JS Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -407,7 +392,7 @@ $(document).ready(function() {
             url: 'add_walkin_appointment.php',
             method: 'POST',
             data: $(this).serialize(),
-            dataType: 'json', // Expecting JSON response
+            dataType: 'json',
             success: function(response) {
                 if (response.status === 'success') {
                     $('#addWalkinModal').modal('hide');
@@ -418,7 +403,7 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 console.error('AJAX error:', status, error);
-                console.error('Response:', xhr.responseText); // Log the server response for debugging
+                console.error('Response:', xhr.responseText);
             }
         });
     });
@@ -430,7 +415,7 @@ $(document).ready(function() {
             url: 'update_walkin_appointment.php',
             method: 'POST',
             data: $(this).serialize(),
-            dataType: 'json', // Expecting JSON response
+            dataType: 'json',
             success: function(response) {
                 if (response.status === 'success') {
                     $('#updateWalkinModal').modal('hide');
@@ -441,7 +426,7 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 console.error('AJAX error:', status, error);
-                console.error('Response:', xhr.responseText); // Log the server response for debugging
+                console.error('Response:', xhr.responseText);
             }
         });
     });
@@ -464,7 +449,7 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 console.error('AJAX error:', status, error);
-                console.error('Response:', xhr.responseText); // Log the server response for debugging
+                console.error('Response:', xhr.responseText);
             }
         });
     });
@@ -477,12 +462,12 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 const tbody = $('tbody');
-                tbody.empty(); // Clear the existing table data
+                tbody.empty();
 
-                if (Array.isArray(response.data)) {
+                if (response.status === 'success' && Array.isArray(response.data)) {
                     response.data.forEach(appointment => {
                         const row = `
-                            <tr>
+                            <tr id="row-${appointment.customer_id}">
                                 <td>${appointment.customer_id}</td>
                                 <td>${appointment.firstname}</td>
                                 <td>${appointment.phoneNumber}</td>
@@ -491,16 +476,14 @@ $(document).ready(function() {
                                 <td>${appointment.appointment_time}</td>
                                 <td>${appointment.appointment_date}</td>
                                 <td>${appointment.Status}</td>
-                                <td>${appointment.created_at}</td>
-                                <td>${appointment.repair_details}</td>
                                 <td>${appointment.carmodel}</td>
                                 <td>${appointment.service_type}</td>
                                 <td>${appointment.total_payable}</td>
                                 <td>${appointment.payment_type}</td>
                                 <td>${appointment.payment_status}</td>
-                                <td class="action-buttons">
-                                    <button class="btn btn-update btn-sm" data-id="${appointment.customer_id}" data-bs-toggle="modal" data-bs-target="#updateWalkinModal"><i class="fas fa-edit"></i> Update</button>
-                                    <button class="btn btn-delete btn-sm" data-id="${appointment.customer_id}" data-bs-toggle="modal" data-bs-target="#deleteWalkinModal"><i class="fas fa-trash"></i> Delete</button>
+                                <td>
+                                    <button class="btn btn-update" data-id="${appointment.customer_id}" data-bs-toggle="modal" data-bs-target="#updateWalkinModal">Update</button>
+                                    <button class="btn btn-delete" data-id="${appointment.customer_id}">Delete</button>
                                 </td>
                             </tr>
                         `;
@@ -510,12 +493,12 @@ $(document).ready(function() {
                     // Bind update and delete button click events
                     bindUpdateAndDeleteButtons();
                 } else {
-                    console.error('Invalid response structure:', response);
+                    console.error('No appointments found or invalid response:', response);
                 }
             },
             error: function(xhr, status, error) {
                 console.error('AJAX error:', status, error);
-                console.error('Response:', xhr.responseText); // Log the server response for debugging
+                console.error('Response:', xhr.responseText);
             }
         });
     }
@@ -530,9 +513,10 @@ $(document).ready(function() {
                 data: { customer_id: customerId },
                 dataType: 'json',
                 success: function(response) {
-                    console.log("Response from server:", response); // For debugging
                     if (response.status === 'success') {
                         const appointment = response.data;
+
+                        // Populate the update form fields
                         $('#update_customer_id').val(appointment.customer_id);
                         $('#update_firstname').val(appointment.firstname);
                         $('#update_phoneNumber').val(appointment.phoneNumber);
@@ -540,35 +524,31 @@ $(document).ready(function() {
                         $('#update_repairdetails').val(appointment.repairdetails);
                         $('#update_appointment_time').val(appointment.appointment_time);
                         $('#update_appointment_date').val(appointment.appointment_date);
-                        $('#update_created_at').val(appointment.created_at); // If you want to display this field
-                        $('#update_repair_details').val(appointment.repair_details); // Include this field
-                        $('#update_carmodel').val(appointment.carmodel); // Include this field
-                        $('#update_service_type').val(appointment.service_type); // Include this field
-                        $('#update_total_payable').val(appointment.total_payable); // Include this field
-                        $('#update_payment_type').val(appointment.payment_type); // Include this field
-                        $('#update_payment_status').val(appointment.payment_status); // Include this field
+                        $('#update_carmodel').val(appointment.carmodel);
+                        $('#update_service_type').val(appointment.service_type);
+                        $('#update_total_payable').val(appointment.total_payable);
+                        $('#update_payment_type').val(appointment.payment_type);
+                        $('#update_payment_status').val(appointment.payment_status);
                     } else {
                         console.error('Failed to fetch appointment details:', response.message);
                     }
                 },
                 error: function(xhr, status, error) {
                     console.error('AJAX error:', status, error);
-                    console.error('Response:', xhr.responseText); // Log the server response for debugging
+                    console.error('Response:', xhr.responseText);
                 }
             });
         });
 
-        $('.btn-delete').click(function() {
+        $(document).on('click', '.btn-delete', function() {
             const customerId = $(this).data('id');
-            $('#delete_customer_id').val(customerId);
+            $('#delete_customer_id').val(customerId); // Set customer ID for confirmation
+            $('#deleteWalkinModal').modal('show'); // Show delete confirmation modal
         });
     }
 });
 
 
-</script>
-<script>
-    
 </script>
 
 </body>

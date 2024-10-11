@@ -4,22 +4,22 @@ require 'db_connection.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $customer_id = $_POST['customer_id'];
+    $customer_id = isset($_POST['customer_id']) ? intval($_POST['customer_id']) : null;
 
-    // Check for missing parameters
-    if (empty($customer_id)) {
-        echo json_encode(['success' => false, 'error' => 'Missing customer_id']);
+    if (!$customer_id) {
+        echo json_encode(['success' => false, 'error' => 'Invalid or missing customer_id']);
         exit;
     }
 
-    // Prepare and execute the delete query
-    $stmt = $conn->prepare("DELETE FROM walkin_appointments WHERE customer_id = ?");
+    // Execute delete query
+    $deleteQuery = "DELETE FROM walkin_appointments WHERE customer_id = ?";
+    $stmt = $conn->prepare($deleteQuery);
     $stmt->bind_param("i", $customer_id);
 
     if ($stmt->execute()) {
-        echo json_encode(['success' => true]);
+        echo json_encode(['success' => true, 'message' => 'Appointment deleted successfully']);
     } else {
-        echo json_encode(['success' => false, 'error' => $stmt->error]); // Return detailed error message
+        echo json_encode(['success' => false, 'error' => 'Error executing deletion: ' . $stmt->error]);
     }
 
     $stmt->close();

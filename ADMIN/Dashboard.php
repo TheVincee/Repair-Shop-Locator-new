@@ -346,30 +346,6 @@
 </div>
 
 
-
-    <table id="walkin-appointments-table" class="walkin-appointments-table">
-    <thead>
-        <tr>
-            <th>Customer ID</th>
-            <th>First Name</th>
-            <th class="hide-column">Last Name</th>
-            <th>Phone Number</th>
-            <th>Email Address</th>
-            <th class="hide-column">Car Make</th>
-            <th class="hide-column">Car Model</th>
-            <th>Repair Details</th>
-            <th>Appointment Time</th>
-            <th>Appointment Date</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody id="walkin-appointments-tbody">
-        <!-- Rows will be dynamically added here -->
-    </tbody>
-</table>
-
-
     </section>
     
     <div class="modal-overlay" id="modal-overlay" style="display: none;">

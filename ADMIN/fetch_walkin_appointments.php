@@ -1,38 +1,26 @@
 <?php
-// fetch_walkin_appointments.php
-require 'db_connection.php'; // Include your database connection file
+header('Content-Type: application/json');
+require 'db_connection.php'; // Include the database connection
 
-header('Content-Type: application/json'); // Set the content type to JSON
+$response = ['status' => 'error', 'data' => []];
 
 try {
-    // Prepare the SQL query to fetch all walk-in appointments
-    $query = "SELECT * FROM walkin_appointments";
-    $stmt = $conn->prepare($query); // Use prepared statements
-    $stmt->execute();
+    // Fetch walk-in appointments with customer_id
+    $query = "SELECT customer_id, firstname, phoneNumber, emailAddress, repairdetails, appointment_time, appointment_date, Status, carmodel, service_type, total_payable, payment_type, payment_status FROM walkin_appointments"; // Adjust the table name as necessary
+    $result = $conn->query($query);
 
-    // Get the result set from the prepared statement
-    $result = $stmt->get_result();
-
-    // Check if any appointments were found
-    if ($result->num_rows > 0) {
-        $appointments = [];
-
-        // Fetch all rows as an associative array
-        while ($row = $result->fetch_assoc()) {
-            $appointments[] = $row;
-        }
-
-        // Output the results in JSON format
-        echo json_encode(['status' => 'success', 'data' => $appointments]);
+    if ($result && $result->num_rows > 0) {
+        $appointments = $result->fetch_all(MYSQLI_ASSOC);
+        $response['status'] = 'success';
+        $response['data'] = $appointments; // Store fetched appointments in the response
     } else {
-        // If no appointments were found, return an empty array
-        echo json_encode(['status' => 'success', 'data' => []]);
+        $response['status'] = 'success';
+        $response['data'] = []; // Return empty array if no results
     }
 } catch (Exception $e) {
-    // If there was an error with the query, output an error message
-    echo json_encode(['status' => 'error', 'message' => 'Error fetching data: ' . $e->getMessage()]);
+    $response['message'] = 'Error: ' . $e->getMessage();
 }
 
-// Close the database connection
+echo json_encode($response); // Return the JSON response
 $conn->close();
 ?>

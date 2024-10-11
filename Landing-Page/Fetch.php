@@ -1,51 +1,59 @@
 <?php
 include('dbconfig.php'); // Include your database configuration
 
-// Check if customer_id is set in the POST request
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Set content type to JSON
+header('Content-Type: application/json');
+
 if (isset($_POST['customer_id'])) {
-    // Sanitize and validate the customer_id
-    $customer_id = intval($_POST['customer_id']); // Ensure it's an integer
+    $customer_id = $_POST['customer_id'];
 
-    if ($customer_id > 0) { // Check if customer_id is valid
-        // Prepare the SQL statement
-        $query = "SELECT * FROM customer_details WHERE customer_id = ?";
+    // Prepare the SQL statement to fetch customer details
+    $query = "SELECT * FROM customer_details WHERE customer_id = ?";
 
-        if ($stmt = $conn->prepare($query)) {
-            // Bind the customer_id as an integer parameter
-            $stmt->bind_param("i", $customer_id);
+    if ($stmt = $conn->prepare($query)) {
+        $stmt->bind_param("i", $customer_id); // Assuming customer_id is an integer
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-            // Execute the statement
-            $stmt->execute();
-
-            // Get the result
-            $result = $stmt->get_result();
-
-            if ($result->num_rows > 0) {
-                // Fetch the record as an associative array
-                $row = $result->fetch_assoc();
-
-                // Send the response as JSON
-                echo json_encode($row);
-            } else {
-                // No record found for the provided customer_id
-                echo json_encode(['error' => 'No record found for the provided customer_id.']);
-            }
-
-            // Close the statement
-            $stmt->close();
+        if ($result->num_rows > 0) {
+            $customer = $result->fetch_assoc();
+            $response = [
+                'customer_id' => $customer['customer_id'],
+                'firstname' => $customer['firstname'],
+                'lastname' => $customer['lastname'],
+                'phoneNumber' => $customer['phoneNumber'],
+                'emailAddress' => $customer['emailAddress'],
+                'address' => $customer['Address'], // Ensure the field name matches the database
+                'carmake' => $customer['carmake'],
+                'carmodel' => $customer['carmodel'],
+                'repairdetails' => $customer['repairdetails'],
+                'appointment_date' => $customer['appointment_date'],
+                'appointment_time' => $customer['appointment_time'],
+                'status' => $customer['Status'],
+                'service_type' => $customer['service_type'],
+                'total_payment' => $customer['total_payment'],
+                'payment_type' => $customer['payment_type'],
+                'payment_status' => $customer['payment_status'] // Ensure this field is included
+            ];
+            echo json_encode($response);
         } else {
-            // Handle SQL preparation error
-            echo json_encode(['error' => 'Failed to prepare SQL statement: ' . $conn->error]);
+            echo json_encode(['error' => 'No customer found.']);
         }
+
+        // Close the prepared statement
+        $stmt->close();
     } else {
-        // Handle invalid customer_id
-        echo json_encode(['error' => 'Invalid customer_id provided.']);
+        // Handle preparation error
+        echo json_encode(['error' => 'Failed to prepare SQL statement: ' . $conn->error]);
     }
 } else {
-    // Handle missing customer_id in the request
-    echo json_encode(['error' => 'customer_id is missing in the request.']);
+    echo json_encode(['error' => 'Invalid request.']);
 }
 
-// Close the connection
+// Close the database connection
 $conn->close();
 ?>

@@ -14,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $repairdetails = $conn->real_escape_string($_POST['repairdetails']);
     $appointment_time = $conn->real_escape_string($_POST['appointment_time']);
     $appointment_date = $conn->real_escape_string($_POST['appointment_date']);
-    $repair_details = $conn->real_escape_string($_POST['repair_details']);
     $carmodel = $conn->real_escape_string($_POST['carmodel']);
     $service_type = $conn->real_escape_string($_POST['service_type']);
     $total_payable = $conn->real_escape_string($_POST['total_payable']);
@@ -22,8 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $payment_status = $conn->real_escape_string($_POST['payment_status']);
     
     // Prepare the SQL query to insert the data
-    $query = "INSERT INTO walkin_appointments (firstname, phoneNumber, emailAddress, repairdetails, appointment_time, appointment_date, repair_details, carmodel, service_type, total_payable, payment_type, payment_status) 
-              VALUES ('$firstname', '$phoneNumber', '$emailAddress', '$repairdetails', '$appointment_time', '$appointment_date', '$repair_details', '$carmodel', '$service_type', '$total_payable', '$payment_type', '$payment_status')";
+    $query = "INSERT INTO walkin_appointments (firstname, phoneNumber, emailAddress, repairdetails, appointment_time, appointment_date, carmodel, service_type, total_payable, payment_type, payment_status) 
+              VALUES ('$firstname', '$phoneNumber', '$emailAddress', '$repairdetails', '$appointment_time', '$appointment_date', '$carmodel', '$service_type', '$total_payable', '$payment_type', '$payment_status')";
 
     // Execute the query
     if ($conn->query($query) === TRUE) {

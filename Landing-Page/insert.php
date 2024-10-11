@@ -39,12 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt = mysqli_prepare($conn, $query)) {
         // Bind parameters to the prepared statement
-        mysqli_stmt_bind_param($stmt, 'sssssssssssssss', $firstname, $lastname, $phoneNumber, $emailAddress, $carmake, $carmodel, $repairdetails, $appointmentDate, $appointmentTime, $Status, $service_type, $total_payment, $payment_type, $address, $payment_status); // Fixing the binding here
+        mysqli_stmt_bind_param($stmt, 'sssssssssssssss', $firstname, $lastname, $phoneNumber, $emailAddress, $carmake, $carmodel, $repairdetails, $appointmentDate, $appointmentTime, $Status, $service_type, $total_payment, $payment_type, $address, $payment_status);
 
         // Execute the statement
         if (mysqli_stmt_execute($stmt)) {
             $customer_id = mysqli_insert_id($conn);
             if ($customer_id > 0) {
+                // Notify about the new appointment
                 $notifyQuery = "INSERT INTO appointment_notify (customer_id, firstname) VALUES (?, ?)";
                 if ($notifyStmt = mysqli_prepare($conn, $notifyQuery)) {
                     mysqli_stmt_bind_param($notifyStmt, 'is', $customer_id, $firstname);

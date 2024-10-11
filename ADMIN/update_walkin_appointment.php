@@ -1,18 +1,11 @@
 <?php
-require 'db_connection.php';
-
 header('Content-Type: application/json');
+require 'db_connection.php'; // Include your database connection file
+
+$response = ['status' => 'error', 'message' => 'Failed to update appointment.'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Check if POST parameters are set
-    if (!isset($_POST['customer_id'], $_POST['firstname'], $_POST['phoneNumber'], 
-                $_POST['emailAddress'], $_POST['repairdetails'], $_POST['appointment_time'], 
-                $_POST['appointment_date'], $_POST['service_type'], $_POST['carmodel'], 
-                $_POST['total_payable'], $_POST['payment_type'], $_POST['payment_status'])) {
-        echo json_encode(['status' => 'error', 'message' => 'Missing parameters']);
-        exit;
-    }
-
+    // Retrieve data from the request
     $customer_id = $_POST['customer_id'];
     $firstname = $_POST['firstname'];
     $phoneNumber = $_POST['phoneNumber'];
@@ -20,45 +13,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $repairdetails = $_POST['repairdetails'];
     $appointment_time = $_POST['appointment_time'];
     $appointment_date = $_POST['appointment_date'];
-    $service_type = $_POST['service_type'];
     $carmodel = $_POST['carmodel'];
+    $service_type = $_POST['service_type']; // Get service type
     $total_payable = $_POST['total_payable'];
     $payment_type = $_POST['payment_type'];
     $payment_status = $_POST['payment_status'];
 
-    // Prepare and execute the update query
-    $stmt = $conn->prepare("UPDATE walkin_appointments 
-        SET firstname = ?, phoneNumber = ?, emailAddress = ?, repairdetails = ?, 
-            appointment_time = ?, appointment_date = ?, service_type = ?, 
-            carmodel = ?, total_payable = ?, payment_type = ?, payment_status = ? 
-        WHERE customer_id = ?");
+    try {
+        // Prepare the SQL update statement
+        $query = "UPDATE walkin_appointments SET 
+                    firstname = ?, 
+                    phoneNumber = ?, 
+                    emailAddress = ?, 
+                    repairdetails = ?, 
+                    appointment_time = ?, 
+                    appointment_date = ?, 
+                    carmodel = ?, 
+                    service_type = ?, 
+                    total_payable = ?, 
+                    payment_type = ?, 
+                    payment_status = ? 
+                  WHERE customer_id = ?";
+                  
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('sssssssssssi', $firstname, $phoneNumber, $emailAddress, $repairdetails, $appointment_time, $appointment_date, $carmodel, $service_type, $total_payable, $payment_type, $payment_status, $customer_id);
 
-    // Check for successful statement preparation
-    if ($stmt === false) {
-        echo json_encode(['status' => 'error', 'message' => 'Failed to prepare the SQL statement.']);
-        exit;
-    }
-
-    // Bind parameters
-    $stmt->bind_param("ssssssissssi", $firstname, $phoneNumber, $emailAddress, $repairdetails, 
-        $appointment_time, $appointment_date, $service_type, $carmodel, 
-        $total_payable, $payment_type, $payment_status, $customer_id);
-
-    // Execute the statement and check for errors
-    if ($stmt->execute()) {
-        if ($stmt->affected_rows > 0) {
-            echo json_encode(['status' => 'success']);
+        // Execute the statement
+        if ($stmt->execute()) {
+            $response['status'] = 'success';
+            $response['message'] = 'Appointment updated successfully.';
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'No records were updated.']);
+            $response['message'] = 'Failed to update appointment.';
         }
-    } else {
-        echo json_encode(['status' => 'error', 'message' => $stmt->error]); // Return detailed error message
+    } catch (Exception $e) {
+        $response['message'] = 'Error: ' . $e->getMessage();
     }
-
-    $stmt->close();
-} else {
-    echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 
+// Return JSON response
+echo json_encode($response);
 $conn->close();
-?>
