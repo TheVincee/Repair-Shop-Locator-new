@@ -580,7 +580,7 @@ $(document).ready(function () {
 
     
     <script>
-    // Define the costs associated with specific repair keywords
+ // Define the costs associated with specific repair keywords
 const repairCosts = {
     'oil change': 500,
     'tire rotation': 700,
@@ -593,19 +593,19 @@ const mechanicFee = 1000;
 
 document.getElementById('serviceTypeModal').addEventListener('change', function() {
     const selectedOption = this.options[this.selectedIndex];
-    const cost = parseInt(selectedOption.getAttribute('data-cost')) || 0;
+    const serviceCost = parseFloat(selectedOption.getAttribute('data-cost')) || 0;
     
-    // Automatically set the mechanic fee based on the selected service
+    // Automatically set the mechanic fee (already set by default)
     document.getElementById('mechanicFeeModal').value = mechanicFee;
 
-    // Calculate total payment
-    calculateTotalPayment(cost);
+    // Calculate total payment based on the service cost
+    calculateTotalPayment(serviceCost);
 });
 
 // Event listener for the Repair Details input
 document.getElementById('repairDetailsModal').addEventListener('input', function() {
     const repairDetails = this.value.toLowerCase();
-    let totalRepairCost = 50;
+    let totalRepairCost = 0; // Initialize to 0 or base cost if needed
 
     // Check for each repair keyword and add its cost to totalRepairCost
     for (const repair in repairCosts) {
@@ -614,24 +614,25 @@ document.getElementById('repairDetailsModal').addEventListener('input', function
         }
     }
 
-    // Calculate the total payment including mechanic fee
-    const mechanicFeeValue = parseInt(document.getElementById('mechanicFeeModal').value) || 0;
-    calculateTotalPayment(totalRepairCost + mechanicFeeValue);
+    // Add the mechanic fee to the total repair cost
+    calculateTotalPayment(totalRepairCost);
 });
 
 // Function to calculate and update the total payment
 function calculateTotalPayment(serviceCost) {
-    const mechanicFeeValue = parseInt(document.getElementById('mechanicFeeModal').value) || 0;
+    const mechanicFeeValue = parseFloat(document.getElementById('mechanicFeeModal').value) || 0;
     const totalPayment = serviceCost + mechanicFeeValue;
 
     // Update the total payment input
-    document.getElementById('totalPaymentModal').value = totalPayment;
+    document.getElementById('totalPaymentModal').value = totalPayment.toFixed(2); // Set with two decimal places for currency
 }
 
 // Set default mechanic fee when the modal is opened
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('mechanicFeeModal').value = mechanicFee; // Set initial mechanic fee
+    // Set initial mechanic fee when the modal is loaded
+    document.getElementById('mechanicFeeModal').value = mechanicFee;
 });
+
 
     </script>
     
