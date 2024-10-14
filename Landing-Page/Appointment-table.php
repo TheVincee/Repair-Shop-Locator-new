@@ -121,7 +121,7 @@ if (mysqli_num_rows($result) > 0) {
 
 
 <!-- Add Customer Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -197,16 +197,15 @@ if (mysqli_num_rows($result) > 0) {
                     <div class="row mb-3">
                         <div class="col">
                             <label for="mechanicFeeModal" class="form-label">Mechanic Fee (₱)</label>
-                            <input type="number" class="form-control" id="mechanicFeeModal" name="mechanicFee" placeholder="Mechanic fee" readonly>
+                            <input type="number" class="form-control" id="mechanicFeeModal" name="mechanicFee" value="0" readonly>
                         </div>
                     </div>
                     <div class="row mb-3">
-    <div class="col">
-        <label for="totalPaymentModal" class="form-label">Total Payment (₱)</label>
-        <input type="text" class="form-control" id="totalPaymentModal" name="total_payment" placeholder="Enter total payment in Peso" readonly>
-    </div>
-</div>
-
+                        <div class="col">
+                            <label for="totalPaymentModal" class="form-label">Total Payment (₱)</label>
+                            <input type="text" class="form-control" id="totalPaymentModal" name="totalPayment" placeholder="Enter total payment" readonly>
+                        </div>
+                    </div>
                     <div class="row mb-3">
                         <div class="col">
                             <label for="paymentTypeModal" class="form-label">Payment Type</label>
@@ -223,7 +222,8 @@ if (mysqli_num_rows($result) > 0) {
             </div>
         </div>
     </div>
-</div><!-- Add Customer Modal -->
+</div>
+<!-- Add Customer Modal -->
 
    <!-- Update Customer Modal -->
 <!-- Update Customer Modal -->
@@ -414,33 +414,37 @@ if (mysqli_num_rows($result) > 0) {
 $(document).ready(function () {
     // Handle form submission for adding a customer
     $("#customerForm").on("submit", function (e) {
-        e.preventDefault();
-        const $submitButton = $(this).closest('.modal').find("button[type='submit']");
-        $submitButton.prop("disabled", true).text("Submitting...");
+    e.preventDefault();
+    const $submitButton = $(this).closest('.modal').find("button[type='submit']");
+    $submitButton.prop("disabled", true).text("Submitting...");
 
-        $.ajax({
-            type: "POST",
-            url: "insert.php",
-            data: $(this).serialize(),
-            dataType: "json",
-            success: function (response) {
-                if (response && response.status === 'success') {
-                    $("#exampleModal").modal("hide");
-                    alert(response.message || "Customer added successfully!");
-                    $("#customerForm")[0].reset();
-                    location.reload(); // Reload to refresh the table
-                } else {
-                    alert(response.message || "Failed to add the customer. Please check the input data and try again.");
-                }
-            },
-            error: function (xhr, status, error) {
-                alert("An unexpected error occurred while adding the customer. Please try again later.");
-            },
-            complete: function () {
-                $submitButton.prop("disabled", false).text("Submit");
+    $.ajax({
+        type: "POST",
+        url: "insert.php", // The PHP file where form data will be processed
+        data: $(this).serialize(), // Serialize form data
+        dataType: "json", // Expect JSON response from server
+        success: function (response) {
+            console.log("Response from server: ", response); // Log server response
+
+            if (response && response.status === 'success') {
+                $("#exampleModal").modal("hide"); // Hide the modal
+                alert(response.message || "Customer added successfully!"); // Show success message
+                $("#customerForm")[0].reset(); // Reset the form
+                location.reload(); // Reload the page to update the table
+            } else {
+                alert(response.message || "Failed to add the customer. Please check the input data and try again.");
             }
-        });
+        },
+        error: function (xhr, status, error) {
+            console.error("Error Details: ", xhr.responseText, status, error); // Log the error details
+            alert("An unexpected error occurred while adding the customer. Please try again later.");
+        },
+        complete: function () {
+            $submitButton.prop("disabled", false).text("Submit"); // Re-enable the submit button
+        }
     });
+});
+
 
     // Fetch and populate data when opening the update modal
     $('#UpdateModal').on('show.bs.modal', function (event) {
@@ -449,7 +453,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "fetch.php",
+            url: "Fetch.php",
             data: { customer_id: customerId },
             dataType: "json",
             success: function (response) {

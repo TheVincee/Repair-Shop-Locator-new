@@ -11,7 +11,7 @@
 <body>
     <div class="container mt-5">
         <h1 class="text-center">Inventory</h1>
-        <a href="previous_page.php" class="btn btn-secondary mb-3">Back</a> <!-- Change to your desired URL -->
+        <a href="DashboardInventory.php" class="btn btn-secondary mb-3">Back</a> <!-- Change to your desired URL -->
         <!-- Table to display Inventory items -->
         <table class="table table-bordered">
             <thead>

@@ -12,7 +12,7 @@
     <div class="sidebar close">
         <div class="logo-details">
             <i class='bx bxl-c-plus-plus'></i>
-            <span class="logo_name">UserDash</span>
+            <span class="logo_name">Inventory</span>
         </div>
         <ul class="nav-links">
             <li>
@@ -34,26 +34,23 @@
                 </div>
                 <ul class="sub-menu">
                     <li><a class="link_name" href="all_items.php">Category</a></li>
-                    <li><a href="InventoryTable.php">HTML & CSS</a></li>
-                    <li><a href="categoryInventory.php">JavaScript</a></li>
-                    <li><a href="delivered_new_products.php">PHP & MySQL</a></li>
+                    <li><a href="InventoryTable.php">Tables</a></li>
+                    <li><a href="categoryInventory.php">Categorys</a></li>
+                    <li><a href="delivered_new_products.php">Delivered</a></li>
                 </ul>
             </li>
             <li>
                 <div class="iocn-link">
                     <a href="ListOfUpdatedStats.php">
                         <i class='bx bx-book-alt'></i>
-                        <span class="link_name">Posts</span>
+                        <span class="link_name">Status</span>
                     </a>
-                    <i class='bx bxs-chevron-down arrow'></i>
                 </div>
                 <ul class="sub-menu">
                     <li><a class="link_name" href="ListOfUpdatedStats.php">Posts</a></li>
-                    <li><a href="Received Delivered Product.php">Web Design</a></li>
-                    <li><a href="returned_damage_items.php">Login Form</a></li>
                 </ul>
             </li>
-            <li>
+            <!-- <li>
                 <a href="http://localhost/Repair-Shop-Locator-new/ADMIN/Dashboard.php">
                     <i class='bx bx-pie-chart-alt-2'></i>
                     <span class="link_name">Analytics</span>
@@ -61,8 +58,8 @@
                 <ul class="sub-menu blank">
                     <li><a class="link_name" href="http://localhost/Repair-Shop-Locator-new/ADMIN/Dashboard.php">Analytics</a></li>
                 </ul>
-            </li>
-            <li>
+            </li> -->
+            <!-- <li>
                 <a href="http://localhost/Repair-Shop-Locator-new/ADMIN/Dashboard.php">
                     <i class='bx bx-line-chart'></i>
                     <span class="link_name">Chart</span>
@@ -70,23 +67,17 @@
                 <ul class="sub-menu blank">
                     <li><a class="link_name" href="http://localhost/Repair-Shop-Locator-new/ADMIN/Dashboard.php">Chart</a></li>
                 </ul>
-            </li>
+            </li> -->
             <li>
                 <div class="iocn-link">
-                    <a href="#">
-                        <i class='bx bx-plug'></i>
-                        <span class="link_name">Plugins</span>
+                    <a href="SoldProducts.php">
+                        <i class='bx bx-dollar'></i>
+                        <span class="link_name">Sold</span>
                     </a>
-                    <i class='bx bxs-chevron-down arrow'></i>
                 </div>
-                <ul class="sub-menu">
-                    <li><a class="link_name" href="#">Plugins</a></li>
-                    <li><a href="#">UI Face</a></li>
-                    <li><a href="#">Pigments</a></li>
-                    <li><a href="#">Box Icons</a></li>
-                </ul>
+               
             </li>
-            <li>
+            <!-- <li>
                 <a href="#">
                     <i class='bx bx-compass'></i>
                     <span class="link_name">Explore</span>
@@ -94,37 +85,39 @@
                 <ul class="sub-menu blank">
                     <li><a class="link_name" href="#">Explore</a></li>
                 </ul>
-            </li>
+            </li> -->
             <li>
-                <a href="#">
-                    <i class='bx bx-history'></i>
-                    <span class="link_name">History</span>
+                <a href="returned_damage_items.php">
+                    <i class='bx bx-product'></i>
+                    <span class="link_name">Returned</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">History</a></li>
+                    <li><a class="link_name" href="returned_damage_items.php">Returned</a></li>
                 </ul>
             </li>
             <li>
-                <a href="#">
+                <a href="sold_products.php">
                     <i class='bx bx-cog'></i>
-                    <span class="link_name">Setting</span>
+                    <span class="link_name">SoldProducts</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Setting</a></li>
+                    <li><a class="link_name" href="sold_products.php">SoldProducts</a></li>
                 </ul>
             </li>
             <li>
-                <div class="profile-details">
-                    <div class="profile-content">
-                        <img src="image/profile.jpg" alt="profileImg">
-                    </div>
-                    <div class="name-job">
-                        <div class="profile_name">Prem Shahi</div>
-                        <div class="job">Web Designer</div>
-                    </div>
-                    <i class='bx bx-log-out'></i>
-                </div>
-            </li>
+    <div class="profile-details">
+        <div class="profile-content">
+            <img src="image/profile.jpg" alt="profileImg">
+        </div>
+        <div class="name-job">
+            <div class="profile_name">Carlo</div>
+        </div>
+        <a href="http://localhost/Repair-Shop-Locator-new/ADMIN/Dashboard.php" class="logout-link">
+        <i class='bx bx-log-out'></i>
+        </a>
+    </div>
+</li>
+
         </ul>
     </div>
     <section class="home-section">

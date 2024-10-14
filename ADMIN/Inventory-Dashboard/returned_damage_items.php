@@ -131,7 +131,7 @@
 <body>
     <h1>Returned Damage Items</h1>
 
-    <a id="backButton" href="dashboard.php">Back to Dashboard</a>
+    <a id="backButton" href="DashboardInventory.php">Back to Dashboard</a>
 
     <!-- Returned Damage Items Table -->
     <table id="returnedDamageTable">

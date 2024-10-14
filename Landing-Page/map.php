@@ -89,13 +89,13 @@
       <li>
     <div class="profile-details">
       <div class="profile-content">
-        <img src="image/profile.jpg" alt="profileImg">
+        <img src="images/user.jpg" alt="profileImg">
       </div>
       <div class="name-job">
-        <div class="profile_name">Prem Shahi</div>
-        <div class="job">Web Desginer</div>
+        <div class="profile_name">Boss Locar</div>
+        <div class="job">User</div>
       </div>
-      <a href="/Repair-Shop-Locator-new/LOGIN/Sign-in.php" class="logout-link">
+      <a href="http://localhost/Repair-Shop-Locator-new/LOGIN/Sign-in.php." class="logout-link">
     <i class='bx bx-log-out'></i> 
 </a>    </div>
   </li>

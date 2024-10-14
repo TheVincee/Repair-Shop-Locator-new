@@ -10,7 +10,7 @@
 <body>
     <div class="container mt-5">
         <h1 class="text-center">Sold Products</h1>
-        <a href="index.html" class="btn btn-secondary mb-3">Back</a>
+        <a href="DashboardInventory.php" class="btn btn-secondary mb-3">Back</a>
         <table class="table table-bordered">
             <thead>
                 <tr>

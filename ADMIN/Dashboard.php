@@ -177,7 +177,7 @@
     <div class="sidebar close">
         <div class="logo-details">
             <i class='bx bxl-c-plus-plus'></i>
-            <span class="logo_name">CodingLab</span>
+            <span class="logo_name">Dashboard</span>
         </div>
         <ul class="nav-links">
             <li>
@@ -253,16 +253,16 @@
                     <span class="link_name">History</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">History</a></li>
+                    <li><a class="link_name" href="History.php">History</a></li>
                 </ul>
             </li>
             <li>
                 <a href="#">
                     <i class='bx bx-cog'></i>
-                    <span class="link_name">Setting</span>
+                    <span class="link_name">Ratings</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="#">Setting</a></li>
+                    <li><a class="link_name" href="#">Ratings</a></li>
                 </ul>
             </li>
             <li>
@@ -416,7 +416,7 @@
 
 
 
-<div id="walkin-modal-container" class="modal-overlay">
+<!-- <div id="walkin-modal-container" class="modal-overlay">
     <div id="walkin-modal-content" class="modal">
         <div class="modal-header">
             <h2>Update Status</h2>
@@ -442,7 +442,7 @@
             </form>
         </div>
     </div>
-</div>
+</div> -->
 
 
    <script>
@@ -710,7 +710,7 @@ $('#editPaymentForm').on('submit', function(event) {
 
 
    </script>
-<script>
+<!-- <script>
    $(document).ready(function() {
     const modalContainer = $('#walkin-modal-container');
     const modalForm = $('#walkin-modal-form');
@@ -826,7 +826,7 @@ $('#editPaymentForm').on('submit', function(event) {
     });
 });
 
-</script>
+</script> -->
 
     <script>
        document.addEventListener('DOMContentLoaded', function () {

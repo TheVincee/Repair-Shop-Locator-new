@@ -35,7 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Prepare an SQL statement to insert appointment
-    $query = "INSERT INTO customer_details (firstname, lastname, phoneNumber, emailAddress, carmake, carmodel, repairdetails, appointment_date, appointment_time, Status, service_type, total_payment, payment_type, address, payment_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO customer_details (firstname, lastname, phoneNumber, emailAddress, carmake, carmodel, repairdetails, appointment_date, appointment_time, Status, service_type, total_payment, payment_type, address, payment_status) 
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     if ($stmt = mysqli_prepare($conn, $query)) {
         // Bind parameters to the prepared statement
@@ -54,21 +55,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $message = "New appointment from customer #{$customer_id}: {$firstname}";
                         echo json_encode(['status' => 'success', 'message' => $message]);
                     } else {
-                        echo json_encode(['status' => 'error', 'message' => 'Error adding notification: ' . mysqli_error($conn)]);
+                        // Log error details for debugging
+                        error_log("Error adding notification: " . mysqli_error($conn));
+                        echo json_encode(['status' => 'error', 'message' => 'Error adding notification.']);
                     }
                 } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Failed to prepare notification statement: ' . mysqli_error($conn)]);
+                    // Log error details for debugging
+                    error_log("Failed to prepare notification statement: " . mysqli_error($conn));
+                    echo json_encode(['status' => 'error', 'message' => 'Failed to prepare notification statement.']);
                 }
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Failed to retrieve customer ID.']);
             }
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Error inserting customer: ' . mysqli_error($conn)]);
+            // Log error details for debugging
+            error_log("Error inserting customer: " . mysqli_error($conn));
+            echo json_encode(['status' => 'error', 'message' => 'Error inserting customer.']);
         }
 
         mysqli_stmt_close($stmt);
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Failed to prepare statement: ' . mysqli_error($conn)]);
+        // Log error details for debugging
+        error_log("Failed to prepare customer statement: " . mysqli_error($conn));
+        echo json_encode(['status' => 'error', 'message' => 'Failed to prepare statement.']);
     }
 
     mysqli_close($conn);
