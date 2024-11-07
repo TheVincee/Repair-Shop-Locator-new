@@ -37,3 +37,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') { // Change to 'GET' to match the AJAX
 }
 
 $conn->close();
+?>

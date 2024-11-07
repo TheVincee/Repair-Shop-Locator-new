@@ -46,7 +46,7 @@
         
       </nav>
       <form class="d-flex">
-      <a href="/Repair-Shop-Locator-new/LOGIN/Sign-in.php" class="btn btn-outline-danger">Logout</a>
+      <a href="../Repair-Shop-Locator-new/LOGIN/Sign-in.php" class="btn btn-outline-danger">Logout</a>
       </form>
     </div>
   </header>

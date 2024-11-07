@@ -153,6 +153,7 @@
                     <p><strong>Repair Details:</strong> <span id="modalRepairDetails"></span></p>
                     <p><strong>Appointment Time:</strong> <span id="modalAppointmentTime"></span></p>
                     <p><strong>Appointment Date:</strong> <span id="modalAppointmentDate"></span></p>
+                    <p><strong>Payment_status</strong> <span id="modalPayment_Status"></span></p> <!-- Added Status -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -170,7 +171,7 @@
     $(document).ready(function () {
         // Fetch and display paid appointments on page load
         $.ajax({
-            url: 'fetchPaidAppointments.php', // URL to your PHP script
+            url: 'fetch_paid_appointments.php', // Corrected URL to your PHP script
             type: 'GET',
             dataType: 'json',
             success: function (data) {
@@ -187,7 +188,7 @@
                         rows += '<td>' + appointment.repairdetails + '</td>';
                         rows += '<td>' + appointment.appointment_time + '</td>';
                         rows += '<td>' + appointment.appointment_date + '</td>';
-                        rows += '<td><span class="status-paid">' + appointment.payment_status + '</span></td>'; // Adjust status to payment_status
+                        rows += '<td><span class="status-paid">' + appointment.payment_status + '</span></td>';
                         rows += '<td><button type="button" class="btn btn-view" data-bs-toggle="modal" data-bs-target="#viewModal" data-id="' + appointment.customer_id + '">View</button></td>';
                         rows += '</tr>';
                     });
@@ -203,7 +204,7 @@
         // Set up the modal to load data when shown
         $('#viewModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
-            var customerId = button.data('id'); // Extract info from data-id attribute
+            var customerId = button.data('id');
 
             // Fetch the appointment details
             $.ajax({
@@ -222,6 +223,7 @@
                         $('#modalRepairDetails').text(data.repairdetails);
                         $('#modalAppointmentTime').text(data.appointment_time);
                         $('#modalAppointmentDate').text(data.appointment_date);
+                        $('#modalPayment_Status').text(data.payment_status);  // Display payment status                        
                     }
                 },
                 error: function (xhr, status, error) {

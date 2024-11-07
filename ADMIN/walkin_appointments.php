@@ -91,9 +91,8 @@
                 <th scope="col" class="hidden-column">Car Model</th> <!-- Hidden column -->
           
                  <th scope="col">Status</th>
-            
                 <th scope="col">Repair Details</th>
-                      <th scope="col">Service Type</th>
+                <th scope="col">Service Type</th>
                 <th scope="col">Total Payable</th>
                 <th scope="col">Payment Type</th>
                 <th scope="col">Payment Status</th>
@@ -381,156 +380,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
-$(document).ready(function() {
-    // Fetch appointments on page load
-    fetchAppointments();
+    $(document).ready(function() {
+        // Fetch appointments on page load
+        fetchAppointments();
 
-    // Add appointment form submission
-    $('#addWalkinForm').submit(function(e) {
-        e.preventDefault();
-        $.ajax({
-            url: 'add_walkin_appointment.php',
-            method: 'POST',
-            data: $(this).serialize(),
-            dataType: 'json',
-            success: function(response) {
-                if (response.status === 'success') {
-                    $('#addWalkinModal').modal('hide');
-                    fetchAppointments();
-                } else {
-                    console.error('Failed to add appointment:', response.message);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX error:', status, error);
-                console.error('Response:', xhr.responseText);
-            }
-        });
-    });
-
-    // Update appointment form submission
-    $('#updateWalkinForm').submit(function(e) {
-        e.preventDefault();
-        $.ajax({
-            url: 'update_walkin_appointment.php',
-            method: 'POST',
-            data: $(this).serialize(),
-            dataType: 'json',
-            success: function(response) {
-                if (response.status === 'success') {
-                    $('#updateWalkinModal').modal('hide');
-                    fetchAppointments();
-                } else {
-                    console.error('Failed to update appointment:', response.message);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX error:', status, error);
-                console.error('Response:', xhr.responseText);
-            }
-        });
-    });
-
-    // Delete appointment button click
-    $('#confirmDeleteButton').click(function() {
-        const customerId = $('#delete_customer_id').val();
-        $.ajax({
-            url: 'delete_walkin_appointment.php',
-            method: 'POST',
-            data: { customer_id: customerId },
-            dataType: 'json',
-            success: function(response) {
-                if (response.status === 'success') {
-                    $('#deleteWalkinModal').modal('hide');
-                    fetchAppointments();
-                } else {
-                    console.error('Failed to delete appointment:', response.message);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX error:', status, error);
-                console.error('Response:', xhr.responseText);
-            }
-        });
-    });
-
-    // Function to fetch appointments
-    function fetchAppointments() {
-        $.ajax({
-            url: 'fetch_walkin_appointments.php',
-            method: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                const tbody = $('tbody');
-                tbody.empty();
-
-                if (response.status === 'success' && Array.isArray(response.data)) {
-                    response.data.forEach(appointment => {
-                        const row = `
-                            <tr id="row-${appointment.customer_id}">
-                                <td>${appointment.customer_id}</td>
-                                <td>${appointment.firstname}</td>
-                                <td>${appointment.phoneNumber}</td>
-                                <td>${appointment.emailAddress}</td>
-                                <td>${appointment.repairdetails}</td>
-                                <td>${appointment.appointment_time}</td>
-                                <td>${appointment.appointment_date}</td>
-                                <td>${appointment.Status}</td>
-                                <td>${appointment.carmodel}</td>
-                                <td>${appointment.service_type}</td>
-                                <td>${appointment.total_payable}</td>
-                                <td>${appointment.payment_type}</td>
-                                <td>${appointment.payment_status}</td>
-                                <td>
-                                    <button class="btn btn-update" data-id="${appointment.customer_id}" data-bs-toggle="modal" data-bs-target="#updateWalkinModal">Update</button>
-                                    <button class="btn btn-delete" data-id="${appointment.customer_id}">Delete</button>
-                                </td>
-                            </tr>
-                        `;
-                        tbody.append(row);
-                    });
-
-                    // Bind update and delete button click events
-                    bindUpdateAndDeleteButtons();
-                } else {
-                    console.error('No appointments found or invalid response:', response);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX error:', status, error);
-                console.error('Response:', xhr.responseText);
-            }
-        });
-    }
-
-    // Function to bind update and delete button click events
-    function bindUpdateAndDeleteButtons() {
-        $('.btn-update').click(function() {
-            const customerId = $(this).data('id');
+        // Add appointment form submission
+        $('#addWalkinForm').submit(function(e) {
+            e.preventDefault();
             $.ajax({
-                url: 'get_walkin_appointment.php',
+                url: 'add_walkin_appointment.php',
                 method: 'POST',
-                data: { customer_id: customerId },
+                data: $(this).serialize(),
                 dataType: 'json',
                 success: function(response) {
                     if (response.status === 'success') {
-                        const appointment = response.data;
-
-                        // Populate the update form fields
-                        $('#update_customer_id').val(appointment.customer_id);
-                        $('#update_firstname').val(appointment.firstname);
-                        $('#update_phoneNumber').val(appointment.phoneNumber);
-                        $('#update_emailAddress').val(appointment.emailAddress);
-                        $('#update_repairdetails').val(appointment.repairdetails);
-                        $('#update_appointment_time').val(appointment.appointment_time);
-                        $('#update_appointment_date').val(appointment.appointment_date);
-                        $('#update_carmodel').val(appointment.carmodel);
-                        $('#update_service_type').val(appointment.service_type);
-                        $('#update_total_payable').val(appointment.total_payable);
-                        $('#update_payment_type').val(appointment.payment_type);
-                        $('#update_payment_status').val(appointment.payment_status);
+                        $('#addWalkinModal').modal('hide');
+                        fetchAppointments();
                     } else {
-                        console.error('Failed to fetch appointment details:', response.message);
+                        console.error('Failed to add appointment:', response.message);
                     }
                 },
                 error: function(xhr, status, error) {
@@ -540,16 +407,148 @@ $(document).ready(function() {
             });
         });
 
-        $(document).on('click', '.btn-delete', function() {
-            const customerId = $(this).data('id');
-            $('#delete_customer_id').val(customerId); // Set customer ID for confirmation
-            $('#deleteWalkinModal').modal('show'); // Show delete confirmation modal
+        // Update appointment form submission
+        $('#updateWalkinForm').submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: 'update_walkin_appointment.php',
+                method: 'POST',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        $('#updateWalkinModal').modal('hide');
+                        fetchAppointments();
+                    } else {
+                        console.error('Failed to update appointment:', response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', status, error);
+                    console.error('Response:', xhr.responseText);
+                }
+            });
         });
-    }
-});
 
+        // Delete appointment button click
+        $('#confirmDeleteButton').click(function() {
+            const customerId = $('#delete_customer_id').val();
+            $.ajax({
+                url: 'delete_walkin_appointment.php',
+                method: 'POST',
+                data: { customer_id: customerId },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        $('#deleteWalkinModal').modal('hide');
+                        fetchAppointments();
+                    } else {
+                        console.error('Failed to delete appointment:', response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', status, error);
+                    console.error('Response:', xhr.responseText);
+                }
+            });
+        });
 
+        // Function to fetch appointments
+        function fetchAppointments() {
+            $.ajax({
+                url: 'fetch_walkin_appointments.php',
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    const tbody = $('tbody');
+                    tbody.empty();
+
+                    if (response.status === 'success' && Array.isArray(response.data)) {
+                        response.data.forEach(appointment => {
+                            const row = `
+                                <tr id="row-${appointment.customer_id}">
+                                    <td>${appointment.customer_id}</td>
+                                    <td>${appointment.firstname}</td>
+                                    <td>${appointment.phoneNumber}</td>
+                                    <td>${appointment.emailAddress}</td>
+                                    <td>${appointment.repairdetails}</td>
+                                    <td>${appointment.appointment_time}</td>
+                                    <td>${appointment.appointment_date}</td>
+                                    <td>${appointment.Status}</td>
+                                    <td>${appointment.carmodel}</td>
+                                    <td>${appointment.service_type}</td>
+                                    <td>${appointment.total_payable}</td>
+                                    <td>${appointment.payment_type}</td>
+                                    <td>${appointment.payment_status}</td>
+                                    <td>
+                                        <button class="btn btn-update" data-id="${appointment.customer_id}" data-bs-toggle="modal" data-bs-target="#updateWalkinModal">Update</button>
+                                        <button class="btn btn-primary" data-id="${appointment.customer_id}">View</button>
+                                        <button class="btn btn-delete" data-id="${appointment.customer_id}">Delete</button>
+                                    </td>
+                                </tr>
+                            `;
+                            tbody.append(row);
+                        });
+
+                        // Call the function to bind update and delete buttons
+                        bindUpdateAndDeleteButtons();
+                    } else {
+                        console.error('No appointments found or invalid response:', response);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', status, error);
+                    console.error('Response:', xhr.responseText);
+                }
+            });
+        }
+
+        // Function to bind update and delete button click events
+        function bindUpdateAndDeleteButtons() {
+            $('.btn-update').click(function() {
+                const customerId = $(this).data('id'); // Ensure customerId is properly accessed here
+                $.ajax({
+                    url: 'get_walkin_appointment.php',
+                    method: 'GET',
+                    data: { customer_id: customerId },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            const appointment = response.data;
+
+                            // Populate the update form fields
+                            $('#update_customer_id').val(appointment.customer_id);
+                            $('#update_firstname').val(appointment.firstname);
+                            $('#update_phoneNumber').val(appointment.phoneNumber);
+                            $('#update_emailAddress').val(appointment.emailAddress);
+                            $('#update_repairdetails').val(appointment.repairdetails);
+                            $('#update_appointment_time').val(appointment.appointment_time);
+                            $('#update_appointment_date').val(appointment.appointment_date);
+                            $('#update_carmodel').val(appointment.carmodel);
+                            $('#update_service_type').val(appointment.service_type);
+                            $('#update_total_payable').val(appointment.total_payable);
+                            $('#update_payment_type').val(appointment.payment_type);
+                            $('#update_payment_status').val(appointment.payment_status);
+                        } else {
+                            console.error('Failed to fetch appointment details:', response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX error:', status, error);
+                        console.error('Response:', xhr.responseText);
+                    }
+                });
+            });
+
+            $('.btn-delete').click(function() {
+                const customerId = $(this).data('id');
+                $('#delete_customer_id').val(customerId); // Set customer ID for confirmation
+                $('#deleteWalkinModal').modal('show'); // Show delete confirmation modal
+            });
+        }
+    });
 </script>
+
 
 </body>
 </html>

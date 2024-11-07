@@ -243,10 +243,10 @@
             <li>
                 <a href="view_paid_appointments.php">
                     <i class='bx bx-dollar'></i>
-                    <span class="link_name">Explore</span>
+                    <span class="link_name">Payments</span>
                 </a>
                 <ul class="sub-menu blank">
-                    <li><a class="link_name" href="view_paid_appointments.php">Explore</a></li>
+                    <li><a class="link_name" href="view_paid_appointments.php">Payments</a></li>
                 </ul>
             </li>
             <li>
@@ -793,8 +793,12 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success) {
                     alert('Status updated successfully!');
-                    modalContainer.fadeOut(); // Close modal after update
-                    fetchAppointments(); // Refresh appointments table
+                    
+                    // Fade out the modal after successful submission
+                    modalContainer.fadeOut(); 
+                    
+                    // Refresh appointments table
+                    fetchAppointments(); 
                 } else {
                     alert('Error updating status: ' + response.message);
                 }
