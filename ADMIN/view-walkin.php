@@ -1,19 +1,28 @@
 <?php
-require 'db_connection.php'; // Include your database connection
-header('Content-Type: application/json'); // Set header for JSON response
+// view_walkin.php
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Retrieve the customer_id from the POST request
-    $customer_id = $_POST['customer_id'] ?? null;
+include 'db_connection.php'; // Include your database connection
 
-    if (empty($customer_id)) {
-        echo json_encode(['status' => 'error', 'message' => 'Customer ID is required']);
+header('Content-Type: application/json'); // Set content type to JSON
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // Check if customer_id is provided
+    if (!isset($_GET['customer_id']) || empty($_GET['customer_id'])) {
+        echo json_encode(['status' => 'error', 'message' => 'Customer ID is required.']);
         exit;
     }
 
-    // Prepare and execute the select query
+    $customerId = $_GET['customer_id'];
+
+    // Validate customer ID (numeric check)
+    if (!is_numeric($customerId)) {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid customer ID.']);
+        exit;
+    }
+
+    // Prepare SQL query to fetch walk-in appointment details
     $stmt = $conn->prepare("SELECT * FROM walkin_appointments WHERE customer_id = ?");
-    $stmt->bind_param("i", $customer_id);
+    $stmt->bind_param("i", $customerId);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -21,13 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $appointment = $result->fetch_assoc();
         echo json_encode(['status' => 'success', 'data' => $appointment]);
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'No appointment found for the provided Customer ID']);
+        echo json_encode(['status' => 'error', 'message' => 'Appointment not found.']);
     }
 
+    // Close statement and connection
     $stmt->close();
+    $conn->close();
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method.']);
 }
-
-$conn->close();
 ?>

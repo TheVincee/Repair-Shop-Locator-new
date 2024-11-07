@@ -82,13 +82,13 @@
     <table class="table table-hover">
         <thead class="table-light">
             <tr>
-                <th scope="col"class="hidden-column">Customer ID</th>
+                <th scope="col">Customer ID</th>
                 <th scope="col">First Name</th>
-                <th scope="col"class="hidden-column">Phone Number</th>
+                <th scope="col">Phone Number</th>
                 <th scope="col">Email Address</th>
                 <th scope="col" >Appointment Time</th> <!-- Hidden column -->
                 <th scope="col">Appointment Date</th> <!-- Hidden column -->
-                <th scope="col" class="hidden-column">Car Model</th> <!-- Hidden column -->
+                <th scope="col">Car Model</th> <!-- Hidden column -->
           
                  <th scope="col">Status</th>
                 <th scope="col">Repair Details</th>
@@ -294,81 +294,57 @@
         </div>
     </div>
 </div>
-
-<!-- View Walk-in Appointment Modal -->
-<div class="modal fade" id="viewWalkinModal" tabindex="-1" aria-labelledby="viewWalkinModalLabel" aria-hidden="true">
+<!-- Delete Walk-in Appointment Modal -->
+<div class="modal" id="deleteWalkinModal" tabindex="-1" aria-labelledby="deleteWalkinModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="viewWalkinModalLabel">View Walk-in Appointment</h5>
+                <h5 class="modal-title" id="deleteWalkinModalLabel">Confirm Deletion</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="viewWalkinForm">
-                    <input type="hidden" id="view_customer_id" name="customer_id">
-
-                    <div class="mb-3">
-                        <label for="view_firstname" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="view_firstname" name="firstname" placeholder="First Name" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="view_phoneNumber" class="form-label">Phone Number</label>
-                        <input type="text" class="form-control" id="view_phoneNumber" name="phoneNumber" placeholder="Phone Number" readonly>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="view_emailAddress" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="view_emailAddress" name="emailAddress" placeholder="Email Address" readonly>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="view_repairdetails" class="form-label">Repair Details</label>
-                        <textarea class="form-control" id="view_repairdetails" name="repairdetails" rows="3" placeholder="Repair Details" readonly></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="view_carmodel" class="form-label">Car Model</label>
-                        <input type="text" class="form-control" id="view_carmodel" name="carmodel" placeholder="Car Model" readonly>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="view_service_type" class="form-label">Service Type</label>
-                        <input type="text" class="form-control" id="view_service_type" name="service_type" placeholder="Service Type" readonly>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="view_total_payable" class="form-label">Total Payable</label>
-                        <input type="number" step="0.01" class="form-control" id="view_total_payable" name="total_payable" placeholder="Total Payable" readonly>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="view_payment_type" class="form-label">Payment Type</label>
-                        <input type="text" class="form-control" id="view_payment_type" name="payment_type" placeholder="Payment Type" readonly>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="view_payment_status" class="form-label">Payment Status</label>
-                        <input type="text" class="form-control" id="view_payment_status" name="payment_status" placeholder="Payment Status" readonly>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="view_appointment_time" class="form-label">Appointment Time</label>
-                        <input type="time" class="form-control" id="view_appointment_time" name="appointment_time" readonly>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="view_appointment_date" class="form-label">Appointment Date</label>
-                        <input type="date" class="form-control" id="view_appointment_date" name="appointment_date" readonly>
-                    </div>
-
-                </form>
+                Are you sure you want to delete this appointment?
+                <input type="hidden" id="delete_customer_id" value="">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- View Appointment Modal -->
+<div id="viewWalkinModal" class="modal fade" tabindex="-1" aria-labelledby="viewWalkinModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewWalkinModalLabel">View Walk-in Appointment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="appointmentDetails">
+          <p><strong>Customer Name:</strong> <span id="customerName"></span></p>
+          <p><strong>Email:</strong> <span id="email"></span></p>
+          <p><strong>Phone Number:</strong> <span id="phoneNumber"></span></p>
+          <p><strong>Repair Details:</strong> <span id="repairDetails"></span></p>
+          <p><strong>Appointment Time:</strong> <span id="appointmentTime"></span></p>
+          <p><strong>Appointment Date:</strong> <span id="appointmentDate"></span></p>
+          <p><strong>Status:</strong> <span id="status"></span></p>
+          <p><strong>Car Model:</strong> <span id="carmodel"></span></p>
+          <p><strong>Service Type:</strong> <span id="serviceType"></span></p>
+          <p><strong>Total Payable:</strong> <span id="totalPayable"></span></p>
+          <p><strong>Payment Type:</strong> <span id="paymentType"></span></p>
+          <p><strong>Payment Status:</strong> <span id="paymentStatus"></span></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 
@@ -430,28 +406,49 @@
             });
         });
 
-        // Delete appointment button click
+        // Delete appointment confirmation
         $('#confirmDeleteButton').click(function() {
-            const customerId = $('#delete_customer_id').val();
-            $.ajax({
-                url: 'delete_walkin_appointment.php',
-                method: 'POST',
-                data: { customer_id: customerId },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.status === 'success') {
-                        $('#deleteWalkinModal').modal('hide');
-                        fetchAppointments();
-                    } else {
-                        console.error('Failed to delete appointment:', response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX error:', status, error);
-                    console.error('Response:', xhr.responseText);
-                }
-            });
-        });
+    const customerId = $('#delete_customer_id').val(); // Retrieve the customer ID from the hidden field
+
+    // Validate if the customerId exists
+    if (!customerId) {
+        console.error("No customer ID provided");
+        alert("Customer ID is missing.");
+        return; // Exit the function if there's no customer ID
+    }
+
+    // Show loading state or disable button if necessary
+    $('#confirmDeleteButton').prop('disabled', true).text('Deleting...');
+
+    $.ajax({
+        url: 'delete_walkin_appointment.php',  // PHP file handling the delete
+        method: 'POST',
+        data: { customer_id: customerId },  // Sending customer ID to server
+        dataType: 'json',  // Expecting a JSON response
+        success: function(response) {
+            $('#confirmDeleteButton').prop('disabled', false).text('Delete'); // Re-enable the button
+
+            if (response.status === 'success') {
+                // Appointment deleted successfully
+                $('#deleteWalkinModal').modal('hide'); // Hide the modal
+                fetchAppointments(); // Refresh the appointment list (make sure this function is defined)
+                console.log('Appointment deleted successfully');
+            } else {
+                // Unexpected status or failure
+                console.error('Failed to delete appointment:', response.message);
+                alert('Failed to delete the appointment: ' + response.message); // Show error message
+            }
+        },
+        error: function(xhr, status, error) {
+            $('#confirmDeleteButton').prop('disabled', false).text('Delete'); // Re-enable button on error
+
+            // Handle AJAX error
+            console.error('AJAX error:', status, error);
+            console.error('Response:', xhr.responseText);
+            alert('There was an error processing the request. Please try again later.');
+        }
+    });
+});
 
         // Function to fetch appointments
         function fetchAppointments() {
@@ -482,8 +479,8 @@
                                     <td>${appointment.payment_status}</td>
                                     <td>
                                         <button class="btn btn-update" data-id="${appointment.customer_id}" data-bs-toggle="modal" data-bs-target="#updateWalkinModal">Update</button>
-                                        <button class="btn btn-primary" data-id="${appointment.customer_id}">View</button>
-                                        <button class="btn btn-delete" data-id="${appointment.customer_id}">Delete</button>
+                                    <button class="btn btn-info btn-view" data-id="${appointment.customer_id}">View</button>
+                                    <button class="btn btn-delete" data-id="${appointment.customer_id}">Delete</button>
                                     </td>
                                 </tr>
                             `;
@@ -540,15 +537,61 @@
                 });
             });
 
-            $('.btn-delete').click(function() {
-                const customerId = $(this).data('id');
-                $('#delete_customer_id').val(customerId); // Set customer ID for confirmation
-                $('#deleteWalkinModal').modal('show'); // Show delete confirmation modal
-            });
+            $(document).ready(function() {
+    // Delegate the click event for dynamically added .btn-delete buttons
+    $(document).on('click', '.btn-delete', function() {
+        const customerId = $(this).data('id'); // Get customer ID from data-id attribute
+        $('#delete_customer_id').val(customerId); // Set customer ID in the modal input field
+        $('#deleteWalkinModal').modal('show'); // Show the delete confirmation modal
+    });
+});
+
         }
     });
 </script>
+<script>
+    // Trigger the view modal when "View" button is clicked
+$('.btn-view').click(function() {
+    const customerId = $(this).data('id');  // Get the customer_id from the button's data-id attribute
 
+    // AJAX request to fetch appointment details
+    $.ajax({
+        url: 'view_walkin.php',  // PHP script to get appointment details
+        method: 'GET',
+        data: { customer_id: customerId },
+        dataType: 'json', // Expecting JSON response
+        success: function(response) {
+            if (response.status === 'success') {
+                // Populate the modal with appointment details
+                $('#customerName').text(response.data.firstname + ' ' + response.data.lastname);
+                $('#email').text(response.data.emailAddress);
+                $('#phoneNumber').text(response.data.phoneNumber);
+                $('#repairDetails').text(response.data.repairdetails);
+                $('#appointmentTime').text(response.data.appointment_time);
+                $('#appointmentDate').text(response.data.appointment_date);
+                $('#status').text(response.data.Status);
+                $('#carmodel').text(response.data.carmodel);
+                $('#serviceType').text(response.data.service_type);
+                $('#totalPayable').text(response.data.total_payable);
+                $('#paymentType').text(response.data.payment_type);
+                $('#paymentStatus').text(response.data.payment_status);
+
+                // Show the modal
+                $('#viewWalkinModal').modal('show');
+            } else {
+                // Handle errors (e.g., appointment not found)
+                alert(response.message || 'An error occurred while fetching the details.');
+            }
+        },
+        error: function(xhr, status, error) {
+            // Handle AJAX error
+            console.error('AJAX error:', status, error);
+            alert('There was an error processing the request.');
+        }
+    });
+});
+
+</script>
 
 </body>
 </html>

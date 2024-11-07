@@ -8,21 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="Modal.css">
+    <link rel="stylesheet" href="edit.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <style>
         .hide-column {
     display: none;
 }
-.edit-btn {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    margin-right: 5px;
-}
-
         /* Basic styling for the table */
         .appointments-table {
             width: 100%;
@@ -63,56 +55,6 @@
         /* The Modal (background) */
 /* The Modal (background) */
 /* Modal background */
-.editModal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
-}
-
-/* Modal content */
-.editModal-content {
-    background-color: #fff;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-    max-width: 500px;
-    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
-}
-
-/* Close button */
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.btn {
-    background-color: #007bff; /* Bootstrap button color */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-.btn:hover {
-    background-color: #0056b3;
-}
 
 
     </style>
@@ -408,39 +350,57 @@
     </div>
 </div>
 <!-- Edit Modal Structure -->
-<div id="editModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <span class="close" id="editCloseBtn">&times;</span>
-        <h2>Edit Appointment Details</h2>
+<div id="editModal" class="modal-overlay" style="display: none;">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>Edit Appointment Details</h2>
+            <button class="close-btn" id="editCloseBtn">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+            <!-- Customer Info Section -->
+            <div class="info-group">
+                <p><strong>Customer ID:</strong> <span id="editCustomerId">N/A</span></p>
+                <p><strong>First Name:</strong> <span id="editFirstName">N/A</span></p>
+                <p><strong>Last Name:</strong> <span id="editLastName">N/A</span></p>
+                <p><strong>Address:</strong> <span id="editAddress">N/A</span></p>
+                <p><strong>Phone Number:</strong> <span id="editPhoneNumber">N/A</span></p>
+                <p><strong>Email Address:</strong> <span id="editEmailAddress">N/A</span></p>
+            </div>
+            
+            <!-- Car Info Section -->
+            <div class="info-group">
+                <p><strong>Car Make:</strong> <span id="editCarMake">N/A</span></p>
+                <p><strong>Car Model:</strong> <span id="editCarModel">N/A</span></p>
+                <p><strong>Repair Details:</strong> <span id="editRepairDetails">N/A</span></p>
+            </div>
+            
+            <!-- Appointment Info Section -->
+            <div class="info-group">
+                <p><strong>Appointment Time:</strong> <span id="editAppointmentTime">N/A</span></p>
+                <p><strong>Appointment Date:</strong> <span id="editAppointmentDate">N/A</span></p>
+                <p><strong>Status:</strong> <span id="editStatus">N/A</span></p>
+                <p><strong>Service Type:</strong> <span id="editServiceType">N/A</span></p>
+                <p><strong>Total Payment:</strong> ₱<span id="editTotalPayment">0.00</span></p>
+                <p><strong>Payment Type:</strong> <span id="editPaymentType">N/A</span></p>
+            </div>
 
-        <p><strong>Customer ID:</strong> <span id="editCustomerId">N/A</span></p>
-        <p><strong>First Name:</strong> <span id="editFirstName">N/A</span></p>
-        <p><strong>Last Name:</strong> <span id="editLastName">N/A</span></p>
-        <p><strong>Address:</strong> <span id="editAddress">N/A</span></p>
-        <p><strong>Phone Number:</strong> <span id="editPhoneNumber">N/A</span></p>
-        <p><strong>Email Address:</strong> <span id="editEmailAddress">N/A</span></p>
-        <p><strong>Car Make:</strong> <span id="editCarMake">N/A</span></p>
-        <p><strong>Car Model:</strong> <span id="editCarModel">N/A</span></p>
-        <p><strong>Repair Details:</strong> <span id="editRepairDetails">N/A</span></p>
-        <p><strong>Appointment Time:</strong> <span id="editAppointmentTime">N/A</span></p>
-        <p><strong>Appointment Date:</strong> <span id="editAppointmentDate">N/A</span></p>
-        <p><strong>Status:</strong> <span id="editStatus">N/A</span></p>
-        <p><strong>Service Type:</strong> <span id="editServiceType">N/A</span></p>
-        <p><strong>Total Payment:</strong> ₱<span id="editTotalPayment">0.00</span></p>
-        <p><strong>Payment Type:</strong> <span id="editPaymentType">N/A</span></p>
-
-        <form id="editPaymentForm" action="#" method="POST">
-            <input type="hidden" id="editCustomerIdInput" name="customer_id" />
-            <label for="editPaymentStatusInput">Payment Status:</label>
-            <select id="editPaymentStatusInput" name="payment_status" required>
-                <option value="">Select Payment Status</option>
-                <option value="Paid">Paid</option>
-                <option value="Not Paid">Not Paid</option>
-            </select>
-            <button type="submit" class="btn">Update Payment</button>
-        </form>
+            <!-- Payment Form -->
+            <form id="editPaymentForm" class="payment-form" action="#" method="POST">
+                <input type="hidden" id="editCustomerIdInput" name="customer_id" />
+                <label for="editPaymentStatusInput">Payment Status:</label>
+                <select id="editPaymentStatusInput" name="payment_status" required>
+                    <option value="">Select Payment Status</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Not Paid">Not Paid</option>
+                </select>
+                <button type="submit" class="btn-submit">Update Payment</button>
+            </form>
+        </div>
     </div>
 </div>
+
+
 
 
 <div id="walkin-modal-container" class="modal-overlay">
@@ -635,46 +595,50 @@
     // Initial fetch of appointments
     fetchAppointments(); 
 
-    // Function to show edit modal with customer data
     function showEditModal(customerId) {
-        fetch(`view_and_edit_payment.php?customer_id=${customerId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Populate modal fields with fetched data
-                    $('#editCustomerId').text(data.data.customer_id || 'N/A');
-                    $('#editFirstName').text(data.data.firstname || 'N/A');
-                    $('#editLastName').text(data.data.lastname || 'N/A');
-                    $('#editAddress').text(data.data.address || 'N/A');
-                    $('#editPhoneNumber').text(data.data.phoneNumber || 'N/A');
-                    $('#editEmailAddress').text(data.data.emailAddress || 'N/A');
-                    $('#editCarMake').text(data.data.carmake || 'N/A');
-                    $('#editCarModel').text(data.data.carmodel || 'N/A');
-                    $('#editRepairDetails').text(data.data.repairdetails || 'N/A');
-                    $('#editAppointmentTime').text(data.data.appointment_time || 'N/A');
-                    $('#editAppointmentDate').text(data.data.appointment_date || 'N/A');
-                    $('#editStatus').text(data.data.Status || 'N/A');
-                    $('#editServiceType').text(data.data.service_type || 'N/A');
-                    $('#editTotalPayment').text(data.data.total_payment || '₱0.00');
-                    $('#editPaymentType').text(data.data.payment_type || 'N/A');
+    fetch(`view_and_edit_payment.php?customer_id=${customerId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("Fetched data:", data); // Debugging line
 
-                    // Set payment status if it exists in the data
-                    if (data.data.payment_status) {
-                        $('#editPaymentStatusInput').val(data.data.payment_status); // Set to existing value
-                        $('#editPaymentStatusDisplay').text(data.data.payment_status); // Display the status
-                    } else {
-                        $('#editPaymentStatusInput').val(''); // Clear input if no status
-                        $('#editPaymentStatusDisplay').text(''); // Clear display if no status
-                    }
+                // Populate modal fields with fetched data
+                $('#editCustomerId').text(data.data.customer_id || 'N/A');
+                $('#editFirstName').text(data.data.firstname || 'N/A');
+                $('#editLastName').text(data.data.lastname || 'N/A');
 
-                    $('#editCustomerIdInput').val(data.data.customer_id);
-                    $('#editModal').show(); // Show the modal
-                } else {
-                    alert(data.error || 'Error fetching customer data.');
-                }
-            })
-            .catch(error => console.error('Error fetching customer data for edit:', error));
-    }
+                // Display address if available, otherwise show "Address not available"
+                $('#editAddress').text(data.data.address ? data.data.address : 'Address not available');
+
+                $('#editPhoneNumber').text(data.data.phoneNumber || 'N/A');
+                $('#editEmailAddress').text(data.data.emailAddress || 'N/A');
+                $('#editCarMake').text(data.data.carmake || 'N/A');
+                $('#editCarModel').text(data.data.carmodel || 'N/A');
+                $('#editRepairDetails').text(data.data.repairdetails || 'N/A');
+                $('#editAppointmentTime').text(data.data.appointment_time || 'N/A');
+                $('#editAppointmentDate').text(data.data.appointment_date || 'N/A');
+                $('#editStatus').text(data.data.Status || 'N/A');
+                $('#editServiceType').text(data.data.service_type || 'N/A');
+                $('#editTotalPayment').text(data.data.total_payment || '₱0.00');
+                $('#editPaymentType').text(data.data.payment_type || 'N/A');
+
+                // Set payment status if it exists in the data
+                $('#editPaymentStatusInput').val(data.data.payment_status || ''); // Set or clear input
+                $('#editPaymentStatusDisplay').text(data.data.payment_status || ''); // Display or clear status
+
+                $('#editCustomerIdInput').val(data.data.customer_id);
+                $('#editModal').show(); // Show the modal
+            } else {
+                alert(data.error || 'Error fetching customer data.');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching customer data for edit:', error);
+            alert('Failed to fetch customer data. Please try again.');
+        });
+}
+
+
 
     // Update payment status and clear the display after submission
     $('#editPaymentForm').on('submit', function(event) {
@@ -964,7 +928,31 @@ $(document).ready(function() {
 
     // Fetch counts on page load
     fetchCounts();
-});</script>
+});
+</script>
+<script>
+    // Get elements
+const editModal = document.getElementById("editModal");
+const editCloseBtn = document.getElementById("editCloseBtn");
+const modalOverlay = document.getElementById("modal-overlay");
+
+// Function to close the modal
+function closeModal() {
+    editModal.style.display = "none";
+    modalOverlay.style.display = "none";
+}
+
+// Close modal when clicking the close button
+editCloseBtn.addEventListener("click", closeModal);
+
+// Close modal when clicking outside the modal content area
+window.addEventListener("click", (event) => {
+    if (event.target === modalOverlay) {
+        closeModal();
+    }
+});
+
+</script>
 
 </body>
 </html>

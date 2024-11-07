@@ -88,7 +88,7 @@
             </li> -->
             <li>
                 <a href="returned_damage_items.php">
-                    <i class='bx bx-product'></i>
+                    <i class='bx bx-box'></i>
                     <span class="link_name">Returned</span>
                 </a>
                 <ul class="sub-menu blank">

@@ -1,31 +1,53 @@
 <?php
-require 'db_connection.php';
+// delete_appointment.php
 
-header('Content-Type: application/json');
+include 'db_connection.php'; // Include your database connection
+
+header('Content-Type: application/json'); // Set content type to JSON
+
+// Ensure connection was successful
+if ($conn->connect_error) {
+    echo json_encode(['status' => 'error', 'message' => 'Database connection failed: ' . $conn->connect_error]);
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $customer_id = isset($_POST['customer_id']) ? intval($_POST['customer_id']) : null;
-
-    if (!$customer_id) {
-        echo json_encode(['success' => false, 'error' => 'Invalid or missing customer_id']);
+    // Check if customer_id is provided
+    if (!isset($_POST['customer_id']) || empty($_POST['customer_id'])) {
+        echo json_encode(['status' => 'error', 'message' => 'Customer ID is required.']);
         exit;
     }
 
-    // Execute delete query
-    $deleteQuery = "DELETE FROM walkin_appointments WHERE customer_id = ?";
-    $stmt = $conn->prepare($deleteQuery);
-    $stmt->bind_param("i", $customer_id);
+    $customerId = $_POST['customer_id'];
 
-    if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => 'Appointment deleted successfully']);
-    } else {
-        echo json_encode(['success' => false, 'error' => 'Error executing deletion: ' . $stmt->error]);
+    // Validate customer ID (numeric check)
+    if (!is_numeric($customerId)) {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid customer ID.']);
+        exit;
     }
 
-    $stmt->close();
-} else {
-    echo json_encode(['success' => false, 'error' => 'Invalid request method']);
-}
+    // Prepare SQL statement to delete the appointment
+    $stmt = $conn->prepare("DELETE FROM walkin_appointments WHERE customer_id = ?");
 
-$conn->close();
+    if (!$stmt) {
+        echo json_encode(['status' => 'error', 'message' => 'Failed to prepare SQL statement. Error: ' . $conn->error]);
+        exit;
+    }
+
+    // Bind parameters
+    $stmt->bind_param("i", $customerId);
+
+    // Execute the statement
+    if ($stmt->execute()) {
+        echo json_encode(['status' => 'success', 'message' => 'Appointment deleted successfully.']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Failed to delete appointment. MySQL Error: ' . $stmt->error]);
+    }
+
+    // Close statement and connection
+    $stmt->close();
+    $conn->close();
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method.']);
+}
 ?>
