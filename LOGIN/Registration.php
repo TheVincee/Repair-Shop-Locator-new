@@ -15,7 +15,6 @@ if ($conn->connect_error) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form input values and sanitize
-    $name = htmlspecialchars(trim($_POST['name']));
     $email = htmlspecialchars(trim($_POST['email']));
     $password = htmlspecialchars(trim($_POST['password']));
     $confirm_password = htmlspecialchars(trim($_POST['confirm_password']));
