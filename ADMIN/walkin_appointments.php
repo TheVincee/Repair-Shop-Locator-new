@@ -11,56 +11,94 @@
     <!-- Custom CSS -->
     <style>
         body {
-            background-color: #f8f9fa;
-            font-family: 'Arial', sans-serif;
-            padding: 20px;
-        }
-        .table-container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
-            margin-bottom: 20px;
-        }
-        .back-button {
-            display: inline-block;
-            margin-bottom: 20px;
-            font-weight: bold;
-            color: #007bff;
-            text-decoration: none;
-        }
-        .back-button i {
-            margin-right: 5px;
-        }
-        .table th, .table td {
-            vertical-align: middle;
-            text-align: center;
-        }
-        .btn-delete, .btn-update, .btn-add {
-            font-weight: bold;
-            color: #ffffff;
-        }
-        .btn-delete {
-            background-color: #dc3545;
-        }
-        .btn-update {
-            background-color: #ffc107;
-        }
-        .btn-add {
-            background-color: #28a745;
-        }
-        .btn-sm {
-            font-size: 0.875rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.2rem;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
-        }
-        .hidden-column {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+    padding: 10px; /* Reduced padding for smaller screens */
+    margin: 0; /* Remove default margin */
+}
+
+.table-container {
+    background-color: #ffffff;
+    padding: 20px; /* Reduced padding to fit content on smaller screens */
+    border-radius: 10px; /* Slightly smaller border radius */
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1); /* Lighter shadow for a cleaner look */
+    margin-bottom: 15px;
+    max-width: 1400px; /* Constrain container width */
+    margin: auto; /* Center the container */
+}
+
+.back-button {
+    display: inline-block;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.9rem; /* Smaller font for smaller screens */
+}
+
+.back-button i {
+    margin-right: 5px;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+    text-align: center;
+    padding: 8px; /* Reduced padding in cells */
+    font-size: 0.9rem; /* Slightly smaller font size */
+}
+
+.btn-delete, .btn-update, .btn-add {
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+}
+
+.btn-update {
+    background-color: #ffc107;
+    color: #333333; /* Darker color for contrast */
+}
+
+.btn-add {
+    background-color: #28a745;
+}
+
+.btn-sm {
+    font-size: 0.8rem; /* Smaller button font */
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.2rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.hidden-column {
     display: none;
+}
+
+/* Responsive adjustments for screen height of 740px */
+@media (max-height: 740px) {
+    .table-container {
+        padding: 15px;
+    }
+
+    .table th, .table td {
+        padding: 6px;
+        font-size: 0.85rem;
+    }
+
+    .back-button {
+        font-size: 0.85rem;
+    }
+
+    .btn-sm {
+        padding: 0.2rem 0.4rem;
+    }
 }
 
     </style>
@@ -314,36 +352,7 @@
     </div>
 </div>
 
-<!-- View Appointment Modal -->
-<div id="viewWalkinModal" class="modal fade" tabindex="-1" aria-labelledby="viewWalkinModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="viewWalkinModalLabel">View Walk-in Appointment</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div id="appointmentDetails">
-          <p><strong>Customer Name:</strong> <span id="customerName"></span></p>
-          <p><strong>Email:</strong> <span id="email"></span></p>
-          <p><strong>Phone Number:</strong> <span id="phoneNumber"></span></p>
-          <p><strong>Repair Details:</strong> <span id="repairDetails"></span></p>
-          <p><strong>Appointment Time:</strong> <span id="appointmentTime"></span></p>
-          <p><strong>Appointment Date:</strong> <span id="appointmentDate"></span></p>
-          <p><strong>Status:</strong> <span id="status"></span></p>
-          <p><strong>Car Model:</strong> <span id="carmodel"></span></p>
-          <p><strong>Service Type:</strong> <span id="serviceType"></span></p>
-          <p><strong>Total Payable:</strong> <span id="totalPayable"></span></p>
-          <p><strong>Payment Type:</strong> <span id="paymentType"></span></p>
-          <p><strong>Payment Status:</strong> <span id="paymentStatus"></span></p>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 
 

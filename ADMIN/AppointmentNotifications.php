@@ -6,57 +6,96 @@
     <title>Modern Notification Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* Grid layout */
+        /* Overall body styling */
+        body {
+            background-color: #f4f7fa;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Back Button Styling */
+        .btn-back {
+            background-color: #6c757d;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #495057;
+        }
+
+        /* Grid layout for notifications */
         #notificationContainer {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
 
-        /* Card styling */
+        /* Card design for notifications */
         .notification-item {
+            background-color: #ffffff;
+            border-radius: 12px;
             padding: 20px;
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            cursor: pointer;
         }
 
-        /* Hover effect for 3D feel */
+        /* Hover effect for notification cards */
         .notification-item:hover {
             transform: translateY(-10px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
         }
 
-        /* Styling for the text inside the card */
+        /* Title and text inside notification card */
+        .notification-item h5 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: #007bff;
+        }
+
         .notification-item p {
             font-size: 14px;
-            color: #333;
+            color: #444;
             margin-bottom: 10px;
         }
 
-        .notification-item .btn-view {
+        /* View Details button */
+        .btn-view {
             display: block;
-            text-align: center;
-            margin-top: 10px;
+            width: 100%;
             background-color: #007bff;
             color: white;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.2s ease;
-        }
-
-        .notification-item .btn-view:hover {
-            background-color: #0056b3;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s ease;
             text-decoration: none;
         }
 
-        /* Modal styling */
+        .btn-view:hover {
+            background-color: #0056b3;
+        }
+
+        /* Modal Styling */
         .modal-content {
-            border-radius: 10px;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
             transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
@@ -64,47 +103,62 @@
             background-color: #007bff;
             color: white;
             border-bottom: none;
-            padding: 20px;
+            padding: 25px 30px;
         }
 
         .modal-title {
-            margin: 0;
             font-size: 1.5rem;
+            font-weight: bold;
         }
 
         .modal-body {
-            padding: 30px;
-            background-color: #f8f9fa;
+            padding: 25px;
+            background-color: #f9f9f9;
         }
 
+        /* Modal Content */
         #modalNotificationContent p {
             font-size: 16px;
-            color: #333;
+            color: #444;
             margin-bottom: 15px;
         }
 
         .modal-footer {
             border-top: none;
             padding: 20px;
-            background-color: #f8f9fa;
+            background-color: #f4f7fa;
         }
 
-        /* Button inside modal */
         #btnTakeAppointment {
             background-color: #28a745;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 25px;
             font-size: 16px;
-            border-radius: 5px;
-            transition: background-color 0.2s ease;
+            border-radius: 8px;
+            width: 100%;
+            transition: background-color 0.3s ease;
         }
 
         #btnTakeAppointment:hover {
             background-color: #218838;
-            cursor: pointer;
         }
 
-        /* Animation for the modal */
+        /* Clear Notification Button */
+        #btnClearNotification {
+            background-color: #dc3545;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 8px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        #btnClearNotification:hover {
+            background-color: #c82333;
+        }
+
+        /* Modal Animation */
         .modal.fade .modal-dialog {
             transform: translateY(-50px);
             opacity: 0;
@@ -115,19 +169,22 @@
             transform: translateY(0);
             opacity: 1;
         }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="mt-4">Notifications</h1>
-        
-        <!-- Back Button -->
-        <a href="Dashboard.php" class="btn btn-secondary mb-3">Back</a>
 
+    <div class="container">
+        <h1>Notifications</h1>
+
+        <!-- Back Button -->
+        <a href="Dashboard.php" class="btn-back mb-4">Back to Dashboard</a>
+
+        <!-- Notifications Container -->
         <div id="notificationContainer"></div>
     </div>
 
-    <!-- Modern Modal for Viewing Notification Details -->
+    <!-- Modal for Viewing Notification Details -->
     <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -142,7 +199,7 @@
                     <button class="btn btn-block" id="btnTakeAppointment">Take Appointment</button>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id="btnClearNotification">Clear Permanently</button>
+                    <button type="button" class="btn btn-block" id="btnClearNotification">Clear Permanently</button>
                 </div>
             </div>
         </div>
@@ -166,11 +223,10 @@
                             response.notifications.forEach(function(notification) {
                                 var notificationHtml = `
                                     <div class="notification-item" data-id="${notification.customer_id}">
-                                        <p><strong>Customer ID:</strong> ${notification.customer_id}</p>
-                                        <p><strong>Name:</strong> ${notification.firstname}</p>
-                                        <p><strong>Created At:</strong> ${notification.created_at}</p>
+                                        <h5>Notification for Customer: ${notification.firstname}</h5>
                                         <p><strong>Message:</strong> ${notification.message}</p>
-                                        <a href="#" class="btn btn-view" data-id="${notification.customer_id}" data-message="${notification.message}">View Details</a>
+                                        <p><strong>Created At:</strong> ${notification.created_at}</p>
+                                        <a href="#" class="btn-view" data-id="${notification.customer_id}" data-message="${notification.message}">View Details</a>
                                     </div>
                                 `;
                                 $("#notificationContainer").append(notificationHtml);
@@ -188,66 +244,57 @@
 
             // Open modal with notification details
             $(document).on('click', '.btn-view', function(event) {
-                event.preventDefault(); 
-                currentCustomerId = $(this).data('id'); 
+                event.preventDefault();
+                currentCustomerId = $(this).data('id');
                 var message = $(this).data('message');
                 var notificationContent = `
                     <p><strong>Customer ID:</strong> ${currentCustomerId}</p>
                     <p><strong>Message:</strong> ${message}</p>
                 `;
                 $("#modalNotificationContent").html(notificationContent);
-                $('#notificationModal').modal('show'); 
+                $('#notificationModal').modal('show');
             });
 
             // Take appointment and hide notification
             $('#btnTakeAppointment').on('click', function() {
-                if (currentCustomerId) { 
-                    $(`.notification-item[data-id="${currentCustomerId}"]`).hide(); 
-                    $('#notificationModal').modal('hide'); 
+                if (currentCustomerId) {
+                    $(`.notification-item[data-id="${currentCustomerId}"]`).hide();
+                    $('#notificationModal').modal('hide');
 
                     setTimeout(function() {
                         if ($("#notificationContainer").children(':visible').length === 0) {
-                            window.location.href = 'Dashboard.php'; 
+                            window.location.href = 'Dashboard.php';
                         }
-                    }, 500); 
+                    }, 500);
                 } else {
-                    alert("No appointment to take!"); 
+                    alert("No appointment to take!");
                 }
             });
 
             // Clear notification permanently
             $('#btnClearNotification').on('click', function() {
-                if (currentCustomerId) { 
+                if (currentCustomerId) {
                     $.ajax({
                         type: "POST",
                         url: "clear_notification.php",
                         data: { customer_id: currentCustomerId },
-                        dataType: "json",
                         success: function(response) {
                             if (response.status === 'success') {
-                                $(`.notification-item[data-id="${currentCustomerId}"]`).remove(); // Remove notification from UI
-                                $('#notificationModal').modal('hide'); // Close the modal
-                                
-                                // Check if there are no visible notifications left
-                                if ($("#notificationContainer").children(':visible').length === 0) {
-                                    $("#notificationContainer").html("<p>No notifications found.</p>"); // Show empty state
-                                }
+                                alert("Notification cleared successfully.");
+                                $(`.notification-item[data-id="${currentCustomerId}"]`).remove();
+                                $('#notificationModal').modal('hide');
                             } else {
-                                alert("Error: " + response.message); // Handle error
+                                alert("Failed to clear notification.");
                             }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("AJAX Error:", error);
-                            alert("An unexpected error occurred while clearing the notification. Please try again later.");
                         }
                     });
                 }
             });
 
-            // Initially fetch notifications
+            // Initialize notifications
             fetchNotifications();
-            setInterval(fetchNotifications, 30000); 
         });
     </script>
+
 </body>
 </html>
