@@ -479,7 +479,6 @@
                                     <td>${appointment.payment_status}</td>
                                     <td>
                                         <button class="btn btn-update" data-id="${appointment.customer_id}" data-bs-toggle="modal" data-bs-target="#updateWalkinModal">Update</button>
-                                    <button class="btn btn-info btn-view" data-id="${appointment.customer_id}">View</button>
                                     <button class="btn btn-delete" data-id="${appointment.customer_id}">Delete</button>
                                     </td>
                                 </tr>
@@ -549,49 +548,7 @@
         }
     });
 </script>
-<script>
-    // Trigger the view modal when "View" button is clicked
-$('.btn-view').click(function() {
-    const customerId = $(this).data('id');  // Get the customer_id from the button's data-id attribute
 
-    // AJAX request to fetch appointment details
-    $.ajax({
-        url: 'view_walkin.php',  // PHP script to get appointment details
-        method: 'GET',
-        data: { customer_id: customerId },
-        dataType: 'json', // Expecting JSON response
-        success: function(response) {
-            if (response.status === 'success') {
-                // Populate the modal with appointment details
-                $('#customerName').text(response.data.firstname + ' ' + response.data.lastname);
-                $('#email').text(response.data.emailAddress);
-                $('#phoneNumber').text(response.data.phoneNumber);
-                $('#repairDetails').text(response.data.repairdetails);
-                $('#appointmentTime').text(response.data.appointment_time);
-                $('#appointmentDate').text(response.data.appointment_date);
-                $('#status').text(response.data.Status);
-                $('#carmodel').text(response.data.carmodel);
-                $('#serviceType').text(response.data.service_type);
-                $('#totalPayable').text(response.data.total_payable);
-                $('#paymentType').text(response.data.payment_type);
-                $('#paymentStatus').text(response.data.payment_status);
-
-                // Show the modal
-                $('#viewWalkinModal').modal('show');
-            } else {
-                // Handle errors (e.g., appointment not found)
-                alert(response.message || 'An error occurred while fetching the details.');
-            }
-        },
-        error: function(xhr, status, error) {
-            // Handle AJAX error
-            console.error('AJAX error:', status, error);
-            alert('There was an error processing the request.');
-        }
-    });
-});
-
-</script>
 
 </body>
 </html>
